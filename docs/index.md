@@ -9,7 +9,9 @@ guidelines, etc. This site is in its infancy, but will fill out over time.
 
 These are all our open-source projects (so far):
 
-````{grid} 2
+````{grid} 1 1 2 2
+:gutter: 2
+
 ```{grid-item-card} CLP
 :link: https://github.com/y-scope/clp
 A tool that can compress logs with higher compression than general-purpose
