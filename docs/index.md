@@ -12,25 +12,33 @@ These are all our open-source projects (so far):
 ````{grid} 1 1 2 2
 :gutter: 2
 
-```{grid-item-card} CLP
+```{grid-item-card}
 :link: https://github.com/y-scope/clp
+CLP
+^^^
 A tool that can compress logs with higher compression than general-purpose
 compressors while allowing search without full decompression.
 ```
 
-```{grid-item-card} clp-ffi-java
+```{grid-item-card}
 :link: https://github.com/y-scope/clp-ffi-java
+clp-ffi-java
+^^^^^^^^^^^^
 A Java library that exposes CLP's message encoding, decoding, and search.
 ```
 
-```{grid-item-card} log4j1-appenders
+```{grid-item-card}
 :link: https://github.com/y-scope/log4j1-appenders
+log4j1-appenders
+^^^^^^^^^^^^^^^^
 Useful log appenders for Log4j 1 including features like log compression into
 CLP's IR stream format.
 ```
 
-```{grid-item-card} yscope-log-viewer
+```{grid-item-card}
 :link: https://github.com/y-scope/yscope-log-viewer
+yscope-log-viewer
+^^^^^^^^^^^^^^^^^
 A log viewer for logs that use CLP's IR stream format including features like
 filtering by log level and viewing large files.
 ```
