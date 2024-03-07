@@ -33,7 +33,7 @@ Follow the steps below to build and view the site locally.
 You can use [npm] with [http-server] to view the output:
 
 ```shell
-npx http-server ../build/html -c-1
+npx http-server build/html -c-1
 ```
 
 [docs.yscope.com]: https://docs.yscope.com
