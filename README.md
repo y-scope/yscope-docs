@@ -11,6 +11,7 @@ Follow the steps below to build and view the site locally.
 * python3
 * python3-venv
 * [Task]
+* [Node.js] 16 or above - [Viewing the output](#viewing-the-output)
 
 ## Building
 
@@ -30,13 +31,12 @@ Follow the steps below to build and view the site locally.
 
 ## Viewing the output
 
-You can use [npm] with [http-server] to view the output:
-
-```shell
-npx http-server build/html -c-1
-```
+Run task `serve` to install [http-server] and view the output:
+   ```shell
+   task serve
+   ```
 
 [docs.yscope.com]: https://docs.yscope.com
-[npm]: https://nodejs.org/en/download/current
-[http-server]: https://www.npmjs.com/package/http-server
 [Task]: https://taskfile.dev/
+[Node.js]: https://nodejs.org/en/download/current
+[http-server]: https://www.npmjs.com/package/http-server
