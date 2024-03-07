@@ -1,0 +1,74 @@
+version: "3"
+
+vars:
+  # Paths
+  BUILD_DIR: "{{.TASKFILE_DIR}}/build"
+  VENV_DIR: "{{.BUILD_DIR}}/venv"
+
+  # Other variables
+  CHECKSUM_TAR_BASE_ARGS: >-
+    --group=0
+    --mtime='UTC 1970-01-01'
+    --numeric-owner
+    --owner=0
+    --sort=name
+
+tasks:
+  default:
+    deps: ["docs"]
+
+  clean:
+    cmds:
+      - "rm -rf {{.BUILD_DIR}}"
+
+  docs:
+    deps: ["venv"]
+    vars:
+      CHECKSUM_FILE: "{{.BUILD_DIR}}/{{.TASK}}.md5"
+      OUTPUT_DIR: "{{.BUILD_DIR}}/html"
+    cmds:
+      - |
+        . "{{.VENV_DIR}}/bin/activate"
+        sphinx-build -a -E -c docs -b html docs "{{.OUTPUT_DIR}}"
+      # Checksum the generated files (this command must be last)
+      - |-
+        cd "{{.OUTPUT_DIR}}"
+        tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum > "{{.CHECKSUM_FILE}}"
+    sources:
+      - "docs/**/*"
+      - "{{.BUILD_DIR}}/venv.md5"
+    status:
+      - "test -f '{{.CHECKSUM_FILE}}'"
+      - >-
+        diff
+        <(cd '{{.OUTPUT_DIR}}' && tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum)
+        "{{.CHECKSUM_FILE}}"
+
+  venv:
+    internal: true
+    vars:
+      CHECKSUM_FILE: "{{.BUILD_DIR}}/{{.TASK}}.md5"
+      OUTPUT_DIR: "{{.VENV_DIR}}"
+    cmds:
+      - "rm -rf '{{.OUTPUT_DIR}}'"
+      - "python3 -m venv '{{.OUTPUT_DIR}}'"
+      # Remove calls to `hash` since Task uses `gosh` rather than `bash`.
+      # NOTE: Older versions of Python's venv would only call `hash` if they detected the running
+      # shell was one that had the command, but that's not the case in newer versions.
+      - "sed -i 's/^\\s*hash\\s\\+.*//g' '{{.OUTPUT_DIR}}/bin/activate'"
+      - |-
+        . "{{.OUTPUT_DIR}}/bin/activate"
+        pip3 install --upgrade -r requirements.txt
+      # Checksum the generated files (this command must be last)
+      - |-
+        cd "{{.OUTPUT_DIR}}"
+        tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum > "{{.CHECKSUM_FILE}}"
+    sources:
+      - "requirements.txt"
+      - "Taskfile.yml"
+    status:
+      - "test -f '{{.CHECKSUM_FILE}}'"
+      - >-
+        diff
+        <(cd '{{.OUTPUT_DIR}}' && tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum)
+        "{{.CHECKSUM_FILE}}"

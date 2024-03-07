@@ -2,52 +2,41 @@
 
 This repo contains the source for YScope's docs hub at [docs.yscope.com].
 
-# Building
+# Development
 
-The best way to build the docs site reproducibly is using a Python virtual
-environment.
+Follow the steps below to build and view the site locally.
 
 ## Requirements
 
-* GNU Make
-* Python3 (if it's not already installed)
-* [pip]
-* [virtualenv]
+* python3
+* python3-venv
+* [Task]
 
-## Setup
+## Building
 
-* Create and enter a Python virtual environment:
+* Build the site incrementally:
+
   ```shell
-  python3 -m venv venv
-  source ./venv/bin/activate
+  task
   ```
-* Install the requirements:
+
+  * The output of the build will be in `build/html`.
+
+* Clean-up the build:
+
   ```shell
-  pip3 install -r requirements.txt
+  task clean
   ```
 
-## Build
+## Viewing the output
 
-* Enter the virtual environment (if you're not already inside):
-
-  ```
-  source ./venv/bin/activate
-  ```
-* Build the site:
-  ```shell
-  make html
-  ```
-
-The output will be in the `build` directory.
-
-# Teardown
-
-To quit the virtual environment, run:
+You can use [npm] with [http-server] to view the output:
 
 ```shell
-deactivate
+npx http-server ../build/html -c-1
 ```
 
 [docs.yscope.com]: https://docs.yscope.com
-[pip]: https://pip.pypa.io/en/stable/installation/
-[virtualenv]: https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#installing-virtualenv
+[npm]: https://nodejs.org/en/download/current
+[http-server]: https://www.npmjs.com/package/http-server
+[Task]: https://taskfile.dev/
