@@ -48,8 +48,8 @@ tasks:
 
   serve:
     deps:
-      - "http-server"
       - "docs"
+      - "http-server"
     cmds:
       - "npm --prefix '{{.NODE_DEPS_DIR}}' exec http-server '{{.DOCS_OUTPUT_DIR}}' -c-1"
 
