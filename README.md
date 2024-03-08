@@ -8,9 +8,9 @@ Follow the steps below to build and view the site locally.
 
 ## Requirements
 
+* [Node.js] >= 16 to be able to [view the output](#viewing-the-output)
 * python3
 * python3-venv
-* [Node.js] >= 16 to be able to [view the output](#viewing-the-output)
 * [Task]
 
 ## Building
