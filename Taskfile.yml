@@ -3,6 +3,8 @@ version: "3"
 vars:
   # Paths
   BUILD_DIR: "{{.TASKFILE_DIR}}/build"
+  DOCS_OUTPUT_DIR: "{{.BUILD_DIR}}/html"
+  NODE_DEPS_DIR: "{{.BUILD_DIR}}/node"
   VENV_DIR: "{{.BUILD_DIR}}/venv"
 
   # Other variables
@@ -25,7 +27,7 @@ tasks:
     deps: ["venv"]
     vars:
       CHECKSUM_FILE: "{{.BUILD_DIR}}/{{.TASK}}.md5"
-      OUTPUT_DIR: "{{.BUILD_DIR}}/html"
+      OUTPUT_DIR: "{{.DOCS_OUTPUT_DIR}}"
     cmds:
       - |
         . "{{.VENV_DIR}}/bin/activate"
@@ -43,6 +45,13 @@ tasks:
         diff
         <(cd '{{.OUTPUT_DIR}}' && tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum)
         "{{.CHECKSUM_FILE}}"
+
+  serve:
+    deps:
+      - "docs"
+      - "http-server"
+    cmds:
+      - "npm --prefix '{{.NODE_DEPS_DIR}}' exec http-server '{{.DOCS_OUTPUT_DIR}}' -c-1"
 
   venv:
     internal: true
@@ -71,4 +80,25 @@ tasks:
       - >-
         diff
         <(cd '{{.OUTPUT_DIR}}' && tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum)
+        "{{.CHECKSUM_FILE}}"
+
+  http-server:
+    internal: true
+    vars:
+      CHECKSUM_FILE: "{{.BUILD_DIR}}/{{.TASK}}.md5"
+      OUTPUT_DIR: "{{.NODE_DEPS_DIR}}"
+    cmds:
+      - "rm -rf '{{.OUTPUT_DIR}}'"
+      - "npm --prefix '{{.OUTPUT_DIR}}' install http-server"
+      # Checksum the generated files (this command must be last)
+      - |-
+        cd "{{.OUTPUT_DIR}}"
+        tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum > "{{.CHECKSUM_FILE}}"
+    sources:
+      - "Taskfile.yml"
+    status:
+      - "test -f '{{.CHECKSUM_FILE}}'"
+      - >-
+        diff
+        <(cd '{{.NODE_DEPS_DIR}}' && tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum)
         "{{.CHECKSUM_FILE}}"

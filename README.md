@@ -8,6 +8,7 @@ Follow the steps below to build and view the site locally.
 
 ## Requirements
 
+* [Node.js] >= 16 to be able to [view the output](#viewing-the-output)
 * python3
 * python3-venv
 * [Task]
@@ -30,13 +31,13 @@ Follow the steps below to build and view the site locally.
 
 ## Viewing the output
 
-You can use [npm] with [http-server] to view the output:
+Run task `serve` to install [http-server] and view the output:
 
 ```shell
-npx http-server build/html -c-1
+task serve
 ```
 
 [docs.yscope.com]: https://docs.yscope.com
-[npm]: https://nodejs.org/en/download/current
 [http-server]: https://www.npmjs.com/package/http-server
+[Node.js]: https://nodejs.org/en/download/current
 [Task]: https://taskfile.dev/
