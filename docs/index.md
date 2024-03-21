@@ -78,7 +78,6 @@ clp-ffi-java
 A Java library exposing an interface to CLP's core. It currently supports CLP's encoding, decoding,
 and query-generation logic as well as serializing CLP IR files.
 :::
-::::
 
 :::{grid-item-card}
 :link: https://github.com/y-scope/clp-ffi-py
@@ -87,6 +86,7 @@ clp-ffi-py
 A Python library exposing an interface to CLP's core. It currently supports serializing,
 deserializing, searching, and analyzing CLP IR files.
 :::
+::::
 
 ## Log visualization
 
