@@ -64,14 +64,6 @@ analyzing CLP IR files.
 :gutter: 2
 
 :::{grid-item-card}
-:link: clp-ffi-py/main
-clp-ffi-py
-^^^
-A Python library exposing an interface to CLP's core. It currently supports serializing,
-deserializing, searching, and analyzing CLP IR files.
-:::
-
-:::{grid-item-card}
 :link: https://github.com/y-scope/clp-ffi-go
 clp-ffi-go
 ^^^
@@ -87,6 +79,14 @@ A Java library exposing an interface to CLP's core. It currently supports CLP's 
 and query-generation logic as well as serializing CLP IR files.
 :::
 ::::
+
+:::{grid-item-card}
+:link: https://github.com/y-scope/clp-ffi-py
+clp-ffi-py
+^^^
+A Python library exposing an interface to CLP's core. It currently supports serializing,
+deserializing, searching, and analyzing CLP IR files.
+:::
 
 ## Log visualization
 
