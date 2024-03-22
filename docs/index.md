@@ -1,56 +1,127 @@
 # YScope Docs
 
-Welcome to YScope's documentation site. From here, you can find docs for all our
-open-source projects as well as other docs like format specifications, coding 
-guidelines, etc. This site is in its infancy, but will fill out over time.
-{ref}`Contributions <ref/contributing>` are always welcome!
+This is the hub for all of YScope's open-source documentation. From here, you can find docs for all
+our open-source projects as well as other docs like format specifications, coding guidelines, etc.
+[Contributions](#contributing) are welcome!
 
 # Projects
 
-These are all our open-source projects (so far):
+Below are all our open-source projects (so far).
 
-````{grid} 1 1 2 2
+## Log management
+
+::::{grid} 1 1 2 2
 :gutter: 2
 
-```{grid-item-card}
+:::{grid-item-card}
 :link: https://github.com/y-scope/clp
-CLP
+CLP (clp)
 ^^^
-A tool that can compress logs with higher compression than general-purpose
-compressors while allowing search without full decompression.
-```
+A tool that can compress both text and JSON logs with higher compression than general-purpose
+compressors while allowing search without full decompression. CLP can run as a large distributed
+system and includes a UI.
+:::
+::::
 
-```{grid-item-card}
+## Logging libraries
+
+The libraries below provide real-time compression into CLP's compressed intermediate representation
+(IR).
+
+::::{grid} 1 1 2 2
+:gutter: 2
+
+:::{grid-item-card}
+:link: https://github.com/y-scope/clp-loglib-py
+clp-logging (clp-loglib-py)
+^^^
+A Python `logging` library providing lightweight and real-time compression into CLP's IR format.
+:::
+
+:::{grid-item-card}
+:link: https://github.com/y-scope/log4j1-appenders
+Log4j 1 appenders (log4j1-appenders)
+^^^
+Useful appenders for Log4j 1 including features like lightweight, real-time compression into CLP's
+IR format.
+:::
+
+:::{grid-item-card}
+:link: https://github.com/y-scope/logback-appenders
+Logback appenders (logback-appenders)
+^^^
+Useful appenders for Logback including features like lightweight, real-time compression into CLP's
+IR format.
+:::
+::::
+
+## Log analytics libraries
+
+The libraries below expose CLP's core, including serializing, deserializing, searching, and
+analyzing CLP IR files.
+
+::::{grid} 1 1 2 2
+:gutter: 2
+
+:::{grid-item-card}
+:link: https://github.com/y-scope/clp-ffi-go
+clp-ffi-go
+^^^
+A Go library exposing an interface to CLP's core. It currently supports CLP's core encoding
+and decoding logic as well as serializing, deserializing, searching, and analyzing CLP IR files.
+:::
+
+:::{grid-item-card}
 :link: https://github.com/y-scope/clp-ffi-java
 clp-ffi-java
-^^^^^^^^^^^^
-A Java library that exposes CLP's message encoding, decoding, and search.
-```
+^^^
+A Java library exposing an interface to CLP's core. It currently supports CLP's encoding, decoding,
+and query-generation logic as well as serializing CLP IR files.
+:::
 
-```{grid-item-card}
-:link: https://github.com/y-scope/log4j1-appenders
-log4j1-appenders
-^^^^^^^^^^^^^^^^
-Useful log appenders for Log4j 1 including features like log compression into
-CLP's IR stream format.
-```
+:::{grid-item-card}
+:link: https://github.com/y-scope/clp-ffi-py
+clp-ffi-py
+^^^
+A Python library exposing an interface to CLP's core. It currently supports serializing,
+deserializing, searching, and analyzing CLP IR files.
+:::
+::::
 
-```{grid-item-card}
+## Log visualization
+
+::::{grid} 1 1 2 2
+:gutter: 2
+
+:::{grid-item-card}
 :link: https://github.com/y-scope/yscope-log-viewer
-yscope-log-viewer
-^^^^^^^^^^^^^^^^^
-A log viewer for logs that use CLP's IR stream format including features like
-filtering by log level and viewing large files.
-```
-````
+YScope Log Viewer (yscope-log-viewer)
+^^^
+A web interface for viewing logs that use CLP’s IR stream format including features like filtering
+by log level and viewing large files.
+:::
+::::
 
-(ref/contributing)=
+## Log parsing
+
+::::{grid} 1 1 2 2
+:gutter: 2
+
+:::{grid-item-card}
+:link: https://github.com/y-scope/log-surgeon
+Log Surgeon (log-surgeon)
+^^^
+A customizable library for parsing logs efficiently and with high performance compared to
+general-purpose regular expression engines.
+:::
+::::
+
+(contributing)=
 # Contributing
 
-To edit existing docs you can click the edit icon in the top right of the page
-you want to edit. To create new docs, you can go to the relevant project's repo
-and add pages to the `docs` folder. The repo for this documentation hub is
-[here][yscope-docs]. 
+To edit existing docs, click the "{fas}`pencil` Edit on GitHub" link found in the right sidebar of
+the page you want to edit. To create new docs, go to the relevant project's repo and add pages
+to the `docs` folder. The repo for this documentation hub is [here][yscope-docs].
 
 [CLP]: https://github.com/y-scope/clp
 [clp-ffi-java]: https://github.com/y-scope/clp-ffi-java
