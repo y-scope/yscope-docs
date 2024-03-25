@@ -1,0 +1,34 @@
+{
+  "name": "yscope-docs-server",
+  "version": "0.1.0",
+  "description": "Server for the YScope docs hub and other YScope projects' docs.",
+  "main": "src/main.js",
+  "scripts": {
+    "dev": "node src/main.js",
+    "prod": "NODE_ENV=production node src/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/y-scope/yscope-docs.git"
+  },
+  "author": "dev@yscope.com",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/y-scope/yscope-docs/issues"
+  },
+  "homepage": "https://github.com/y-scope/yscope-docs#readme",
+  "dependencies": {
+    "@fastify/static": "^7.0.1",
+    "dotenv": "^16.4.5",
+    "fastify": "^4.26.2"
+  },
+  "type": "module",
+  "devDependencies": {
+    "eslint-config-yscope": "^0.0.14"
+  },
+  "eslintConfig": {
+    "extends": [
+      "yscope/common"
+    ]
+  }
+}
