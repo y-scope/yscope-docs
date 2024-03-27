@@ -19,7 +19,7 @@ const start = async () => {
         });
 
         const host = process.env.HOST;
-        const port = process.env.PORT;
+        const port = parseInt(process.env.PORT);
         await fastify.listen({host: host, port: port});
     } catch (err) {
         fastify.log.error(err);

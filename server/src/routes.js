@@ -6,7 +6,7 @@ import path from "node:path";
 
 /**
  * Fastify plugin to register routes for the main docs site and each project docs site.
- * @param {FastifyInstance} fastify
+ * @param {import("fastify").FastifyInstance} fastify
  * @param {object} options
  * @param {string} options.publicDir
  * @param {string} options.projectsConfigFile Config file containing the projects and their
