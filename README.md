@@ -31,13 +31,12 @@ Follow the steps below to build and view the site locally.
 
 ## Viewing the output
 
-Run task `serve` to install [http-server] and view the output:
+Run task `serve` to view the output:
 
 ```shell
 task serve
 ```
 
 [docs.yscope.com]: https://docs.yscope.com
-[http-server]: https://www.npmjs.com/package/http-server
 [Node.js]: https://nodejs.org/en/download/current
 [Task]: https://taskfile.dev/
