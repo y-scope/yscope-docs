@@ -139,8 +139,8 @@ tasks:
         tar cf - --directory "{{.OUTPUT_DIR}}" {{.CHECKSUM_TAR_BASE_ARGS}} .
         | md5sum > "{{.CHECKSUM_FILE}}"
     sources:
+      - "{{.TASKFILE}}"
       - "requirements.txt"
-      - "Taskfile.yml"
     status:
       - "test -f '{{.CHECKSUM_FILE}}'"
       - >-
