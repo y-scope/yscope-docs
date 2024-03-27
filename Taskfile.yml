@@ -33,9 +33,9 @@ tasks:
         . "{{.VENV_DIR}}/bin/activate"
         sphinx-build -a -E -c docs -b html docs "{{.OUTPUT_DIR}}"
       # Checksum the generated files (this command must be last)
-      - |-
-        cd "{{.OUTPUT_DIR}}"
-        tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum > "{{.CHECKSUM_FILE}}"
+      - >-
+        tar cf - --directory "{{.OUTPUT_DIR}}" {{.CHECKSUM_TAR_BASE_ARGS}} .
+        | md5sum > "{{.CHECKSUM_FILE}}"
     sources:
       - "docs/**/*"
       - "{{.BUILD_DIR}}/venv.md5"
@@ -43,15 +43,81 @@ tasks:
       - "test -f '{{.CHECKSUM_FILE}}'"
       - >-
         diff
-        <(cd '{{.OUTPUT_DIR}}' && tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum)
+        <(tar cf - --directory "{{.OUTPUT_DIR}}" {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum)
         "{{.CHECKSUM_FILE}}"
 
+  download-projects:
+    deps: ["venv"]
+    cmds:
+      - |-
+        . "{{.VENV_DIR}}/bin/activate"
+        python3 scripts/download-projects.py --build-dir "{{.BUILD_DIR}}"
+
+  release-tar:
+    deps: ["docs"]
+    vars:
+      OUTPUT_DIR_NAME: "yscope-docs-release"
+      OUTPUT_DIR: "{{.BUILD_DIR}}/{{.OUTPUT_DIR_NAME}}"
+      SITE_PUBLIC_DIR: "{{.OUTPUT_DIR}}/public"
+    cmds:
+      - "rm -rf '{{.OUTPUT_DIR}}'"
+      - "mkdir -p '{{.OUTPUT_DIR}}'"
+      - >-
+        rsync
+        --archive
+        --relative
+        conf/projects.json
+        server/.env
+        server/src
+        server/package.json
+        server/package-lock.json
+        server/README.md
+        "{{.OUTPUT_DIR}}"
+      - "mkdir '{{.SITE_PUBLIC_DIR}}'"
+      - "rsync -a '{{.BUILD_DIR}}/html' {{.SITE_PUBLIC_DIR}}"
+      - |-
+        cd "{{.BUILD_DIR}}"
+        find -type d -regex ".*/build/docs/html" -exec \
+          rsync \
+          --archive \
+          --relative \
+          {} \
+          "{{.SITE_PUBLIC_DIR}}" \
+          \;
+      - >-
+        tar czf "{{.BUILD_DIR}}/{{.OUTPUT_DIR_NAME}}.tar.gz" --directory "{{.OUTPUT_DIR}}/.."
+        "{{.OUTPUT_DIR_NAME}}"
+
   serve:
+    dir: "server"
     deps:
       - "docs"
-      - "http-server"
+      - "server"
     cmds:
-      - "npm --prefix '{{.NODE_DEPS_DIR}}' exec http-server '{{.DOCS_OUTPUT_DIR}}' -c-1"
+      - "PUBLIC_DIR='{{.BUILD_DIR}}' npm run dev"
+
+  server:
+    internal: true
+    dir: "server"
+    vars:
+      CHECKSUM_FILE: "{{.BUILD_DIR}}/{{.TASK}}.md5"
+      OUTPUT_DIR: "node_modules"
+    cmds:
+      - "rm -rf '{{.OUTPUT_DIR}}'"
+      - "npm install"
+      # Checksum the generated files (this command must be last)
+      - >-
+        tar cf - --directory "{{.OUTPUT_DIR}}" {{.CHECKSUM_TAR_BASE_ARGS}} .
+        | md5sum > "{{.CHECKSUM_FILE}}"
+    sources:
+      - "{{.TASKFILE}}"
+      - "package.json"
+    status:
+      - "test -f '{{.CHECKSUM_FILE}}'"
+      - >-
+        diff
+        <(tar cf - --directory "{{.OUTPUT_DIR}}" {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum)
+        "{{.CHECKSUM_FILE}}"
 
   venv:
     internal: true
@@ -69,36 +135,15 @@ tasks:
         . "{{.OUTPUT_DIR}}/bin/activate"
         pip3 install --upgrade -r requirements.txt
       # Checksum the generated files (this command must be last)
-      - |-
-        cd "{{.OUTPUT_DIR}}"
-        tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum > "{{.CHECKSUM_FILE}}"
+      - >-
+        tar cf - --directory "{{.OUTPUT_DIR}}" {{.CHECKSUM_TAR_BASE_ARGS}} .
+        | md5sum > "{{.CHECKSUM_FILE}}"
     sources:
+      - "{{.TASKFILE}}"
       - "requirements.txt"
-      - "Taskfile.yml"
     status:
       - "test -f '{{.CHECKSUM_FILE}}'"
       - >-
         diff
-        <(cd '{{.OUTPUT_DIR}}' && tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum)
-        "{{.CHECKSUM_FILE}}"
-
-  http-server:
-    internal: true
-    vars:
-      CHECKSUM_FILE: "{{.BUILD_DIR}}/{{.TASK}}.md5"
-      OUTPUT_DIR: "{{.NODE_DEPS_DIR}}"
-    cmds:
-      - "rm -rf '{{.OUTPUT_DIR}}'"
-      - "npm --prefix '{{.OUTPUT_DIR}}' install http-server"
-      # Checksum the generated files (this command must be last)
-      - |-
-        cd "{{.OUTPUT_DIR}}"
-        tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum > "{{.CHECKSUM_FILE}}"
-    sources:
-      - "Taskfile.yml"
-    status:
-      - "test -f '{{.CHECKSUM_FILE}}'"
-      - >-
-        diff
-        <(cd '{{.NODE_DEPS_DIR}}' && tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum)
+        <(tar cf - --directory "{{.OUTPUT_DIR}}" {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum)
         "{{.CHECKSUM_FILE}}"

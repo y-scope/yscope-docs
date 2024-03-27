@@ -6,7 +6,8 @@ our open-source projects as well as other docs like format specifications, codin
 
 # Projects
 
-Below are all our open-source projects (so far).
+Below are all our open-source projects (so far). Each card links to docs for the specific project
+or, if no docs exist yet, it links to the project's repo. 
 
 ## Log management
 
@@ -80,7 +81,7 @@ and query-generation logic as well as serializing CLP IR files.
 :::
 
 :::{grid-item-card}
-:link: https://github.com/y-scope/clp-ffi-py
+:link: clp-ffi-py/main
 clp-ffi-py
 ^^^
 A Python library exposing an interface to CLP's core. It currently supports serializing,
@@ -122,6 +123,12 @@ general-purpose regular expression engines.
 To edit existing docs, click the "{fas}`pencil` Edit on GitHub" link found in the right sidebar of
 the page you want to edit. To create new docs, go to the relevant project's repo and add pages
 to the `docs` folder. The repo for this documentation hub is [here][yscope-docs].
+
+:::{toctree}
+:hidden:
+
+dev-guide/index
+:::
 
 [CLP]: https://github.com/y-scope/clp
 [clp-ffi-java]: https://github.com/y-scope/clp-ffi-java
