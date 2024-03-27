@@ -61,6 +61,6 @@ directory's path to generate routes similar to the previous table.
    task release-tar
    ```
 
-   The tar will be written to `build/release.tar.gz`.
+   The tar will be written to `build/yscope-docs-release.tar.gz`.
 5. Upload the tar to the deployment server and untar it.
-6. Follow the instructions in `release/server/README.md` to start the server.
+6. Follow the instructions in `yscope-docs-release/server/README.md` to start the server.

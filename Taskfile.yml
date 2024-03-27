@@ -33,9 +33,9 @@ tasks:
         . "{{.VENV_DIR}}/bin/activate"
         sphinx-build -a -E -c docs -b html docs "{{.OUTPUT_DIR}}"
       # Checksum the generated files (this command must be last)
-      - |-
-        cd "{{.OUTPUT_DIR}}"
-        tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum > "{{.CHECKSUM_FILE}}"
+      - >-
+        tar cf - --directory "{{.OUTPUT_DIR}}" {{.CHECKSUM_TAR_BASE_ARGS}} .
+        | md5sum > "{{.CHECKSUM_FILE}}"
     sources:
       - "docs/**/*"
       - "{{.BUILD_DIR}}/venv.md5"
@@ -43,7 +43,7 @@ tasks:
       - "test -f '{{.CHECKSUM_FILE}}'"
       - >-
         diff
-        <(cd '{{.OUTPUT_DIR}}' && tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum)
+        <(tar cf - --directory "{{.OUTPUT_DIR}}" {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum)
         "{{.CHECKSUM_FILE}}"
 
   download-projects:
@@ -56,7 +56,8 @@ tasks:
   release-tar:
     deps: ["docs"]
     vars:
-      OUTPUT_DIR: "{{.BUILD_DIR}}/release"
+      OUTPUT_DIR_NAME: "yscope-docs-release"
+      OUTPUT_DIR: "{{.BUILD_DIR}}/{{.OUTPUT_DIR_NAME}}"
       SITE_PUBLIC_DIR: "{{.OUTPUT_DIR}}/public"
     cmds:
       - "rm -rf '{{.OUTPUT_DIR}}'"
@@ -83,7 +84,9 @@ tasks:
           {} \
           "{{.SITE_PUBLIC_DIR}}" \
           \;
-      - "tar czf '{{.BUILD_DIR}}/release.tar.gz' '{{.OUTPUT_DIR}}'"
+      - >-
+        tar czf "{{.BUILD_DIR}}/{{.OUTPUT_DIR_NAME}}.tar.gz" --directory "{{.OUTPUT_DIR}}/.."
+        "{{.OUTPUT_DIR_NAME}}"
 
   serve:
     dir: "server"
@@ -103,9 +106,9 @@ tasks:
       - "rm -rf '{{.OUTPUT_DIR}}'"
       - "npm install"
       # Checksum the generated files (this command must be last)
-      - |-
-        cd "{{.OUTPUT_DIR}}"
-        tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum > "{{.CHECKSUM_FILE}}"
+      - >-
+        tar cf - --directory "{{.OUTPUT_DIR}}" {{.CHECKSUM_TAR_BASE_ARGS}} .
+        | md5sum > "{{.CHECKSUM_FILE}}"
     sources:
       - "{{.TASKFILE}}"
       - "package.json"
@@ -113,7 +116,7 @@ tasks:
       - "test -f '{{.CHECKSUM_FILE}}'"
       - >-
         diff
-        <(cd '{{.OUTPUT_DIR}}' && tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum)
+        <(tar cf - --directory "{{.OUTPUT_DIR}}" {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum)
         "{{.CHECKSUM_FILE}}"
 
   venv:
@@ -132,9 +135,9 @@ tasks:
         . "{{.OUTPUT_DIR}}/bin/activate"
         pip3 install --upgrade -r requirements.txt
       # Checksum the generated files (this command must be last)
-      - |-
-        cd "{{.OUTPUT_DIR}}"
-        tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum > "{{.CHECKSUM_FILE}}"
+      - >-
+        tar cf - --directory "{{.OUTPUT_DIR}}" {{.CHECKSUM_TAR_BASE_ARGS}} .
+        | md5sum > "{{.CHECKSUM_FILE}}"
     sources:
       - "requirements.txt"
       - "Taskfile.yml"
@@ -142,5 +145,5 @@ tasks:
       - "test -f '{{.CHECKSUM_FILE}}'"
       - >-
         diff
-        <(cd '{{.OUTPUT_DIR}}' && tar cf - {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum)
+        <(tar cf - --directory "{{.OUTPUT_DIR}}" {{.CHECKSUM_TAR_BASE_ARGS}} . | md5sum)
         "{{.CHECKSUM_FILE}}"
