@@ -15,7 +15,7 @@ or, if no docs exist yet, it links to the project's repo.
 :gutter: 2
 
 :::{grid-item-card}
-:link: https://github.com/y-scope/clp
+:link: clp/main
 CLP (clp)
 ^^^
 A tool that can compress both text and JSON logs with higher compression than general-purpose
