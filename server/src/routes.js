@@ -5,6 +5,17 @@ import path from "node:path";
 
 
 /**
+ * Base set of options to be used when registering the fastify static plugin.
+ *
+ * @type {Readonly<{[key: string]: any}>}
+ */
+const FASTIFY_STATIC_BASE_OPTIONS = Object.freeze({
+    decorateReply: false,
+    extensions: ["html"],
+    redirect: true,
+});
+
+/**
  * Fastify plugin to register routes for the main docs site and each project docs site.
  * @param {import("fastify").FastifyInstance} fastify
  * @param {object} options
@@ -16,9 +27,8 @@ import path from "node:path";
 const routes = async (fastify, options) => {
     // Add route for main site
     await fastify.register(fastifyStatic, {
-        decorateReply: false,
+        ...FASTIFY_STATIC_BASE_OPTIONS,
         prefix: "/",
-        redirect: true,
         root: path.resolve(options.publicDir, "html"),
     });
 
@@ -43,7 +53,7 @@ const routes = async (fastify, options) => {
     for (const project of projects) {
         for (const version of project.versions) {
             await fastify.register(fastifyStatic, {
-                decorateReply: false,
+                ...FASTIFY_STATIC_BASE_OPTIONS,
                 root: path.resolve(
                     options.publicDir,
                     `${project.name}-${version}`,
@@ -52,7 +62,6 @@ const routes = async (fastify, options) => {
                     "html"
                 ),
                 prefix: `/${project.name}/${version}`,
-                redirect: true,
             });
         }
     }
