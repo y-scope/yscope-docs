@@ -127,10 +127,16 @@ tasks:
     cmds:
       - "rm -rf '{{.OUTPUT_DIR}}'"
       - "python3 -m venv '{{.OUTPUT_DIR}}'"
-      # Remove calls to `hash` since Task uses `gosh` rather than `bash`.
+      # Remove calls to `hash` from the venv activation script since Task uses `gosh` rather than
+      # `bash`.
       # NOTE: Older versions of Python's venv would only call `hash` if they detected the running
       # shell was one that had the command, but that's not the case in newer versions.
-      - "sed -i 's/^\\s*hash\\s\\+.*//g' '{{.OUTPUT_DIR}}/bin/activate'"
+      - |-
+        # NOTE: We can't use `sed -i` since `-i` has different syntax on Linux and macOS
+        src="{{.OUTPUT_DIR}}/bin/activate"
+        dst="{{.OUTPUT_DIR}}/bin/activate.tmp"
+        sed --regexp-extended 's/^([[:space:]]*)hash[[:space:]]+.*/\1true/g' "${src}" > "${dst}"
+        mv "${dst}" "${src}"
       - |-
         . "{{.OUTPUT_DIR}}/bin/activate"
         pip3 install --upgrade -r requirements.txt
