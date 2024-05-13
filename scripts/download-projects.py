@@ -48,6 +48,24 @@ def _clone_repo(repo_url: str, output_dir: Path):
     return True
 
 
+def _checkout_ref(repo_dir: Path, ref_name: str):
+    """
+    Checks out the given ref.
+    :param repo_dir:
+    :param ref_name:
+    :return: Whether the checkout was successful.
+    """
+    cmd = [
+        "git",
+        "checkout",
+        ref_name,
+    ]
+    proc = subprocess.run(cmd, cwd=repo_dir)
+    if 0 != proc.returncode:
+        return False
+    return True
+
+
 def _dir_contains_repo(repo_dir: Path, repo_url: str):
     """
     :param repo_dir:
@@ -148,7 +166,7 @@ def main(argv):
                     failed = True
                     continue
 
-            if not _clone_repo(project.repo_url, repo_dir):
+            if not (_clone_repo(project.repo_url, repo_dir) and _checkout_ref(repo_dir, version)):
                 failed = True
                 continue
     if failed:
