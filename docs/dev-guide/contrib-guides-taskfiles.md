@@ -18,7 +18,7 @@ vars:
 
 binaries:
   vars:
-    BIN_BUILD_DIR: "{{.G_BUILD_DIR}}/bin"
+    BUILD_DIR: "{{.G_BUILD_DIR}}/bin"
 ```
 
 ## Paths in commands
