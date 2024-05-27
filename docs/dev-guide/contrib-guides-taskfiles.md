@@ -251,8 +251,9 @@ attributes.
 
 ## Ordering of list/map entries
 
-List/map entries should be ordered alphabetically (except for `vars`). Where there are several
-attributes, they may be broken down into categories with a comment above each category.
+List/map entries should be ordered alphabetically (except for `vars`), case-insensitively. Where
+there are several attributes, they may be broken down into categories with a comment above each
+category.
 
 Entries in the `vars` attribute may violate this ordering so that variables defined later can depend
 on the values of variables defined earlier.
