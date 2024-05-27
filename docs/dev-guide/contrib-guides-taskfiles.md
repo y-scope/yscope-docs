@@ -46,6 +46,38 @@ my-task:
 
 ## `sources` and `generates`
 
+The task attributes `sources` and `generates` are supposed to allow us to control whether a task is
+run based on whether its source files or generated files have changed, but `task`'s behaviour may
+seem intuitive. So to understand the guidelines, you'll first need to understand `task`'s behaviour.
+
+`task` has two methods to track changes to source files, specified using the `method` attribute:
+`checksum` which tracks changes to the source files checksums and `timestamp` which tracks changes
+to the source files' modification timestamps. Note that checksums and modification timestamps are
+only tracked for source files, *not* generated files.
+
+If a task has a `sources` attribute, then the task will run if:
+
+* it has never been run (the checksums/modification timestamps of the source files have not been
+  cached), or
+* the content of any listed source file has changed.
+
+This is true even if a `sources` entry is a glob that matches one or more file paths.
+
+If the task has a `sources` *and* a `generates` attribute, the task will run if any source file has
+changed or if any `generates` entry doesn't exist. Note however, that:
+
+* `task` doesn't checksum the generated files nor check if they are older than the source files; it
+  only checks for existence.
+* When using globs, `task` only checks whether the glob entry is satisfied rather than whether all
+  previously generated files exist.
+  * E.g., if the `generates` entry is `build/nodejs/node/**/*`,
+    `task` will re-run the task if the `node` or `nodejs` directory don't exist, or if they're
+    empty; but `task` won't re-run the task if all but one file inside `node` exists.
+
+Overall, this means that `task` will not detect *all* changes to the generated files.
+
+### Depending on generated files
+
 Every task with a `sources` field should depend on the generated files of its dependencies.
 
 **Example**
@@ -65,6 +97,93 @@ child1:
 child2:
   generates: ["child2-output.txt"]
 ```
+
+### `generates` and glob patterns
+
+Don't use `generates` entries with glob patterns unless you've accounted for the limitations above.
+Instead, you can manually checksum the generated files using the utility tasks below:
+
+```yaml
+vars:
+  CHECKSUM_TAR_BASE_ARGS: >-
+    --group=0
+    --mtime='UTC 1970-01-01'
+    --numeric-owner
+    --owner=0
+    --sort=name
+
+compute-checksum:
+  desc: "Tries to compute a checksum for the given directory and output it to a file."
+  internal: true
+  requires:
+    vars: ["DATA_DIR", "OUTPUT_FILE"]
+  cmds:
+    - >-
+      tar cf -
+      --directory "{{.DATA_DIR}}"
+      --group=0
+      --mtime='UTC 1970-01-01'
+      --numeric-owner
+      --owner=0
+      --sort=name
+      {{.CHECKSUM_TAR_BASE_ARGS}} . 2> /dev/null
+      | md5sum > {{.OUTPUT_FILE}}
+  # Ignore errors so that dependent tasks don't fail
+  ignore_error: true
+  silent: true
+
+validate-checksum:
+  desc: "Validates the checksum of the given directory matches the checksum in the given file, or
+  deletes the checksum file otherwise."
+  internal: true
+  requires:
+    vars: ["CHECKSUM_FILE", "DATA_DIR"]
+  vars:
+    TMP_CHECKSUM_FILE: "{{.CHECKSUM_FILE}}.tmp"
+  cmds:
+    - task: "compute-checksum"
+      vars:
+        DATA_DIR: "{{.DATA_DIR}}"
+        OUTPUT_FILE: "{{.TMP_CHECKSUM_FILE}}"
+    - defer: "rm -f '{{.TMP_CHECKSUM_FILE}}'"
+    # Check that the directory exists and the checksum matches; otherwise delete the checksum file
+    - >-
+      (
+      test -d "{{.DATA_DIR}}"
+      && diff -q '{{.TMP_CHECKSUM_FILE}}' '{{.CHECKSUM_FILE}}' 2> /dev/null
+      ) || rm -f '{{.CHECKSUM_FILE}}'
+  silent: true
+```
+
+You can use the utility tasks as follows:
+
+```yaml
+my-task:
+  vars:
+    CHECKSUM_FILE: "checksum.txt"
+    OUTPUT_DIR: "build/my-task"
+  sources: ["source.txt"]
+  generates: ["{{.CHECKSUM_FILE}}"]
+  deps:
+    - task: "validate-checksum"
+      vars:
+        CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
+        DATA_DIR: "{{.OUTPUT_DIR}}"
+  cmds:
+    - "mkdir -p '{{.OUTPUT_DIR}}'"
+    - "touch '{{.OUTPUT_DIR}}/output.txt'"
+    # This command must be last
+    - task: "compute-checksum"
+      vars:
+        DATA_DIR: "{{.OUTPUT_DIR}}"
+        OUTPUT_FILE: "{{.CHECKSUM_FILE}}"
+```
+
+Thus, the task will re-run if either:
+
+* the source files change;
+* the checksum file doesn't exist; or
+* `validate-checksum` fails because a generated file was changed.
 
 ## Task ordering
 
@@ -159,3 +278,4 @@ my-task:
 ```
 
 [Taskfiles]: https://taskfile.dev/usage/
+[task-attrs]: https://taskfile.dev/api/#task
