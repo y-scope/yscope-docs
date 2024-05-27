@@ -115,6 +115,7 @@ vars:
 compute-checksum:
   desc: "Tries to compute a checksum for the given directory and output it to a file."
   internal: true
+  silent: true
   requires:
     vars: ["DATA_DIR", "OUTPUT_FILE"]
   cmds:
@@ -130,12 +131,12 @@ compute-checksum:
       | md5sum > {{.OUTPUT_FILE}}
   # Ignore errors so that dependent tasks don't fail
   ignore_error: true
-  silent: true
 
 validate-checksum:
   desc: "Validates the checksum of the given directory matches the checksum in the given file, or
   deletes the checksum file otherwise."
   internal: true
+  silent: true
   requires:
     vars: ["CHECKSUM_FILE", "DATA_DIR"]
   vars:
@@ -152,7 +153,6 @@ validate-checksum:
       test -d "{{.DATA_DIR}}"
       && diff -q '{{.TMP_CHECKSUM_FILE}}' '{{.CHECKSUM_FILE}}' 2> /dev/null
       ) || rm -f '{{.CHECKSUM_FILE}}'
-  silent: true
 ```
 
 You can use the utility tasks as follows:
@@ -220,6 +220,10 @@ attributes.
   * `desc`
   * `internal`
   * `summary`
+* Logging
+  * `label`
+  * `prefix`
+  * `silent`
 * Variables
   * `dotenv`
   * `env`
@@ -244,10 +248,6 @@ attributes.
   * `cmds`
   * `ignore_error`
   * `interactive`
-* Logging
-  * `label`
-  * `prefix`
-  * `silent`
 
 ## Ordering of list/map entries
 
