@@ -233,7 +233,7 @@ attributes.
   * `sources`
 * Environment control
   * `dir`
-  * `platform`
+  * `platforms`
   * `set`
   * `shopt`
 * Outputs
