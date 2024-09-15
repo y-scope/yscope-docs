@@ -101,71 +101,21 @@ child2:
 ### `generates` and glob patterns
 
 Don't use `generates` entries with glob patterns unless you've accounted for the limitations above.
-Instead, you can manually checksum the generated files using the utility tasks below:
+Instead, we can checksum the generated files ourselves using the utility tasks in [yscope-dev-utils]
+as follows:
 
 ```yaml
-vars:
-  CHECKSUM_TAR_BASE_ARGS: >-
-    --group=0
-    --mtime='UTC 1970-01-01'
-    --numeric-owner
-    --owner=0
-    --sort=name
+includes:
+  utils: "tools/yscope-dev-utils/tasks/utils.yml"
 
-compute-checksum:
-  desc: "Tries to compute a checksum for the given directory and output it to a file."
-  internal: true
-  silent: true
-  requires:
-    vars: ["DATA_DIR", "OUTPUT_FILE"]
-  cmds:
-    - >-
-      tar cf -
-      --directory "{{.DATA_DIR}}"
-      --group=0
-      --mtime='UTC 1970-01-01'
-      --numeric-owner
-      --owner=0
-      --sort=name
-      {{.CHECKSUM_TAR_BASE_ARGS}} . 2> /dev/null
-      | md5sum > {{.OUTPUT_FILE}}
-  # Ignore errors so that dependent tasks don't fail
-  ignore_error: true
-
-validate-checksum:
-  desc: "Validates the checksum of the given directory matches the checksum in the given file, or
-  deletes the checksum file otherwise."
-  internal: true
-  silent: true
-  requires:
-    vars: ["CHECKSUM_FILE", "DATA_DIR"]
-  vars:
-    TMP_CHECKSUM_FILE: "{{.CHECKSUM_FILE}}.tmp"
-  cmds:
-    - task: "compute-checksum"
-      vars:
-        DATA_DIR: "{{.DATA_DIR}}"
-        OUTPUT_FILE: "{{.TMP_CHECKSUM_FILE}}"
-    - defer: "rm -f '{{.TMP_CHECKSUM_FILE}}'"
-    # Check that the directory exists and the checksum matches; otherwise delete the checksum file
-    - >-
-      (
-      test -d "{{.DATA_DIR}}"
-      && diff -q '{{.TMP_CHECKSUM_FILE}}' '{{.CHECKSUM_FILE}}' 2> /dev/null
-      ) || rm -f '{{.CHECKSUM_FILE}}'
-```
-
-You can use the utility tasks as follows:
-
-```yaml
 my-task:
   vars:
     CHECKSUM_FILE: "checksum.txt"
-    OUTPUT_DIR: "build/my-task"
+    OUTPUT_DIR: "build/{{.TASK}}"
   sources: ["source.txt"]
   generates: ["{{.CHECKSUM_FILE}}"]
   deps:
-    - task: "validate-checksum"
+    - task: "utils:validate-checksum"
       vars:
         CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
         DATA_DIR: "{{.OUTPUT_DIR}}"
@@ -173,7 +123,7 @@ my-task:
     - "mkdir -p '{{.OUTPUT_DIR}}'"
     - "touch '{{.OUTPUT_DIR}}/output.txt'"
     # This command must be last
-    - task: "compute-checksum"
+    - task: "utils:compute-checksum"
       vars:
         DATA_DIR: "{{.OUTPUT_DIR}}"
         OUTPUT_FILE: "{{.CHECKSUM_FILE}}"
@@ -280,3 +230,4 @@ my-task:
 
 [Taskfiles]: https://taskfile.dev/usage/
 [task-attrs]: https://taskfile.dev/api/#task
+[yscope-dev-utils]: https://github.com/y-scope/yscope-dev-utils/blob/main/taskfiles/utils.yml
