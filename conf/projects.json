@@ -17,5 +17,12 @@
     "versions": [
       "main"
     ]
+  },
+  {
+    "name": "yscope-log-viewer",
+    "repo_url": "https://github.com/y-scope/yscope-log-viewer.git",
+    "versions": [
+      "main"
+    ]
   }
 ]
