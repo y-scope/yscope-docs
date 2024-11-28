@@ -95,7 +95,7 @@ deserializing, searching, and analyzing CLP IR files.
 :gutter: 2
 
 :::{grid-item-card}
-:link: https://github.com/y-scope/yscope-log-viewer
+:link: yscope-log-viewer/main
 YScope Log Viewer (yscope-log-viewer)
 ^^^
 A web interface for viewing logs that use CLP’s IR stream format including features like filtering
