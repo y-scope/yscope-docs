@@ -7,6 +7,7 @@ This section contains docs describing our development practices and the like.
 :maxdepth: 1
 
 contrib-guides-overview
+contrib-guides-cpp
 contrib-guides-taskfiles
 :::
 
