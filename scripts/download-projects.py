@@ -1,6 +1,7 @@
 import argparse
 import json
 import logging
+import multiprocessing
 import subprocess
 from pathlib import Path
 import sys
@@ -29,38 +30,26 @@ class Project(BaseModel):
     versions: List[str]
 
 
-def _clone_repo(repo_url: str, output_dir: Path):
+def _clone_repo_at_ref(repo_url: str, ref_name: str, output_dir: Path):
     """
     Clones a repo.
     :param repo_url:
+    :param ref_name:
     :param output_dir:
     :return: Whether the clone was successful
     """
     cmd = [
         "git",
         "clone",
+        "--depth", "1",
+        "--branch", ref_name,
+        "--recurse-submodules",
+        "--shallow-submodules",
+        "--jobs", str(multiprocessing.cpu_count()),
         repo_url,
         str(output_dir),
     ]
     proc = subprocess.run(cmd)
-    if 0 != proc.returncode:
-        return False
-    return True
-
-
-def _checkout_ref(repo_dir: Path, ref_name: str):
-    """
-    Checks out the given ref.
-    :param repo_dir:
-    :param ref_name:
-    :return: Whether the checkout was successful.
-    """
-    cmd = [
-        "git",
-        "checkout",
-        ref_name,
-    ]
-    proc = subprocess.run(cmd, cwd=repo_dir)
     if 0 != proc.returncode:
         return False
     return True
@@ -166,7 +155,7 @@ def main(argv):
                     failed = True
                     continue
 
-            if not (_clone_repo(project.repo_url, repo_dir) and _checkout_ref(repo_dir, version)):
+            if not _clone_repo_at_ref(project.repo_url, version, repo_dir):
                 failed = True
                 continue
     if failed:
