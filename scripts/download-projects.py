@@ -1,7 +1,7 @@
 import argparse
 import json
 import logging
-import multiprocessing
+import os
 import subprocess
 from pathlib import Path
 import sys
@@ -38,6 +38,9 @@ def _clone_repo_at_ref(repo_url: str, ref_name: str, output_dir: Path):
     :param output_dir:
     :return: Whether the clone was successful
     """
+    cpu_count = os.cpu_count()
+    if cpu_count is None:
+        cpu_count = 1
     cmd = [
         "git",
         "clone",
@@ -45,7 +48,7 @@ def _clone_repo_at_ref(repo_url: str, ref_name: str, output_dir: Path):
         "--branch", ref_name,
         "--recurse-submodules",
         "--shallow-submodules",
-        "--jobs", str(multiprocessing.cpu_count()),
+        "--jobs", str(cpu_count),
         repo_url,
         str(output_dir),
     ]
