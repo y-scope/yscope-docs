@@ -4,13 +4,13 @@ Follow the guidelines below when writing and updating C++ files.
 
 ## Automated linting
 
-As mentioned in the overview, where possible, we have automated linting processes so you need not
-remember all guidelines perfectly. For C++, we currently use the following tools:
+As mentioned in the overview, where possible, we have automated linting processes, so you need not
+remember all the guidelines perfectly. For C++, we currently use the following tools:
 
 * `clang-format` for formatting ([base config][clang-format-config])
 * `clang-tidy` for static analysis ([base config][clang-tidy-config])
 
-When the linter disagrees with a guideline, err on the side of following the linter since:
+When the linter disagrees with a guideline, err on the side of following the linter, since:
 
 * we don't want automated runs of the linters to fail, leading to them being ignored due to the
   noise.
@@ -39,12 +39,12 @@ This section is a work in progress and does not yet include all exceptions after
 
 #### Self-contained Headers
 
-* Header files should end in `.hpp`
-* Don't use non-header files meant for inclusion since they can confuse static analysis tools.
+* Header files should end in `.hpp`.
+* Don't use non-header files meant for inclusion, since they can confuse static analysis tools.
 
 #### The #define Guard
 
-* The format of the symbol name should be `<NAMESPACE>_<FILENAME-STEM>_<FILENAME-EXTENSION>`
+The format of the symbol name should be `<NAMESPACE>_<FILENAME-STEM>_<FILENAME-EXTENSION>`.
 
 #### Names and order of includes
 
@@ -74,11 +74,11 @@ internal linkage.
 
 #### Doing work in constructors
 
-* We allow (but discourage) the use of exceptions, even in constructors.
+We allow (but discourage) the use of exceptions, even in constructors.
 
 #### Declaration order
 
-* Group static constants/methods/members together before non-static constants/methods/constants.
+Group static constants/methods/members together before non-static constants/methods/constants.
 
 [adding-cpp-linting]: https://github.com/y-scope/yscope-dev-utils/blob/main/docs/lint-tools-cpp.md
 [clang-format-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-format
