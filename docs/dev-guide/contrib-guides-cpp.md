@@ -85,4 +85,4 @@ Group static constants/methods/members together before non-static constants/meth
 [clang-tidy-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-tidy
 [google-cpp-style-guide]: https://google.github.io/styleguide/cppguide.html
 [google-cpp-style-guide-classes]: https://google.github.io/styleguide/cppguide.html#Classes
-[google-styleguide-8f97e24]: https://github.com/google/styleguide/commit/8f97e24da04753c7a15eda6b02114a01ec3146f5
+[google-styleguide-8f97e24]: https://github.com/google/styleguide/tree/8f97e24da04753c7a15eda6b02114a01ec3146f5
