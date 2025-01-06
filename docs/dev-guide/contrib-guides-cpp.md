@@ -50,8 +50,7 @@ The format of the symbol name should be `<NAMESPACE>_<FILENAME-STEM>_<FILENAME-E
 
 * For codebases where the code is not organized into well-defined libraries, it is fine to use UNIX
   directory aliases to include headers.
-* For C headers that have C++ counterparts (e.g., `stddef.h` vs `cstddef`), prefer the C++
-  counterpart.
+* For C headers that have C++ counterparts (e.g., `stddef.h` vs `cstddef`), use the C++ counterpart.
 
 ### Scoping
 
