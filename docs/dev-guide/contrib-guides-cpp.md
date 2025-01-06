@@ -79,7 +79,7 @@ successful, constructs and returns the object.
 
 #### Declaration order
 
-Within each section, our declaration order is as follows:
+Within each section, order declarations as follows:
 
 1. Types and type aliases (`typedef`, `using`, `enum`, nested structs and classes, and `friend`
    types).
