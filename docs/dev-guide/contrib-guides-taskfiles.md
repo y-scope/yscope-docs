@@ -278,5 +278,26 @@ my-task:
     - "lib2"
 ```
 
+## Task docstrings
+
+For reusable utility tasks that take arguments, you should add a docstring above the task definition
+using a JSDoc-like syntax. The following example demonstrates the syntax:
+
+```yaml
+# Task description.
+#
+# @param {param_type} param_1 Description for a required parameter.
+# @param {param_type} [param_2] Description for an optional parameter.
+# @param {param_type} [param_3=default_value] Description for an optional parameter with a default
+# value.
+# @param {[]param_type} param_4 Description for a required parameter that's an array.
+# @param {map[key_type]value_type} param_5 Description for a required parameter that's a map.
+```
+
+* The task's description (and the empty line following it) may be omitted if the task's name makes
+  it obvious.
+* Each parameter's description may be omitted if it's obvious.
+* Each parameter's type should use Go's (rather than JavaScript's) syntax for specifying types.
+
 [Taskfiles]: https://taskfile.dev/usage/
 [task-attrs]: https://taskfile.dev/api/#task
