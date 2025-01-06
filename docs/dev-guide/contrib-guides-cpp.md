@@ -77,7 +77,26 @@ We allow (but discourage) the use of exceptions, even in constructors.
 
 #### Declaration order
 
-Group static constants/methods/members together before non-static constants/methods/constants.
+Within each section, our declaration order is as follows:
+
+1. Types and type aliases (`typedef`, `using`, `enum`, nested structs and classes, and `friend`
+   types).
+2. Static constants.
+3. Static functions:
+   * Factory functions.
+   * Other functions.
+4. Static variables.
+5. Constructors.
+6. Copy & move constructors and assignment operators.
+7. The destructor.
+8. Methods (member functions):
+   * Overridden methods.
+   * Implemented abstract methods.
+   * All other methods.
+9. Data members.
+
+The order above is to largely to agree with our general
+[ordering guidelines](./contrib-guides-general.md#declaration-order).
 
 [adding-cpp-linting]: https://github.com/y-scope/yscope-dev-utils/blob/main/docs/lint-tools-cpp.md
 [clang-format-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-format
