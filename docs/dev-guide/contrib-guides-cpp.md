@@ -73,7 +73,9 @@ internal linkage.
 
 #### Doing work in constructors
 
-We allow (but discourage) the use of exceptions, even in constructors.
+We allow (but discourage) the use of exceptions, even in constructors. If creating an object can
+fail, you're encouraged to use a factory function that performs the work that can fail, and if
+successful, constructs and returns the object.
 
 #### Declaration order
 
