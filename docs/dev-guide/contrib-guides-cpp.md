@@ -46,7 +46,7 @@ This section is a work in progress and does not yet include all exceptions after
 
 The symbol name should have the form
 
-```
+```txt
 <NAMESPACE>_<FILENAME-STEM>_<FILENAME-EXTENSION>
 ```
 
@@ -98,7 +98,7 @@ internal linkage. However, as Google's style guide indicates, you can't use unna
 header files. For symbols that should only be used within a header file, you can create a named
 namespace in the header file, where its name is of the form:
 
-```
+```txt
 <FilenameStem>_internal
 ```
 
@@ -147,8 +147,8 @@ Within each section, order declarations as follows:
    * All other methods.
 9. Data members.
 
-The order above is to largely to agree with our general
-[ordering guidelines](./contrib-guides-general.md#declaration-order).
+The differences between our declaration order and the order in Google's style guide is to conform
+with our general [ordering guidelines](./contrib-guides-general.md#declaration-order).
 
 [adding-cpp-linting]: https://github.com/y-scope/yscope-dev-utils/blob/main/docs/lint-tools-cpp.md
 [clang-format-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-format
