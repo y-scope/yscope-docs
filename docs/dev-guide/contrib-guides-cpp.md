@@ -28,11 +28,11 @@ it.
 
 We adhere to [Google's C++ style guide][google-cpp-style-guide] (as of
 [8f97e24][google-styleguide-8f97e24]) with the following exceptions (organized according to the
-sections in the Google style guide).
+sections in Google's style guide).
 
 :::{note}
 This section is a work in progress and does not yet include all exceptions after the
-[Classes][google-cpp-style-guide-classes] section of the Google style guide.
+[Classes][google-cpp-style-guide-classes] section of Google's style guide.
 :::
 
 ### Header files
@@ -54,9 +54,9 @@ where
 
 * `<NAMESPACE>` is the namespace of the file.
   * For files in a nested namespace, each namespace layer should be separated by an underscore.
-* `<FILENAME-STEM>` is the file's name without the extension.
+* `<FILENAME_STEM>` is the file's name without the extension.
   * For stems with multiple words, the words should _not_ be separated with underscores.
-* `<FILENAME-EXTENSION>` is the file's extension.
+* `<FILENAME_EXTENSION>` is the file's extension.
 
 For example:
 
@@ -94,20 +94,17 @@ namespace foo::bar {
 #### Internal linkage
 
 Only use unnamed namespaces (instead of the `static` qualifier) to give functions and variables
-internal linkage.
-
-#### Internal symbols inside header files
-
-Unnamed namespaces are not allowed in header files due to their potential to create multiple
-conflicting definitions across translation units. Instead, internal symbols (e.g., helper functions
-only used inside the header file) should be placed in a dedicated named namespace within the file's
-primary namespace. The internal namespace should follow this naming convention:
+internal linkage. However, as Google's style guide indicates, you can't use unnamed namespaces in
+header files. For symbols that should only be used within a header file, you can create a named
+namespace in the header file, where its name is of the form:
 
 ```
-<FILENAME_STEM>_internal
+<FilenameStem>_internal
 ```
+
 where
-* `<FILENAME-STEM>` is the file's name without the extension.
+
+* `<FilenameStem_stem>` is the file's name without the extension.
 * `_internal` is a fixed suffix indicating the namespace's purpose.
 
 For example:
