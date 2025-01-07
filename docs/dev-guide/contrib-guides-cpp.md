@@ -44,18 +44,18 @@ This section is a work in progress and does not yet include all exceptions after
 
 #### The #define Guard
 
-The symbol name should have the form:
+The symbol name should have the form
 
 ```
 <NAMESPACE>_<FILENAME-STEM>_<FILENAME-EXTENSION>
 ```
 
-where:
+where
 
 * `<NAMESPACE>` is the namespace of the file.
   * For files in a nested namespace, each namespace layer should be separated by an underscore.
 * `<FILENAME-STEM>` is the file's name without the extension.
-  * Stems with multiple words should _not_ separate the words with underscores.
+  * For stems with multiple words, the words should _not_ be separated with underscores.
 * `<FILENAME-EXTENSION>` is the file's extension.
 
 For example:
