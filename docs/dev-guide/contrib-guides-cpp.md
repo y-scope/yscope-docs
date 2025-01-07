@@ -44,7 +44,34 @@ This section is a work in progress and does not yet include all exceptions after
 
 #### The #define Guard
 
-The format of the symbol name should be `<NAMESPACE>_<FILENAME-STEM>_<FILENAME-EXTENSION>`.
+The symbol name should have the form:
+
+```
+<NAMESPACE>_<FILENAME-STEM>_<FILENAME-EXTENSION>
+```
+
+where:
+
+* `<NAMESPACE>` is the namespace of the file.
+  * For files in a nested namespace, each namespace layer should be separated by an underscore.
+* `<FILENAME-STEM>` is the file's name without the extension.
+  * Stems with multiple words should _not_ separate the words with underscores.
+* `<FILENAME-EXTENSION>` is the file's extension.
+
+For example:
+
+`clp/streaming_archive/reader/SegmentManager.hpp`
+
+```c++
+#ifndef CLP_STREAMING_ARCHIVE_READER_SEGMENTMANAGER_HPP
+#define CLP_STREAMING_ARCHIVE_READER_SEGMENTMANAGER_HPP
+
+namespace clp::streaming_archive::reader {
+    // ...
+}
+
+#endif  // CLP_STREAMING_ARCHIVE_READER_SEGMENTMANAGER_HPP
+```
 
 #### Names and order of includes
 
