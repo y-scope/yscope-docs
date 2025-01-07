@@ -96,6 +96,32 @@ namespace foo::bar {
 Only use unnamed namespaces (instead of the `static` qualifier) to give functions and variables
 internal linkage.
 
+#### Internal symbols inside header files
+
+Unnamed namespaces are not allowed in header files due to their potential to create multiple
+conflicting definitions across translation units. Instead, internal symbols (e.g., helper functions
+only used inside the header file) should be placed in a dedicated named namespace within the file's
+primary namespace. The internal namespace should follow this naming convention:
+
+```
+<FILENAME_STEM>_internal
+```
+where
+* `<FILENAME-STEM>` is the file's name without the extension.
+* `_internal` is a fixed suffix indicating the namespace's purpose.
+
+For example:
+
+`clp/streaming_archive/reader/SegmentManager.hpp`
+
+```c++
+namespace clp::streaming_archive::reader {
+namespace SegmentManager_internal {
+// Internal symbols
+}
+}
+```
+
 ### Classes
 
 #### Doing work in constructors
