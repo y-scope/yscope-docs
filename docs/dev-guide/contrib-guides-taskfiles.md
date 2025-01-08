@@ -296,7 +296,8 @@ using a JSDoc-like syntax. The following example demonstrates the syntax:
 
 * The task's description (and the empty line following it) may be omitted if the task's name makes
   it obvious.
-* Each parameter's description may be omitted if it's obvious.
+* Each parameter's description may be omitted if it's obvious (however, the tag, type, and name
+  should always be present).
 * Each parameter's type should use Go's (rather than JavaScript's) syntax for specifying types.
 
 :::{note}
