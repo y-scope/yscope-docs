@@ -21,8 +21,8 @@ When the linter disagrees with a guideline, err on the side of following the lin
 To learn about how to apply the linters to a new C++ project, [see here][adding-cpp-linting].
 :::
 
-When you encounter such a disagreement, if it hasn't been noted below, please open an issue to track
-it.
+When you encounter such a disagreement, if it hasn't been noted below, please open an [issue] to
+track it.
 
 ## Guidelines
 
@@ -40,7 +40,8 @@ This section is a work in progress and does not yet include all exceptions after
 #### Self-contained Headers
 
 * Header files should end in `.hpp`.
-* Don't use non-header files meant for inclusion, since they can confuse static analysis tools.
+* Don't use non-header files meant for inclusion (e.g., `.impl`/`.tpp` files included at the end of
+  the `.hpp` file), since they can confuse static analysis tools.
 
 #### The #define Guard
 
@@ -124,8 +125,8 @@ namespace SegmentManager_internal {
 #### Doing work in constructors
 
 We allow (but discourage) the use of exceptions, even in constructors. If creating an object can
-fail, you're encouraged to use a factory function that performs the work that can fail, and if
-successful, constructs and returns the object.
+fail, you're encouraged to use a factory function that performs the work that can fail, and then
+returns a result containing an error code if unsuccessful or the object if successful.
 
 #### Declaration order
 
@@ -156,3 +157,4 @@ with our general [ordering guidelines](./contrib-guides-general.md#declaration-o
 [google-cpp-style-guide]: https://google.github.io/styleguide/cppguide.html
 [google-cpp-style-guide-classes]: https://google.github.io/styleguide/cppguide.html#Classes
 [google-styleguide-8f97e24]: https://github.com/google/styleguide/tree/8f97e24da04753c7a15eda6b02114a01ec3146f5
+[issue]: https://github.com/y-scope/yscope-docs/issues/new
