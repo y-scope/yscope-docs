@@ -12,6 +12,16 @@ This section is a work in progress while we open-source all our guidelines.
 :gutter: 2
 
 :::{grid-item-card}
+:link: contrib-guides-general
+General guidelines
+:::
+
+:::{grid-item-card}
+:link: contrib-guides-cpp
+C++
+:::
+
+:::{grid-item-card}
 :link: contrib-guides-taskfiles
 Taskfiles
 :::
