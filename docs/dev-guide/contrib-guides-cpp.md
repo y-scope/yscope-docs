@@ -40,8 +40,8 @@ This section is a work in progress and does not yet include all exceptions after
 #### Self-contained Headers
 
 * Header files should end in `.hpp`.
-* Don't use non-header files meant for inclusion (e.g., `.impl`/`.tpp` files included at the end of
-  the `.hpp` file), since they can confuse static analysis tools.
+* Don't use non-header files meant for inclusion (e.g., `.impl`/`.inc`/`.tpp` files included at the
+  end of the `.hpp` file), since they can confuse static analysis tools.
 
 #### The #define Guard
 
