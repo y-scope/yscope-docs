@@ -48,7 +48,8 @@ my-task:
 
 The task attributes `sources` and `generates` are supposed to allow us to control whether a task is
 run based on whether its source files or generated files have changed, but `task`'s behaviour may
-seem intuitive. So to understand the guidelines, you'll first need to understand `task`'s behaviour.
+seem unintuitive. So to understand the guidelines, you'll first need to understand `task`'s
+behaviour.
 
 `task` has two methods to track changes to source files, specified using the `method` attribute:
 `checksum` which tracks changes to the source files checksums and `timestamp` which tracks changes
