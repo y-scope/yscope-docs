@@ -151,6 +151,34 @@ Within each section, order declarations as follows:
 The differences between our declaration order and the order in Google's style guide is to conform
 with our general [ordering guidelines](./contrib-guides-general.md#declaration-order).
 
+### Type-specific Guidelines
+
+#### std::unordered_map
+
+* Don't use `unordered_map`'s `[]` operator.
+  * `unordered_map`'s `[]` operator operates as follows:
+    * If the specified key doesn't exist, then a kv-pair will be created using the value's default
+      constructor.
+    * If the specified key already exists, the value will be returned directly.
+  * This behaviour is error-prone for access existing keys because:
+    * You could create a kv-pair by accident without explicitly knowing whether the corresponding
+      key already existed.
+  * This behaviour is inefficient for creating new kv-pairs because the value must be first default
+    constructed.
+  * Instead, you should use the following as required:
+    * Use [`contains`][std::unordered_map::contains] to check whether a key exists (available since
+      C++20).
+    * Use [`emplace`][std::unordered_map::emplace] to construct and insert kv-pairs efficiently.
+    * Use [`at`][std::unordered_map::at] to access the value of a given key with internal sanity
+      checks.
+    * Use [`try_emplace`][std::unordered_map::try_emplace] to inserts in-place if the key does not
+      exist, does nothing if the key exists.
+  * For consistency and maintainability, you should avoid using the `[]` operator in all map-like
+    containers (such as `std::map`) and use the suggested methods above wherever possible. By
+    avoiding `[]`, it becomes easier to switch between container types (e.g., from `std::map` to
+    `std::unordered_map`) with minimal effort.
+
+
 [adding-cpp-linting]: https://github.com/y-scope/yscope-dev-utils/blob/main/docs/lint-tools-cpp.md
 [clang-format-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-format
 [clang-tidy-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-tidy
@@ -158,3 +186,7 @@ with our general [ordering guidelines](./contrib-guides-general.md#declaration-o
 [google-cpp-style-guide-classes]: https://google.github.io/styleguide/cppguide.html#Classes
 [google-styleguide-8f97e24]: https://github.com/google/styleguide/tree/8f97e24da04753c7a15eda6b02114a01ec3146f5
 [issue]: https://github.com/y-scope/yscope-docs/issues/new
+[std::unordered_map::at]: https://en.cppreference.com/w/cpp/container/unordered_map/at
+[std::unordered_map::contains]: https://en.cppreference.com/w/cpp/container/unordered_map/contains
+[std::unordered_map::emplace]: https://en.cppreference.com/w/cpp/container/unordered_map/emplace
+[std::unordered_map::try_emplace]: https://en.cppreference.com/w/cpp/container/unordered_map/try_emplace
