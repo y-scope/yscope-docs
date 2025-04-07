@@ -21,7 +21,17 @@ binaries:
     BUILD_DIR: "{{.G_BUILD_DIR}}/bin"
 ```
 
-## Paths in commands
+## Specifying paths
+
+### Matching files with glob patterns
+
+To match all files in the current directory and subdirectories, use the pattern `**/*`.
+
+:::{warning}
+Unlike `bash`, the pattern `**` in `task` only matches all files in the current directory.
+:::
+
+### Paths in commands
 
 All paths used in commands should be quoted.
 
