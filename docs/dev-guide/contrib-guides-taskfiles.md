@@ -21,7 +21,7 @@ binaries:
     BUILD_DIR: "{{.G_BUILD_DIR}}/bin"
 ```
 
-## Specifying paths
+## Paths
 
 ### Matching files with glob patterns
 
