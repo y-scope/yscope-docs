@@ -37,7 +37,7 @@ Use the glob patterns in the table below depending on your use case.
 | Match all files with the `.x` extension in the current directory and all levels of subdirectories.       | `**/*.x` |
 
 Patterns can be combined depending on your needs. E.g., `*/*/**/*.x` matches all files with the`.x`
-extension that in a subdirectory two or more levels below the current directory.
+extension that are in a subdirectory two or more levels below the current directory.
 
 :::{warning}
 Don't use the pattern `**` (instead of `**/*`) since it is equivalent to `*`. Note that this isn't
