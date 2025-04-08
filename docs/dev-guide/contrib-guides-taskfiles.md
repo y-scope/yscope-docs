@@ -21,7 +21,30 @@ binaries:
     BUILD_DIR: "{{.G_BUILD_DIR}}/bin"
 ```
 
-## Paths in commands
+## Paths
+
+### Matching files with glob patterns
+
+Use the glob patterns in the table below depending on your use case.
+
+| Use case                                                                                                 | Pattern  |
+|----------------------------------------------------------------------------------------------------------|----------|
+| Match all files in the current directory.                                                                | `*`      |
+| Match all files with the `.x` extension in the current directory.                                        | `*.x`    |
+| Match all files that are in a subdirectory directly below the current directory.                         | `*/*`    |
+| Match all files with the `.x` extension that are in a subdirectory directly below the current directory. | `*/*.x`  |
+| Match all files in the current directory and all levels of subdirectories.                               | `**/*`   |
+| Match all files with the `.x` extension in the current directory and all levels of subdirectories.       | `**/*.x` |
+
+Patterns can be combined depending on your needs. E.g., `*/*/**/*.x` matches all files with the`.x`
+extension that are in a subdirectory two or more levels below the current directory.
+
+:::{warning}
+Don't use the pattern `**` (instead of `**/*`) since it is equivalent to `*`. Note that this isn't
+the case in bash.
+:::
+
+### Paths in commands
 
 All paths used in commands should be quoted.
 
