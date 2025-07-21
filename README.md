@@ -31,8 +31,6 @@ Follow the steps below to build and view the site locally.
 
 ## Viewing the output
 
-Run task `serve` to view the output:
-
 ```shell
 task docs:serve
 ```

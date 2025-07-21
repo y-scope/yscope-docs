@@ -44,11 +44,11 @@ tasks:
         python3 scripts/download-projects.py --build-dir "{{.G_BUILD_DIR}}"
 
   release-tar:
-    deps: ["build"]
     vars:
       OUTPUT_DIR_NAME: "yscope-docs-release"
       OUTPUT_DIR: "{{.G_BUILD_DIR}}/{{.OUTPUT_DIR_NAME}}"
       SITE_PUBLIC_DIR: "{{.OUTPUT_DIR}}/public"
+    deps: ["build"]
     cmds:
       - "rm -rf '{{.OUTPUT_DIR}}'"
       - "mkdir -p '{{.OUTPUT_DIR}}'"
@@ -102,8 +102,8 @@ tasks:
           CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
           INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
     cmds:
+      - "rm -rf '{{.OUTPUT_DIR}}'"
       - |-
-        rm -rf "{{.OUTPUT_DIR}}"
         cd "{{.G_SOURCE_DIR}}"
         npm install
 
