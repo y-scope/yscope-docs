@@ -1,0 +1,145 @@
+version: "3"
+
+includes:
+  utils:
+    internal: true
+    taskfile: "../tools/yscope-dev-utils/exports/taskfiles/utils/utils.yaml"
+
+vars:
+  G_SOURCE_DIR: "{{.ROOT_DIR}}/server"
+  G_VENV_CHECKSUM_FILE: "{{.G_BUILD_DIR}}/docs#venv.md5"
+  G_VENV_DIR: "{{.G_BUILD_DIR}}/venv"
+
+tasks:
+  build:
+    vars:
+      CHECKSUM_FILE: "{{.G_BUILD_DIR}}/{{.TASK | replace \":\" \"#\"}}.md5"
+      OUTPUT_DIR: "{{.G_BUILD_DIR}}/html"
+    sources:
+      - "{{.G_VENV_CHECKSUM_FILE}}"
+      - "{{.ROOT_DIR}}/docs/**/*"
+      - "{{.TASKFILE}}"
+    generates: ["{{.CHECKSUM_FILE}}"]
+    deps:
+      - task: "utils:checksum:validate"
+        vars:
+          CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
+          INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
+      - "venv"
+    cmds:
+      - |-
+        . "{{.G_VENV_DIR}}/bin/activate"
+        sphinx-build -a -E -c docs -b html docs "{{.OUTPUT_DIR}}"
+
+      # This command must be last
+      - task: "utils:checksum:compute"
+        vars:
+          CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
+          INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
+
+  download-projects:
+    deps: ["venv"]
+    cmds:
+      - |-
+        . "{{.G_VENV_DIR}}/bin/activate"
+        python3 scripts/download-projects.py --build-dir "{{.G_BUILD_DIR}}"
+
+  release-tar:
+    vars:
+      OUTPUT_DIR_NAME: "yscope-docs-release"
+      OUTPUT_DIR: "{{.G_BUILD_DIR}}/{{.OUTPUT_DIR_NAME}}"
+      SITE_PUBLIC_DIR: "{{.OUTPUT_DIR}}/public"
+    deps: ["build"]
+    cmds:
+      - "rm -rf '{{.OUTPUT_DIR}}'"
+      - "mkdir -p '{{.OUTPUT_DIR}}'"
+      - >-
+        rsync
+        --archive
+        --relative
+        conf/projects.json
+        server/.env
+        server/src
+        server/package.json
+        server/package-lock.json
+        server/README.md
+        "{{.OUTPUT_DIR}}"
+      - "mkdir '{{.SITE_PUBLIC_DIR}}'"
+      - "rsync -a '{{.G_BUILD_DIR}}/html' {{.SITE_PUBLIC_DIR}}"
+      - |-
+        cd "{{.G_BUILD_DIR}}"
+        find -type d -regex ".*/build/docs/html" -exec \
+          rsync \
+          --archive \
+          --relative \
+          {} \
+          "{{.SITE_PUBLIC_DIR}}" \
+          \;
+      - >-
+        tar czf "{{.G_BUILD_DIR}}/{{.OUTPUT_DIR_NAME}}.tar.gz" --directory "{{.OUTPUT_DIR}}/.."
+        "{{.OUTPUT_DIR_NAME}}"
+
+  serve:
+    deps:
+      - "build"
+      - "server"
+    cmd: |-
+      cd "{{.G_SOURCE_DIR}}"
+      PUBLIC_DIR="{{.G_BUILD_DIR}}" npm run dev
+
+  server:
+    internal: true
+    vars:
+      CHECKSUM_FILE: "{{.G_BUILD_DIR}}/{{.TASK | replace \":\" \"#\"}}.md5"
+      OUTPUT_DIR: "{{.G_SOURCE_DIR}}/node_modules"
+    sources:
+      - "{{.G_SOURCE_DIR}}/package.json"
+      - "{{.TASKFILE}}"
+    generates: ["{{.CHECKSUM_FILE}}"]
+    run: "once"
+    deps:
+      - task: "utils:checksum:validate"
+        vars:
+          CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
+          INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
+    cmds:
+      - "rm -rf '{{.OUTPUT_DIR}}'"
+      - |-
+        cd "{{.G_SOURCE_DIR}}"
+        npm install
+
+      # This command must be last
+      - task: "utils:checksum:compute"
+        vars:
+          CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
+          INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
+
+  venv:
+    internal: true
+    vars:
+      CHECKSUM_FILE: "{{.G_VENV_CHECKSUM_FILE}}"
+      OUTPUT_DIR: "{{.G_VENV_DIR}}"
+      REQUIREMENTS_FILE: "{{.ROOT_DIR}}/requirements.txt"
+    sources:
+      - "{{.REQUIREMENTS_FILE}}"
+      - "{{.TASKFILE}}"
+    generates: ["{{.CHECKSUM_FILE}}"]
+    run: "once"
+    deps:
+      - ":init"
+      - task: "utils:checksum:validate"
+        vars:
+          CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
+          INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
+    cmds:
+      - task: "utils:misc:create-venv"
+        vars:
+          LABEL: "docs"
+          OUTPUT_DIR: "{{.OUTPUT_DIR}}"
+          REQUIREMENTS_FILE: "{{.REQUIREMENTS_FILE}}"
+
+      # This command must be last
+      - task: "utils:checksum:compute"
+        vars:
+          CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
+          INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]

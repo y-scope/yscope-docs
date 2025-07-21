@@ -38,13 +38,13 @@ directory's path to generate routes similar to the previous table.
 1. Build a clean version of this docs site:
 
    ```shell
-   task clean && task
+   task clean && task docs:build
    ```
 
 2. Download the projects:
 
    ```shell
-   task download-projects
+   task docs:download-projects
    ```
 
 3. Build the docs for each project and version in `conf/projects.json`:
@@ -58,7 +58,7 @@ directory's path to generate routes similar to the previous table.
 4. Assemble a release:
 
    ```shell
-   task release-tar
+   task docs:release-tar
    ```
 
    The tar will be written to `build/yscope-docs-release.tar.gz`.
