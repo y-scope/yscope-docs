@@ -1,0 +1,21 @@
+version: "3"
+
+set: ["u", "pipefail"]
+shopt: ["globstar"]
+
+includes:
+  docs: "taskfiles/docs.yaml"
+
+vars:
+  G_BUILD_DIR: "{{.ROOT_DIR}}/build"
+  G_DOCS_OUTPUT_DIR: "{{.G_BUILD_DIR}}/html"
+  G_VENV_DIR: "{{.G_BUILD_DIR}}/venv"
+
+tasks:
+  clean: "rm -rf '{{.G_BUILD_DIR}}'"
+
+  init:
+    internal: true
+    silent: true
+    run: "once"
+    cmd: "mkdir -p '{{.G_BUILD_DIR}}'"
