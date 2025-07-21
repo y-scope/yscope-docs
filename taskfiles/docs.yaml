@@ -6,16 +6,17 @@ includes:
     taskfile: "../tools/yscope-dev-utils/exports/taskfiles/utils/utils.yaml"
 
 vars:
-  G_DOCS_VENV_CHECKSUM_FILE: "{{.G_BUILD_DIR}}/docs#docs-venv.md5"
   G_SOURCE_DIR: "{{.ROOT_DIR}}/server"
+  G_VENV_CHECKSUM_FILE: "{{.G_BUILD_DIR}}/docs#venv.md5"
+  G_VENV_DIR: "{{.G_BUILD_DIR}}/venv"
 
 tasks:
   build:
     vars:
       CHECKSUM_FILE: "{{.G_BUILD_DIR}}/{{.TASK | replace \":\" \"#\"}}.md5"
-      OUTPUT_DIR: "{{.G_DOCS_OUTPUT_DIR}}"
+      OUTPUT_DIR: "{{.G_BUILD_DIR}}/html"
     sources:
-      - "{{.G_DOCS_VENV_CHECKSUM_FILE}}"
+      - "{{.G_VENV_CHECKSUM_FILE}}"
       - "{{.ROOT_DIR}}/docs/**/*"
       - "{{.TASKFILE}}"
     generates: ["{{.CHECKSUM_FILE}}"]
@@ -88,7 +89,6 @@ tasks:
 
   server:
     internal: true
-    run: "once"
     vars:
       CHECKSUM_FILE: "{{.G_BUILD_DIR}}/{{.TASK | replace \":\" \"#\"}}.md5"
       OUTPUT_DIR: "{{.G_SOURCE_DIR}}/node_modules"
@@ -96,6 +96,7 @@ tasks:
       - "{{.G_SOURCE_DIR}}/package.json"
       - "{{.TASKFILE}}"
     generates: ["{{.CHECKSUM_FILE}}"]
+    run: "once"
     deps:
       - task: "utils:checksum:validate"
         vars:
@@ -115,15 +116,15 @@ tasks:
 
   venv:
     internal: true
-    run: "once"
     vars:
-      CHECKSUM_FILE: "{{.G_DOCS_VENV_CHECKSUM_FILE}}"
+      CHECKSUM_FILE: "{{.G_VENV_CHECKSUM_FILE}}"
       OUTPUT_DIR: "{{.G_VENV_DIR}}"
       REQUIREMENTS_FILE: "{{.ROOT_DIR}}/requirements.txt"
     sources:
       - "{{.REQUIREMENTS_FILE}}"
       - "{{.TASKFILE}}"
     generates: ["{{.CHECKSUM_FILE}}"]
+    run: "once"
     deps:
       - ":init"
       - task: "utils:checksum:validate"
