@@ -18,7 +18,7 @@ Follow the steps below to build and view the site locally.
 * Build the site incrementally:
 
   ```shell
-  task
+  task docs:build
   ```
 
   * The output of the build will be in `build/html`.
@@ -34,7 +34,7 @@ Follow the steps below to build and view the site locally.
 Run task `serve` to view the output:
 
 ```shell
-task serve
+task docs:serve
 ```
 
 [docs.yscope.com]: https://docs.yscope.com

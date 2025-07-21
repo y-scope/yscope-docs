@@ -10,7 +10,7 @@ vars:
   G_SOURCE_DIR: "{{.ROOT_DIR}}/server"
 
 tasks:
-  docs:
+  build:
     vars:
       CHECKSUM_FILE: "{{.G_BUILD_DIR}}/{{.TASK | replace \":\" \"#\"}}.md5"
       OUTPUT_DIR: "{{.G_DOCS_OUTPUT_DIR}}"
@@ -44,7 +44,7 @@ tasks:
         python3 scripts/download-projects.py --build-dir "{{.G_BUILD_DIR}}"
 
   release-tar:
-    deps: ["docs"]
+    deps: ["build"]
     vars:
       OUTPUT_DIR_NAME: "yscope-docs-release"
       OUTPUT_DIR: "{{.G_BUILD_DIR}}/{{.OUTPUT_DIR_NAME}}"
@@ -80,7 +80,7 @@ tasks:
 
   serve:
     deps:
-      - "docs"
+      - "build"
       - "server"
     cmd: |-
       cd "{{.G_SOURCE_DIR}}"
