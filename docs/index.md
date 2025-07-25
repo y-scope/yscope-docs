@@ -109,7 +109,7 @@ by log level and viewing large files.
 :gutter: 2
 
 :::{grid-item-card}
-:link: https://github.com/y-scope/log-surgeon
+:link: log-surgeon/main
 Log Surgeon (log-surgeon)
 ^^^
 A customizable library for parsing logs efficiently and with high performance compared to
