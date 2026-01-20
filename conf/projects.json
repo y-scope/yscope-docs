@@ -3,6 +3,7 @@
     "name": "clp",
     "repo_url": "https://github.com/y-scope/clp.git",
     "versions": [
+      "v0.8.0",
       "v0.7.0",
       "v0.6.0",
       "v0.5.1",
