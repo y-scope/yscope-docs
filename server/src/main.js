@@ -1,11 +1,12 @@
+import fastifyCors from "@fastify/cors";
+
+import routes from "./routes.js";
+
+import "dotenv/config.js";
 import Fastify from "fastify";
 import path from "node:path";
 import process from "node:process";
 
-import fastifyCors from "@fastify/cors";
-import "dotenv/config.js";
-
-import routes from "./routes.js";
 
 // eslint-disable-next-line new-cap
 const fastify = Fastify({
@@ -14,9 +15,9 @@ const fastify = Fastify({
 
 const start = async () => {
     try {
-        // Allow CORs for http://localhost:<port>
+        // Allow CORS for development and public access (GET only)
         await fastify.register(fastifyCors, {
-            origin: /^http:\/\/localhost:\d+$/,
+            origin: true,
             methods: ["GET"],
         });
 
@@ -25,9 +26,32 @@ const start = async () => {
             projectsConfigFile: path.resolve(process.env.PROJECTS_CONFIG_FILE),
         });
 
-        const host = process.env.HOST;
-        const port = parseInt(process.env.PORT);
-        await fastify.listen({host: host, port: port});
+        const host = process.env.HOST || "0.0.0.0";
+        const basePort = parseInt(process.env.PORT) || 3000;
+        const maxAttempts = 50;
+
+        let lastErr;
+        for (let i = 0; i < maxAttempts; i += 1) {
+            const tryPort = basePort + i;
+            try {
+                await fastify.listen({host, port: tryPort});
+                fastify.log.info(`Server listening on ${host}:${tryPort}`);
+
+                return;
+            } catch (err) {
+                lastErr = err;
+
+                // If port in use, try the next one; otherwise rethrow
+                if (err && "EADDRINUSE" === err.code) {
+                    fastify.log.warn(`Port ${tryPort} in use, trying ${tryPort + 1}`);
+                    continue;
+                }
+                throw err;
+            }
+        }
+
+        // if we exhausted attempts, throw the last error
+        throw lastErr;
     } catch (err) {
         fastify.log.error(err);
         process.exit(1);
