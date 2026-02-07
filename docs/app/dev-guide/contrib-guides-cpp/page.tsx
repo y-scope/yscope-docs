@@ -1,7 +1,9 @@
 /* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
-/* eslint-disable @stylistic/max-len */
 "use client";
+import Admonition from "../../shared/Admonition";
+import CodeBlock from "../../shared/CodeBlock";
+
 
 /**
  * C++ contribution and style guidelines page component.
@@ -17,8 +19,9 @@ const CppGuidelines = () => {
                 <br/>
                 <h1>Automated linting</h1>
                 <p>
-                    As mentioned in the overview, where possible, we have automated linting processes, so you need not
-                    remember all the guidelines perfectly. For C++, we currently use the following tools:
+                    As mentioned in the overview, where possible, we have automated linting
+                    processes, so you need not remember all the guidelines perfectly. For C++, we
+                    currently use the following tools:
                 </p>
 
                 <ul>
@@ -40,15 +43,22 @@ const CppGuidelines = () => {
                     </li>
                 </ul>
 
-                <p>When the linter disagrees with a guideline, err on the side of following the linter, since:</p>
+                <p>
+                    When the linter disagrees with a guideline, err on the side of following the
+                    linter, since:
+                </p>
                 <ul>
-                    <li>we don&apos;t want automated runs of the linters to fail, leading to them being ignored due to the noise;</li>
+                    <li>
+                        we don&apos;t want automated runs of the linters to fail, leading to them
+                        being ignored due to the noise;
+                    </li>
                     <li>the linter may have a good reason for disagreeing with the guideline;</li>
-                    <li>the linter&apos;s configuration may be more up-to-date than the guideline.</li>
+                    <li>
+                        the linter&apos;s configuration may be more up-to-date than the guideline.
+                    </li>
                 </ul>
 
-                <div className={"admonition tip"}>
-                    <p className={"admonition-tip-title"}>Tip</p>
+                <Admonition type={"tip"}>
                     <p>
                         To learn about how to apply the linters to a new C++ project, see
                         {" "}
@@ -56,10 +66,11 @@ const CppGuidelines = () => {
                         {" "}
                         .
                     </p>
-                </div>
+                </Admonition>
 
                 <p>
-                    When you encounter such a disagreement, if it hasn&apos;t been noted below, please open an
+                    When you encounter such a disagreement, if it hasn&apos;t been noted below,
+                    please open an
                     {" "}
                     <a href={"https://github.com/y-scope/yscope-docs/issues/new"}>issue</a>
                     {" "}
@@ -76,16 +87,16 @@ const CppGuidelines = () => {
                     {" "}
                     <a href={"https://github.com/google/styleguide/tree/8f97e24da04753c7a15eda6b02114a01ec3146f5"}>8f97e24</a>
                     {" "}
-                    ) with the following exceptions (organized according to the sections in Google&apos;s style guide).
+                    ) with the following exceptions (organized according to the sections in
+                    Google&apos;s style guide).
                 </p>
 
-                <div className={"admonition note"}>
-                    <p className={"admonition-note-title"}>Note</p>
+                <Admonition type={"note"}>
                     <p>
                         This section is a work in progress and does not yet include all
                         exceptions after the Classes section of Google&apos;s style guide.
                     </p>
-                </div>
+                </Admonition>
                 <br/>
 
                 <h2>Header files</h2>
@@ -120,21 +131,24 @@ const CppGuidelines = () => {
 
                 <h3>The #define Guard</h3>
                 <p>The symbol name should have the form</p>
-                <p className={"admonition code"}>
-                    <code>&lt;NAMESPACE&gt;_&lt;FILENAME-STEM&gt;_&lt;FILENAME-EXTENSION&gt;</code>
-                </p>
+                <CodeBlock
+                    code={"<NAMESPACE>_<FILENAME-STEM>_<FILENAME-EXTENSION>"}
+                    language={"text"}
+                    showCopy={true}/>
 
                 <p>where:</p>
                 <ul>
                     <li>
                         <code>&lt;NAMESPACE&gt;</code>
                         {" "}
-                        is the namespace of the file. For files in a nested namespace, each namespace layer should be separated by an underscore.
+                        is the namespace of the file. For files in a nested namespace, each
+                        namespace layer should be separated by an underscore.
                     </li>
                     <li>
                         <code>&lt;FILENAME_STEM&gt;</code>
                         {" "}
-                        is the file&apos;s name without the extension. For stems with multiple words, the words should
+                        is the file&apos;s name without the extension. For stems with multiple
+                        words, the words should
                         {" "}
                         <em>not</em>
                         {" "}
@@ -151,31 +165,28 @@ const CppGuidelines = () => {
                 <p>
                     <code>clp/streaming_archive/reader/SegmentManager.hpp</code>
                 </p>
-                <p className={"admonition code"}>
-                    <code>
-                        #ifndef CLP_STREAMING_ARCHIVE_READER_SEGMENTMANAGER_HPP
-                        <br/>
-                        #define CLP_STREAMING_ARCHIVE_READER_SEGMENTMANAGER_HPP
-                        <br/>
-                        <br/>
-                        namespace clp::streaming_archive::reader
-                        {" "}
-                        {"{"}
-                        <br/>
-                            &nbsp;&nbsp;
-                        {"// ..."}
-                        <br/>
-                        {"}"}
-                        <br/>
-                        <br/>
-                        #endif  // CLP_STREAMING_ARCHIVE_READER_SEGMENTMANAGER_HPP
-                    </code>
-                </p>
+                <CodeBlock
+                    language={"cpp"}
+                    showCopy={true}
+                    code={
+                        `#ifndef CLP_STREAMING_ARCHIVE_READER_SEGMENTMANAGER_HPP
+#define CLP_STREAMING_ARCHIVE_READER_SEGMENTMANAGER_HPP
+
+namespace clp::streaming_archive::reader {
+  // ...
+}
+
+#endif  // CLP_STREAMING_ARCHIVE_READER_SEGMENTMANAGER_HPP
+`
+                    }/>
 
                 <br/>
                 <h3>Names and order of includes</h3>
                 <ul>
-                    <li>For codebases where the code is not organized into well-defined libraries, it is fine to use UNIX directory aliases to include headers.</li>
+                    <li>
+                        For codebases where the code is not organized into well-defined libraries,
+                        it is fine to use UNIX directory aliases to include headers.
+                    </li>
                     <li>
                         For C headers that have C++ counterparts (e.g.,
                         {" "}
@@ -204,13 +215,10 @@ const CppGuidelines = () => {
                     {" "}
                     ) should use the following format (unless doing so would affect clarity):
                 </p>
-                <p className={"admonition code"}>
-                    <code>
-                        namespace foo::bar
-                        {" {"}
-                        {"}"}
-                    </code>
-                </p>
+                <CodeBlock
+                    code={"namespace foo::bar { }"}
+                    language={"cpp"}
+                    showCopy={true}/>
 
                 <h3>Internal linkage</h3>
                 <p>
@@ -218,11 +226,15 @@ const CppGuidelines = () => {
                     {" "}
                     <code>static</code>
                     {" "}
-                    qualifier) to give functions and variables internal linkage. However, as Google&apos;s style guide indicates, you can&apos;t use unnamed namespaces in header files. For symbols that should only be used within a header file, you can create a named namespace in the header file, where its name is of the form:
+                    qualifier) to give functions and variables internal linkage. However, as
+                    Google&apos;s style guide indicates, you can&apos;t use unnamed namespaces in
+                    header files. For symbols that should only be used within a header file, you
+                    can create a named namespace in the header file, where its name is of the form:
                 </p>
-                <p className={"admonition code"}>
-                    <code>&lt;FilenameStem&gt;_internal</code>
-                </p>
+                <CodeBlock
+                    code={"<FilenameStem>_internal"}
+                    language={"text"}
+                    showCopy={true}/>
 
                 <p>where:</p>
                 <ul>
@@ -243,28 +255,28 @@ const CppGuidelines = () => {
                     clp/streaming_archive/reader/SegmentManager.hpp
                 </code>
 
-                <p className={"admonition code"}>
-                    <code>
-                        namespace clp::streaming_archive::reader
-                        {" {"}
-                        <br/>
-                        namespace SegmentManager_internal
-                        {" {"}
-                        <br/>
-                            &nbsp;&nbsp;
-                        {"// Internal symbols"}
-                        <br/>
-                        {" }"}
-                        <br/>
-                        {"}"}
-                    </code>
-                </p>
+                <CodeBlock
+                    language={"cpp"}
+                    showCopy={true}
+                    code={
+                        `namespace clp::streaming_archive::reader {
+  namespace SegmentManager_internal {
+    // Internal symbols
+  }
+}
+`
+                    }/>
 
                 <br/>
                 <h2>Classes</h2>
                 <br/>
                 <h3>Doing work in constructors</h3>
-                <p>We allow (but discourage) the use of exceptions, even in constructors. If creating an object can fail, you&apos;re encouraged to use a factory function that performs the work that can fail, and then returns a result containing an error code if unsuccessful or the object if successful.</p>
+                <p>
+                    We allow (but discourage) the use of exceptions, even in constructors. If
+                    creating an object can fail, you&apos;re encouraged to use a factory function
+                    that performs the work that can fail, and then returns a result containing an
+                    error code if unsuccessful or the object if successful.
+                </p>
 
                 <h3>Declaration order</h3>
                 <p>Within each section, order declarations as follows:</p>
@@ -312,7 +324,8 @@ const CppGuidelines = () => {
                 </ol>
 
                 <p>
-                    The differences between our declaration order and the order in Google&apos;s style guide is to conform with our general
+                    The differences between our declaration order and the order in Google&apos;s
+                    style guide is to conform with our general
                     {" "}
                     <a href={"./contrib-guides-general/"}>ordering guidelines</a>
                     {" "}

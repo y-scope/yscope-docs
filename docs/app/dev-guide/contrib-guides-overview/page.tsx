@@ -1,4 +1,6 @@
 "use client";
+import Admonition from "../../shared/Admonition";
+
 
 /**
  * Overview page component that displays contribution guideline links.
@@ -17,13 +19,11 @@ const Overview = () => {
                     guidelines here are only those for which we cannot or have not yet
                     automated.
                 </p>
-                <div className={"admonition note"}>
-                    <p className={"admonition-note-title"}>Note</p>
+                <Admonition type={"note"}>
                     <p>
-                        This section is a work in progress while we open-source all our
-                        guidelines.
+                        This section is a work in progress while we open-source all our guidelines.
                     </p>
-                </div>
+                </Admonition>
 
                 <h2>Guides</h2>
                 <ul>

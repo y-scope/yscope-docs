@@ -362,8 +362,9 @@ const Navbar = () => {
                             )}
                         </a>
                         <button
-                            className={"btn btn-yscope-secondary btn-sm d-inline-flex align-items-center"}
                             id={"themeSwitcher"}
+                            className={"btn btn-yscope-secondary btn-sm d-inline-flex " +
+                                "align-items-center"}
                             style={{
                                 border: "none",
                                 justifyContent: "center",

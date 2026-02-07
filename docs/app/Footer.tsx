@@ -23,7 +23,11 @@ const Footer = () => {
                             >
                                 YScope
                             </a>
-                            <h5 style={{fontSize: "1rem", marginLeft: "0.5rem", marginTop: "1rem"}}>The Future of Debugging</h5>
+                            <h5
+                                style={{fontSize: "1rem", marginLeft: "0.5rem", marginTop: "1rem"}}
+                            >
+                                The Future of Debugging
+                            </h5>
                         </div>
                         <div className={"col-6 text-center"}>
                             <a

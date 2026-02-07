@@ -1,25 +1,253 @@
 /* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 "use client";
+import {
+    useEffect,
+    useState,
+} from "react";
+
 import {useTheme} from "./shared/ThemeProvider";
 
 
 /**
+ *
+ */
+const Divider = () => {
+    return (
+        <div className={"row my-3"}>
+            <div className={"col-lg-10 mx-auto divider-whitespace"}>
+                <hr className={"m-0"}/>
+            </div>
+        </div>
+    );
+};
+
+/**
  * Renders the home page.
- *      To enable autoplay set the initial `autoplay` state to true.
  *
  * @return the home page.
  */
 const Home = () => {
     const {theme} = useTheme();
+    const [prestoSrc, setPrestoSrc] = useState("/assets/images/presto_light.svg");
+    const [mcpSrc, setMcpSrc] = useState("/assets/images/mcp_light.svg");
 
-    const prestoSrc = "dark" === theme ?
-        "/assets/images/presto_dark.svg" :
-        "/assets/images/presto_light.svg";
+    useEffect(() => {
+        setPrestoSrc("dark" === theme ?
+            "/assets/images/presto_dark.svg" :
+            "/assets/images/presto_light.svg");
 
-    const mcpSrc = "dark" === theme ?
-        "/assets/images/mcp_dark.svg" :
-        "/assets/images/mcp_light.svg";
+        setMcpSrc("dark" === theme ?
+            "/assets/images/mcp_dark.svg" :
+            "/assets/images/mcp_light.svg");
+    }, [theme]);
+
+    /* Small reusable IconLink component to avoid repeating markup for each icon */
+    const IconLink = ({
+        external,
+        href,
+        imgAlt,
+        imgSrc,
+        imgStyle,
+        label,
+    }: {
+        external?: boolean;
+        href: string;
+        imgAlt: string;
+        imgSrc: string;
+        imgStyle?: any;
+        label: string;
+    }) => (
+        <div className={"col-auto homepage_icon_row"}>
+            <a
+                href={href}
+                className={
+                    "d-flex flex-row align-items-center " +
+                        "text-decoration-none text-body"
+                }
+                {...(external ?
+                    {rel: "noreferrer noopener", target: "_blank"} :
+                    {})}
+            >
+                <div
+                    style={{marginRight: "10px"}}
+                    className={
+                        "rounded homepage_icon_box d-flex " +
+                            "align-items-center justify-content-center"
+                    }
+                >
+                    <img
+                        alt={imgAlt}
+                        className={"homepage_icon"}
+                        src={imgSrc}
+                        style={imgStyle}/>
+                </div>
+                <small className={"mt-2"}>
+                    {label}
+                </small>
+            </a>
+        </div>
+    );
+
+    const Category = ({title, items}: {title: string; items: Array<any>}) => (
+        <div className={"row align-items-center justify-content-center"}>
+            <div className={"col-lg-3 mb-3 mb-lg-0"}>
+                <h3 className={"h5 mb-1"}>
+                    {title}
+                </h3>
+            </div>
+            <div className={"col-lg-7"}>
+                <div className={"row g-2 homepage_icons_category"}>
+                    {items.map((it: any, i: number) => (
+                        <IconLink
+                            key={i}
+                            {...it}/>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+
+    const categories = [
+        {
+            title: "Deploy CLP",
+            items: [
+                {
+                    href: "/clp/main/user-docs/quick-start/index",
+                    imgAlt: "Single-node",
+                    imgSrc: "/assets/images/single-node.svg",
+                    label: "Single Node",
+                },
+                {
+                    href: "/clp/main/user-docs/guides-docker-compose-deployment.html",
+                    imgAlt: "Docker Compose",
+                    imgSrc: "/assets/images/docker-compose_icon.svg",
+                    label: "Docker Compose",
+                },
+                {
+                    href: "/clp/main/user-docs/guides-k8s-deployment.html",
+                    imgAlt: "Kubernetes",
+                    imgSrc: "/assets/images/kubernetes.svg",
+                    label: "Kubernetes",
+                },
+            ],
+        },
+        {
+            title: "Log Input",
+            items: [
+                {
+                    href: "/clp/main/user-docs/guides-using-object-storage/index",
+                    imgAlt: "S3",
+                    imgSrc: "/assets/images/s3.svg",
+                    label: "S3",
+                },
+                {
+                    external: true,
+                    href: "https://github.com/y-scope/clp-loglib-py",
+                    imgAlt: "Python Library",
+                    imgSrc: "/assets/images/python.svg",
+                    label: "Python",
+                },
+                {
+                    href: "/clp/main/user-docs/guides-using-log-ingestor.html",
+                    imgAlt: "Log Ingestor",
+                    imgSrc: "/assets/images/log-ingestor.svg",
+                    label: "Log Ingestor",
+                },
+            ],
+        },
+        {
+            title: "Analyze & View",
+            items: [
+                {
+                    href: "/clp/main/user-docs/guides-using-presto.html",
+                    imgAlt: "Presto",
+                    imgSrc: prestoSrc,
+                    imgStyle: {transform: "scale(1.2)", transformOrigin: "center"},
+                    label: "Presto",
+                },
+                {
+                    href: "/clp/main/user-docs/guides-mcp-server/index.html",
+                    imgAlt: "MCP",
+                    imgSrc: mcpSrc,
+                    label: "MCP Server",
+                },
+                {
+                    href: "/clp/main/user-docs/guides-using-the-api-server.html",
+                    imgAlt: "API Server",
+                    imgSrc: "/assets/images/api-server.svg",
+                    label: "API Server",
+                },
+                {
+                    href: "/yscope-log-viewer/main/",
+                    imgAlt: "Log viewer",
+                    imgSrc: "/assets/images/log-viewer_icon.svg",
+                    label: "Log Viewer",
+                },
+                {
+                    href: "/clp/main/user-docs/reference-json-search-syntax",
+                    imgAlt: "JSON Search",
+                    imgSrc: "/assets/images/json.svg",
+                    label: "JSON Search",
+                },
+                {
+                    href: "/clp/main/user-docs/reference-text-search-syntax",
+                    imgAlt: "Text Search",
+                    imgSrc: "/assets/images/text.svg",
+                    label: "Text Search",
+                },
+            ],
+        },
+        {
+            title: "Resources",
+            items: [
+                {
+                    href: "/clp/main/user-docs/resources-datasets.html",
+                    imgAlt: "Datasets",
+                    imgSrc: "/assets/images/datasets.svg",
+                    label: "Datasets",
+                },
+                {
+                    external: true,
+                    href: "https://benchmarks.yscope.com/log-archival-bench/",
+                    imgAlt: "Benchmarks",
+                    imgSrc: "/assets/images/benchmarks.svg",
+                    label: "Benchmarks",
+                },
+                {
+                    external: true,
+                    href: "https://blog.yscope.com/",
+                    imgAlt: "Blog",
+                    imgSrc: "/assets/images/blog.svg",
+                    label: "Blog",
+                },
+            ],
+        },
+        {
+            title: "References",
+            items: [
+                {
+                    external: true,
+                    href: "https://www.yscope.com/publications",
+                    imgAlt: "Publications",
+                    imgSrc: "/assets/images/publications.svg",
+                    label: "Publications",
+                },
+                {
+                    href: "/clp/main/user-docs/reference-sbin-scripts/index",
+                    imgAlt: "Package Scripts",
+                    imgSrc: "/assets/images/scripts.svg",
+                    label: "Package Scripts",
+                },
+                {
+                    href: "/clp/main/user-docs/reference-unstructured-schema-file",
+                    imgAlt: "Schema File Syntax",
+                    imgSrc: "/assets/images/schema-file-syntax.svg",
+                    label: "Schema File Syntax",
+                },
+            ],
+        },
+    ];
 
     return (
         <section className={"section main-section"}>
@@ -75,553 +303,20 @@ const Home = () => {
                     </div>
                 </div>
 
-                {/* Repeated category blocks */}
+                {/* Replaced repeated markup with data-driven categories */}
                 <div className={"col align-items-center justify-content-center"}>
-                    {/* Deploy CLP */}
-                    <div className={"row align-items-center justify-content-center"}>
-                        <div className={"col-lg-3 mb-3 mb-lg-0"}>
-                            <h3 className={"h5 mb-1"}>Deploy CLP</h3>
+                    {categories.map((c, idx) => (
+                        <div key={c.title}>
+                            <Category
+                                items={c.items}
+                                title={c.title}/>
+                            {idx < categories.length - 1 && <Divider/>}
                         </div>
-                        <div className={"col-lg-7"}>
-                            <div className={"row g-2 homepage_icons_category"}>
-                                <div className={"col-auto homepage_icon_row"}>
-                                    <a
-                                        href={"/clp/main/user-docs/quick-start/index"}
-                                        className={
-                                            "d-flex flex-row align-items-center " +
-                                                "text-decoration-none text-body"
-                                        }
-                                    >
-                                        <div
-                                            style={{marginRight: "10px"}}
-                                            className={
-                                                "rounded homepage_icon_box d-flex " +
-                                                    "align-items-center justify-content-center"
-                                            }
-                                        >
-                                            <img
-                                                alt={"Single-node"}
-                                                className={"homepage_icon"}
-                                                src={"/assets/images/single-node.svg"}/>
-                                        </div>
-                                        <small className={"mt-2"}>Single Node</small>
-                                    </a>
-                                </div>
-
-                                <div className={"col-auto homepage_icon_row"}>
-                                    <a
-                                        className={
-                                            "d-flex flex-row align-items-center " +
-                                                "text-decoration-none text-body"
-                                        }
-                                        href={
-                                            "/clp/main/user-docs/guides-docker-compose-" +
-                                            "deployment.html"
-                                        }
-                                    >
-                                        <div
-                                            style={{marginRight: "10px"}}
-                                            className={
-                                                "rounded homepage_icon_box d-flex " +
-                                                    "align-items-center justify-content-center"
-                                            }
-                                        >
-                                            <img
-                                                alt={"Docker Compose"}
-                                                className={"homepage_icon"}
-                                                src={"/assets/images/docker-compose_icon.svg"}/>
-                                        </div>
-                                        <small className={"mt-2"}>
-                                            Docker Compose
-                                        </small>
-                                    </a>
-                                </div>
-
-                                <div className={"col-auto homepage_icon_row"}>
-                                    <a
-                                        href={"/clp/main/user-docs/guides-k8s-deployment.html"}
-                                        className={
-                                            "d-flex flex-row align-items-center " +
-                                                "text-decoration-none text-body"
-                                        }
-                                    >
-                                        <div
-                                            style={{marginRight: "10px"}}
-                                            className={
-                                                "rounded homepage_icon_box d-flex " +
-                                                    "align-items-center justify-content-center"
-                                            }
-                                        >
-                                            <img
-                                                alt={"Kubernetes"}
-                                                className={"homepage_icon"}
-                                                src={"/assets/images/kubernetes.svg"}/>
-                                        </div>
-                                        <small className={"mt-2"}>Kubernetes</small>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={"row my-3"}>
-                        <div className={"col-lg-10 mx-auto divider-whitespace"}>
-                            <hr className={"m-0"}/>
-                        </div>
-                    </div>
-
-                    {/* Log Input */}
-                    <div className={"row align-items-center justify-content-center"}>
-                        <div className={"col-lg-3 mb-3 mb-lg-0"}>
-                            <h3 className={"h5 mb-1"}>Log Input</h3>
-                        </div>
-                        <div className={"col-lg-7"}>
-                            <div className={"row g-2 homepage_icons_category"}>
-                                <div className={"col-auto homepage_icon_row"}>
-                                    <a
-                                        className={
-                                            "d-flex flex-row align-items-center " +
-                                                "text-decoration-none text-body"
-                                        }
-                                        href={
-                                            "/clp/main/user-docs/guides-using-object-storage/" +
-                                            "index"
-                                        }
-                                    >
-                                        <div
-                                            style={{marginRight: "10px"}}
-                                            className={
-                                                "rounded homepage_icon_box d-flex " +
-                                                    "align-items-center justify-content-center"
-                                            }
-                                        >
-                                            <img
-                                                alt={"S3"}
-                                                className={"homepage_icon"}
-                                                src={"/assets/images/s3.svg"}/>
-                                        </div>
-                                        <small className={"mt-2"}>S3</small>
-                                    </a>
-                                </div>
-
-                                <div className={"col-auto homepage_icon_row"}>
-                                    <a
-                                        href={"https://github.com/y-scope/clp-loglib-py"}
-                                        rel={"noreferrer noopener"}
-                                        target={"_blank"}
-                                        className={
-                                            "d-flex flex-row align-items-center " +
-                                                "text-decoration-none text-body"
-                                        }
-                                    >
-                                        <div
-                                            style={{marginRight: "10px"}}
-                                            className={
-                                                "rounded homepage_icon_box d-flex " +
-                                                    "align-items-center justify-content-center"
-                                            }
-                                        >
-                                            <img
-                                                alt={"Python Library"}
-                                                className={"homepage_icon"}
-                                                src={"/assets/images/python.svg"}/>
-                                        </div>
-                                        <small className={"mt-2"}>
-                                            Python
-                                        </small>
-                                    </a>
-                                </div>
-
-                                <div className={"col-auto homepage_icon_row"}>
-                                    <a
-                                        href={"/clp/main/user-docs/guides-using-log-ingestor.html"}
-                                        className={
-                                            "d-flex flex-row align-items-center " +
-                                                "text-decoration-none text-body"
-                                        }
-                                    >
-                                        <div
-                                            style={{marginRight: "10px"}}
-                                            className={
-                                                "rounded homepage_icon_box d-flex " +
-                                                    "align-items-center justify-content-center"
-                                            }
-                                        >
-                                            <img
-                                                alt={"Log Ingestor"}
-                                                className={"homepage_icon"}
-                                                src={"/assets/images/log-ingestor.svg"}/>
-                                        </div>
-                                        <small className={"mt-2"}>
-                                            Log Ingestor
-                                        </small>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={"row my-3"}>
-                        <div className={"col-lg-10 mx-auto divider-whitespace"}>
-                            <hr className={"m-0"}/>
-                        </div>
-                    </div>
-
-                    {/* Analyze & View */}
-                    <div className={"row align-items-center justify-content-center"}>
-                        <div className={"col-lg-3 mb-3 mb-lg-0"}>
-                            <h3 className={"h5 mb-1"}>Analyze & View</h3>
-                        </div>
-                        <div className={"col-lg-7"}>
-                            <div className={"row g-2 homepage_icons_category"}>
-                                <div className={"col-auto homepage_icon_row"}>
-                                    <a
-                                        href={"/clp/main/user-docs/guides-using-presto.html"}
-                                        className={
-                                            "d-flex flex-row align-items-center " +
-                                                "text-decoration-none text-body"
-                                        }
-                                    >
-                                        <div
-                                            style={{marginRight: "10px"}}
-                                            className={
-                                                "rounded homepage_icon_box d-flex " +
-                                                    "align-items-center justify-content-center"
-                                            }
-                                        >
-                                            <img
-                                                alt={"Presto"}
-                                                className={"homepage_icon"}
-                                                src={prestoSrc}
-                                                style={{
-                                                    transform: "scale(1.2)",
-                                                    transformOrigin: "center",
-                                                }}/>
-                                        </div>
-                                        <small className={"mt-2"}>Presto</small>
-                                    </a>
-                                </div>
-
-                                <div className={"col-auto homepage_icon_row"}>
-                                    <a
-                                        href={"/clp/main/user-docs/guides-mcp-server/index.html"}
-                                        className={
-                                            "d-flex flex-row align-items-center " +
-                                                "text-decoration-none text-body"
-                                        }
-                                    >
-                                        <div
-                                            style={{marginRight: "10px"}}
-                                            className={
-                                                "rounded homepage_icon_box d-flex " +
-                                                    "align-items-center justify-content-center"
-                                            }
-                                        >
-                                            <img
-                                                alt={"MCP"}
-                                                className={"homepage_icon"}
-                                                src={mcpSrc}/>
-                                        </div>
-                                        <small className={"mt-2"}>MCP Server</small>
-                                    </a>
-                                </div>
-
-                                <div className={"col-auto homepage_icon_row"}>
-                                    <a
-                                        className={
-                                            "d-flex flex-row align-items-center " +
-                                                "text-decoration-none text-body"
-                                        }
-                                        href={
-                                            "/clp/main/user-docs/guides-using-the-api-server." +
-                                            "html"
-                                        }
-                                    >
-                                        <div
-                                            style={{marginRight: "10px"}}
-                                            className={
-                                                "rounded homepage_icon_box d-flex " +
-                                                    "align-items-center justify-content-center"
-                                            }
-                                        >
-                                            <img
-                                                alt={"API Server"}
-                                                className={"homepage_icon"}
-                                                src={"/assets/images/api-server.svg"}/>
-                                        </div>
-                                        <small className={"mt-2"}>API Server</small>
-                                    </a>
-                                </div>
-
-                                <div className={"col-auto homepage_icon_row"}>
-                                    <a
-                                        href={"/yscope-log-viewer/main/"}
-                                        className={
-                                            "d-flex flex-row align-items-center " +
-                                                "text-decoration-none text-body"
-                                        }
-                                    >
-                                        <div
-                                            style={{marginRight: "10px"}}
-                                            className={
-                                                "rounded homepage_icon_box d-flex " +
-                                                    "align-items-center justify-content-center"
-                                            }
-                                        >
-                                            <img
-                                                alt={"Log viewer"}
-                                                className={"homepage_icon"}
-                                                src={"/assets/images/log-viewer_icon.svg"}/>
-                                        </div>
-                                        <small className={"mt-2"}>Log Viewer</small>
-                                    </a>
-                                </div>
-
-                                <div className={"col-auto homepage_icon_row"}>
-                                    <a
-                                        href={"/clp/main/user-docs/reference-json-search-syntax"}
-                                        className={
-                                            "d-flex flex-row align-items-center " +
-                                                "text-decoration-none text-body"
-                                        }
-                                    >
-                                        <div
-                                            style={{marginRight: "10px"}}
-                                            className={
-                                                "rounded homepage_icon_box d-flex " +
-                                                    "align-items-center justify-content-center"
-                                            }
-                                        >
-                                            <img
-                                                alt={"JSON Search"}
-                                                className={"homepage_icon"}
-                                                src={"/assets/images/json.svg"}/>
-                                        </div>
-                                        <small className={"mt-2"}>JSON Search</small>
-                                    </a>
-                                </div>
-
-                                <div className={"col-auto homepage_icon_row"}>
-                                    <a
-                                        href={"/clp/main/user-docs/reference-text-search-syntax"}
-                                        className={
-                                            "d-flex flex-row align-items-center " +
-                                                "text-decoration-none text-body"
-                                        }
-                                    >
-                                        <div
-                                            style={{marginRight: "10px"}}
-                                            className={
-                                                "rounded homepage_icon_box d-flex " +
-                                                    "align-items-center justify-content-center"
-                                            }
-                                        >
-                                            <img
-                                                alt={"Text Search"}
-                                                className={"homepage_icon"}
-                                                src={"/assets/images/text.svg"}/>
-                                        </div>
-                                        <small className={"mt-2"}>Text Search</small>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={"row my-3"}>
-                        <div className={"col-lg-10 mx-auto divider-whitespace"}>
-                            <hr className={"m-0"}/>
-                        </div>
-                    </div>
-
-                    {/* Resources */}
-                    <div className={"row align-items-center justify-content-center"}>
-                        <div className={"col-lg-3 mb-3 mb-lg-0"}>
-                            <h3 className={"h5 mb-1"}>Resources</h3>
-                        </div>
-                        <div className={"col-lg-7"}>
-                            <div className={"row g-2 homepage_icons_category"}>
-                                <div className={"col-auto homepage_icon_row"}>
-                                    <a
-                                        href={"/clp/main/user-docs/resources-datasets.html"}
-                                        className={
-                                            "d-flex flex-row align-items-center " +
-                                                "text-decoration-none text-body"
-                                        }
-                                    >
-                                        <div
-                                            style={{marginRight: "10px"}}
-                                            className={
-                                                "rounded homepage_icon_box d-flex " +
-                                                    "align-items-center justify-content-center"
-                                            }
-                                        >
-                                            <img
-                                                alt={"Datasets"}
-                                                className={"homepage_icon"}
-                                                src={"/assets/images/datasets.svg"}/>
-                                        </div>
-                                        <small className={"mt-2"}>Datasets</small>
-                                    </a>
-                                </div>
-
-                                <div className={"col-auto homepage_icon_row"}>
-                                    <a
-                                        href={"https://benchmarks.yscope.com/log-archival-bench/"}
-                                        rel={"noreferrer noopener"}
-                                        target={"_blank"}
-                                        className={
-                                            "d-flex flex-row align-items-center " +
-                                                "text-decoration-none text-body"
-                                        }
-                                    >
-                                        <div
-                                            style={{marginRight: "10px"}}
-                                            className={
-                                                "rounded homepage_icon_box d-flex " +
-                                                    "align-items-center justify-content-center"
-                                            }
-                                        >
-                                            <img
-                                                alt={"Benchmarks"}
-                                                className={"homepage_icon"}
-                                                src={"/assets/images/benchmarks.svg"}/>
-                                        </div>
-                                        <small className={"mt-2"}>Benchmarks</small>
-                                    </a>
-                                </div>
-
-                                <div className={"col-auto homepage_icon_row"}>
-                                    <a
-                                        href={"https://blog.yscope.com/"}
-                                        rel={"noreferrer noopener"}
-                                        target={"_blank"}
-                                        className={
-                                            "d-flex flex-row align-items-center " +
-                                                "text-decoration-none text-body"
-                                        }
-                                    >
-                                        <div
-                                            style={{marginRight: "10px"}}
-                                            className={
-                                                "rounded homepage_icon_box d-flex " +
-                                                    "align-items-center justify-content-center"
-                                            }
-                                        >
-                                            <img
-                                                alt={"Blog"}
-                                                className={"homepage_icon"}
-                                                src={"/assets/images/blog.svg"}/>
-                                        </div>
-                                        <small className={"mt-2"}>
-                                            Blog
-                                        </small>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={"row my-3"}>
-                        <div className={"col-lg-10 mx-auto divider-whitespace"}>
-                            <hr className={"m-0"}/>
-                        </div>
-                    </div>
-
-                    {/* References */}
-                    <div className={"row align-items-center justify-content-center"}>
-                        <div className={"col-lg-3 mb-3 mb-lg-0"}>
-                            <h3 className={"h5 mb-1"}>References</h3>
-                        </div>
-                        <div className={"col-lg-7"}>
-                            <div className={"row g-2 homepage_icons_category"}>
-                                <div className={"col-auto homepage_icon_row"}>
-                                    <a
-                                        href={"https://www.yscope.com/publications"}
-                                        rel={"noreferrer noopener"}
-                                        target={"_blank"}
-                                        className={
-                                            "d-flex flex-row align-items-center " +
-                                                "text-decoration-none text-body"
-                                        }
-                                    >
-                                        <div
-                                            style={{marginRight: "10px"}}
-                                            className={
-                                                "rounded homepage_icon_box d-flex " +
-                                                    "align-items-center justify-content-center"
-                                            }
-                                        >
-                                            <img
-                                                alt={"Publications"}
-                                                className={"homepage_icon"}
-                                                src={"/assets/images/publications.svg"}/>
-                                        </div>
-                                        <small className={"mt-2"}>Publications</small>
-                                    </a>
-                                </div>
-
-                                <div className={"col-auto homepage_icon_row"}>
-                                    <a
-                                        href={"/clp/main/user-docs/reference-sbin-scripts/index"}
-                                        className={
-                                            "d-flex flex-row align-items-center " +
-                                                "text-decoration-none text-body"
-                                        }
-                                    >
-                                        <div
-                                            style={{marginRight: "10px"}}
-                                            className={
-                                                "rounded homepage_icon_box d-flex " +
-                                                    "align-items-center justify-content-center"
-                                            }
-                                        >
-                                            <img
-                                                alt={"Package Scripts"}
-                                                className={"homepage_icon"}
-                                                src={"/assets/images/scripts.svg"}/>
-                                        </div>
-                                        <small className={"mt-2"}>
-                                            Package Scripts
-                                        </small>
-                                    </a>
-                                </div>
-
-                                <div className={"col-auto homepage_icon_row"}>
-                                    <a
-                                        className={
-                                            "d-flex flex-row align-items-center " +
-                                                "text-decoration-none text-body"
-                                        }
-                                        href={
-                                            "/clp/main/user-docs/reference-unstructured-schema-" +
-                                            "file"
-                                        }
-                                    >
-                                        <div
-                                            style={{marginRight: "10px"}}
-                                            className={
-                                                "rounded homepage_icon_box d-flex " +
-                                                    "align-items-center justify-content-center"
-                                            }
-                                        >
-                                            <img
-                                                alt={"Schema File Syntax"}
-                                                className={"homepage_icon"}
-                                                src={"/assets/images/schema-file-syntax.svg"}/>
-                                        </div>
-                                        <small className={"mt-2"}>Schema File Syntax</small>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    ))}
                 </div>
-                <div className={"row my-3"}>
-                    <div className={"col-lg-10 mx-auto divider-whitespace"}>
-                        <hr className={"m-0"}/>
-                    </div>
-                </div>
+
+                <Divider/>
+
                 <div className={"row align-items-center justify-content-center below-fold"}>
                     <div className={"col-lg-10"}>
                         <div className={"row"}>

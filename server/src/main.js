@@ -15,9 +15,9 @@ const fastify = Fastify({
 
 const start = async () => {
     try {
-        // Allow CORS for development and public access (GET only)
+        // Allow CORs for http://localhost:<port>
         await fastify.register(fastifyCors, {
-            origin: true,
+            origin: /^http:\/\/localhost:\d+$/,
             methods: ["GET"],
         });
 
@@ -26,32 +26,9 @@ const start = async () => {
             projectsConfigFile: path.resolve(process.env.PROJECTS_CONFIG_FILE),
         });
 
-        const host = process.env.HOST || "0.0.0.0";
-        const basePort = parseInt(process.env.PORT) || 3000;
-        const maxAttempts = 50;
-
-        let lastErr;
-        for (let i = 0; i < maxAttempts; i += 1) {
-            const tryPort = basePort + i;
-            try {
-                await fastify.listen({host, port: tryPort});
-                fastify.log.info(`Server listening on ${host}:${tryPort}`);
-
-                return;
-            } catch (err) {
-                lastErr = err;
-
-                // If port in use, try the next one; otherwise rethrow
-                if (err && "EADDRINUSE" === err.code) {
-                    fastify.log.warn(`Port ${tryPort} in use, trying ${tryPort + 1}`);
-                    continue;
-                }
-                throw err;
-            }
-        }
-
-        // if we exhausted attempts, throw the last error
-        throw lastErr;
+        const host = process.env.HOST;
+        const port = parseInt(process.env.PORT);
+        await fastify.listen({host: host, port: port});
     } catch (err) {
         fastify.log.error(err);
         process.exit(1);

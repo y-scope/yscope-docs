@@ -1,6 +1,9 @@
 /* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 "use client";
+import Admonition from "../../shared/Admonition";
+import CodeBlock from "../../shared/CodeBlock";
+
 
 /**
  * Taskfiles page React component that renders the Taskfiles contribution guide.
@@ -45,21 +48,17 @@ const Taskfiles = () => {
                 <p>
                     <strong>Example</strong>
                 </p>
-                <p className={"admonition code"}>
-                    <code>
-                        vars:
-                        <br/>
-                            &emsp;&emsp;G_GLOBAL_VAR: &ldquo;global_value&rdquo;
-                        <br/>
-                        binaries:
-                        <br/>
-                            &emsp;&emsp;vars:
-                        <br/>
-                            &emsp;&emsp;&emsp;&emsp;BUILD_DIR:&ldquo;
-                        {"{{.G_BUILD_DIR}}/bin"}
-                        &rdquo;
-                    </code>
-                </p>
+                <CodeBlock
+                    language={"yaml"}
+                    showCopy={true}
+                    code={
+                        `vars:
+  G_GLOBAL_VAR: "global_value"
+binaries:
+  vars:
+    BUILD_DIR: "{{.G_BUILD_DIR}}/bin"
+`
+                    }/>
 
                 <br/>
                 <h1>Paths</h1>
@@ -139,8 +138,7 @@ const Taskfiles = () => {
                     </tbody>
                 </table>
 
-                <div className={"admonition warning"}>
-                    <p className={"admonition-warning-title"}>Warning</p>
+                <Admonition type={"warning"}>
                     <p>
                         Don&apos;t use the pattern
                         {" "}
@@ -149,14 +147,12 @@ const Taskfiles = () => {
                         (instead of
                         {" "}
                         <code>**/*</code>
-                        {""}
                         ) since it is equivalent to
                         {" "}
                         <code>*</code>
-                        {""}
                         . Note that this isn&apos;t the case in bash.
                     </p>
-                </div>
+                </Admonition>
 
                 <br/>
                 <h2>Paths in commands</h2>
@@ -165,24 +161,17 @@ const Taskfiles = () => {
                 <p>
                     <strong>Example</strong>
                 </p>
-                <p className={"admonition code"}>
-                    <code>
-                        my-task:
-                        <br/>
-                            &emsp;cmds:
-                        <br/>
-                            &emsp;- &ldquo;touch &apos;
-                        {"{{.FILE_PATH}}"}
-                        &apos;&rdquo;
-                        <br/>
-                            &emsp;- |-
-                        <br/>
-                        &emsp;&emsp;&emsp;echo &ldquo;Hello, world&rdquo; &gt;
-                        &ldquo;
-                        {"{{.FILE_PATH}}"}
-                        &rdquo;
-                    </code>
-                </p>
+                <CodeBlock
+                    language={"yaml"}
+                    showCopy={true}
+                    code={
+                        `my-task:
+  cmds:
+  - "touch '{{.FILE_PATH}}'"
+  - |-
+    echo "Hello, world" > "{{.FILE_PATH}}"
+`
+                    }/>
 
                 <h2>Built-in variables</h2>
                 <ol>
@@ -401,33 +390,25 @@ const Taskfiles = () => {
                     field should depend on the generated files of its dependencies.
                 </p>
 
-                <p className={"admonition code"}>
-                    <code>
-                        parent:
-                        <br/>
-                            &emsp;sources:
-                        <br/>
-                            &emsp;&emsp;- child1-output.txt
-                        <br/>
-                            &emsp;&emsp;- child2-output.txt
-                        <br/>
-                            &emsp;deps:
-                        <br/>
-                            &emsp;&emsp;- child1
-                        <br/>
-                            &emsp;&emsp;- child2
-                        <br/>
-                        <br/>
-                            &emsp;child1:
-                        <br/>
-                            &emsp;&emsp;generates: [&ldquo;child1-output.txt&rdquo;]
-                        <br/>
-                        <br/>
-                            &emsp;child2:
-                        <br/>
-                            &emsp;&emsp;generates: [&ldquo;child2-output.txt&rdquo;]
-                    </code>
-                </p>
+                <CodeBlock
+                    language={"yaml"}
+                    showCopy={true}
+                    code={
+                        `parent:
+  sources:
+    - child1-output.txt
+    - child2-output.txt
+  deps:
+    - child1
+    - child2
+
+child1:
+  generates: ["child1-output.txt"]
+
+child2:
+  generates: ["child2-output.txt"]
+`
+                    }/>
 
                 <br/>
                 <h2>
@@ -445,187 +426,83 @@ const Taskfiles = () => {
                     utility tasks below:
                 </p>
 
-                <p className={"admonition code"}>
-                    <code>
-                        vars:
-                        <br/>
-                            &emsp;CHECKSUM_TAR_BASE_ARGS: &gt;-
-                        <br/>
-                            &emsp;&emsp;--group=0
-                        <br/>
-                            &emsp;&emsp;--mtime=&apos;UTC 1970-01-01&apos;
-                        <br/>
-                            &emsp;&emsp;--numeric-owner
-                        <br/>
-                            &emsp;&emsp;--owner=0
-                        <br/>
-                        &emsp;&emsp;--sort=name
+                <CodeBlock
+                    language={"yaml"}
+                    showCopy={true}
+                    code={
+                        `vars:
+  CHECKSUM_TAR_BASE_ARGS: >-
+    --group=0
+    --mtime='UTC 1970-01-01'
+    --numeric-owner
+    --owner=0
+    --sort=name
 
-                        compute-checksum:
-                        <br/>
-                        &emsp;desc: &ldquo;Tries to compute a checksum for the given directory
-                        and output it to a file.&rdquo;
-                        <br/>
-                            &emsp;internal: true
-                        <br/>
-                            &emsp;silent: true
-                        <br/>
-                            &emsp;requires:
-                        <br/>
-                            &emsp;&emsp;vars: [&ldquo;DATA_DIR&rdquo;, &ldquo;OUTPUT_FILE&rdquo;]
-                        <br/>
-                            &emsp;cmds:
-                        <br/>
-                            &emsp;&emsp;- &gt;-
-                        <br/>
-                            &emsp;&emsp;tar cf -
-                        <br/>
-                            &emsp;&emsp;--directory &ldquo;
-                        {"{{.DATA_DIR}}"}
-                        &rdquo;
-                        <br/>
-                            &emsp;&emsp;--group=0
-                        <br/>
-                            &emsp;&emsp;--mtime=&apos;UTC 1970-01-01&apos;
-                        <br/>
-                            &emsp;&emsp;--numeric-owner
-                        <br/>
-                            &emsp;&emsp;--owner=0
-                        <br/>
-                            &emsp;&emsp;--sort=name
-                        <br/>
-                            &emsp;&emsp;
-                        {"{{.CHECKSUM_TAR_BASE_ARGS}}"}
-                        {" "}
-                        . 2&gt; /dev/null
-                        <br/>
-                            &emsp;&emsp;| md5sum &gt;
-                        {" "}
-                        {"{{.OUTPUT_FILE}}"}
-                        <br/>
-                            &emsp;# Ignore errors so that dependent tasks don&apos;t fail
-                        <br/>
-                        &emsp;
-                        ignore_error: true
-                        <br/>
-                        <br/>
-                        validate-checksum:
-                        <br/>
-                        &emsp;desc: &ldquo;Validates the checksum of the given directory
-                        matches the checksum in the given file, or deletes the checksum file
-                        otherwise.&rdquo;
-                        <br/>
-                            &emsp;internal: true
-                        <br/>
-                            &emsp;silent: true
-                        <br/>
-                            &emsp;requires:
-                        <br/>
-                            &emsp;&emsp;vars: [&ldquo;CHECKSUM_FILE&rdquo;, &ldquo;DATA_DIR&rdquo;]
-                        <br/>
-                            &emsp;vars:
-                        <br/>
-                            &emsp;&emsp;TMP_CHECKSUM_FILE: &ldquo;
-                        {"{{.CHECKSUM_FILE}}"}
-                        .tmp&rdquo;
-                        <br/>
-                            &emsp;cmds:
-                        <br/>
-                            &emsp;&emsp;- task: &ldquo;compute-checksum&rdquo;
-                        <br/>
-                            &emsp;&emsp;vars:
-                        <br/>
-                            &emsp;&emsp;&emsp;DATA_DIR: &ldquo;
-                        {"{{.DATA_DIR}}"}
-                        &rdquo;
-                        <br/>
-                            &emsp;&emsp;&emsp;OUTPUT_FILE: &ldquo;
-                        {"{{.TMP_CHECKSUM_FILE}}"}
-                        &rdquo;
-                        <br/>
-                            &emsp;&emsp;- defer: &ldquo;rm -f &apos;
-                        {"{{.TMP_CHECKSUM_FILE}}"}
-                        &apos;&rdquo;
-                        <br/>
-                        &emsp;&emsp;# Check that the directory exists and the checksum matches;
-                        otherwise delete the checksum file
-                        <br/>
-                            &emsp;&emsp;- &gt;-
-                        <br/>
-                            &emsp;&emsp;&emsp;(
-                        <br/>
-                            &emsp;&emsp;&emsp;test -d &ldquo;
-                        {"{{.DATA_DIR}}"}
-                        &rdquo;
-                        <br/>
-                            &emsp;&emsp;&emsp;&& diff -q &apos;
-                        {"{{.TMP_CHECKSUM_FILE}}"}
-                        &apos; &apos;
-                        {"{{.CHECKSUM_FILE}}"}
-                        &apos; 2&gt; /dev/null
-                        <br/>
-                            &emsp;&emsp;&emsp;) || rm -f &apos;
-                        {"{{.CHECKSUM_FILE}}"}
-                        &apos;
-                    </code>
-                </p>
+compute-checksum:
+  desc: "Tries to compute a checksum for the given directory and output it to a file."
+  internal: true
+  silent: true
+  requires:
+    vars: ["DATA_DIR", "OUTPUT_FILE"]
+  cmds:
+    - >-
+      tar cf -
+      --directory "{{.DATA_DIR}}"
+      --group=0
+      --mtime='UTC 1970-01-01'
+      --numeric-owner
+      --owner=0
+      --sort=name
+      {{.CHECKSUM_TAR_BASE_ARGS}} . 2> /dev/null
+      | md5sum > {{.OUTPUT_FILE}}
+  ignore_error: true
+
+validate-checksum:
+  desc: "Validates the checksum of the given directory matches the checksum in the given file, or deletes the checksum file otherwise."
+  internal: true
+  silent: true
+  requires:
+    vars: ["CHECKSUM_FILE", "DATA_DIR"]
+  vars:
+    TMP_CHECKSUM_FILE: "{{.CHECKSUM_FILE}}.tmp"
+  cmds:
+    - task: "compute-checksum"
+      vars:
+        DATA_DIR: "{{.DATA_DIR}}"
+        OUTPUT_FILE: "{{.TMP_CHECKSUM_FILE}}"
+    - defer: "rm -f '{{.TMP_CHECKSUM_FILE}}'"
+    - >-
+      (
+        test -d "{{.DATA_DIR}}" && diff -q '{{.TMP_CHECKSUM_FILE}}' '{{.CHECKSUM_FILE}}' 2> /dev/null
+      ) || rm -f '{{.CHECKSUM_FILE}}'
+`
+                    }/>
 
                 <p>You can use the utility tasks as follows:</p>
-                <p className={"admonition code"}>
-                    <code>
-                        my-task:
-                        <br/>
-                            &emsp;vars:
-                        <br/>
-                            &emsp;&emsp;CHECKSUM_FILE: &ldquo;checksum.txt&rdquo;
-                        <br/>
-                            &emsp;&emsp;OUTPUT_DIR: &ldquo;build/my-task&rdquo;
-                        <br/>
-                            &emsp;sources: [&ldquo;source.txt&rdquo;]
-                        <br/>
-                            &emsp;generates: [&ldquo;
-                        {"{{.CHECKSUM_FILE}}"}
-                        &rdquo;]
-                        <br/>
-                            &emsp;deps:
-                        <br/>
-                            &emsp;&emsp;- task: &ldquo;validate-checksum&rdquo;
-                        <br/>
-                            &emsp;&emsp;vars:
-                        <br/>
-                            &emsp;&emsp;&emsp;CHECKSUM_FILE: &ldquo;
-                        {"{{.CHECKSUM_FILE}}"}
-                        &rdquo;
-                        <br/>
-                            &emsp;&emsp;&emsp;DATA_DIR: &ldquo;
-                        {"{{.OUTPUT_DIR}}"}
-                        &rdquo;
-                        <br/>
-                            &emsp;cmds:
-                        <br/>
-                            &emsp;&emsp;- &ldquo;mkdir -p &apos;
-                        {"{{.OUTPUT_DIR}}"}
-                        &apos;&rdquo;
-                        <br/>
-                            &emsp;&emsp;- &ldquo;touch &apos;
-                        {"{{.OUTPUT_DIR}}"}
-                        /output.txt&apos;&rdquo;
-                        <br/>
-                            &emsp;&emsp;# This command must be last
-                        <br/>
-                            &emsp;&emsp;- task: &ldquo;compute-checksum&rdquo;
-                        <br/>
-                            &emsp;&emsp;vars:
-                        <br/>
-                            &emsp;&emsp;&emsp;DATA_DIR: &ldquo;
-                        {"{{.OUTPUT_DIR}}"}
-                        &rdquo;
-                        <br/>
-                            &emsp;&emsp;&emsp;OUTPUT_FILE: &ldquo;
-                        {"{{.CHECKSUM_FILE}}"}
-                        &rdquo;
-                    </code>
-                </p>
+                <CodeBlock
+                    language={"yaml"}
+                    showCopy={true}
+                    code={
+                        `my-task:
+  vars:
+    CHECKSUM_FILE: "checksum.txt"
+    OUTPUT_DIR: "build/my-task"
+  sources: ["source.txt"]
+  generates: ["{{.CHECKSUM_FILE}}"]
+  deps:
+    - task: "validate-checksum"
+      vars:
+        CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
+        DATA_DIR: "{{.OUTPUT_DIR}}"
+  cmds:
+    - "mkdir -p '{{.OUTPUT_DIR}}'"
+    - "touch '{{.OUTPUT_DIR}}/output.txt'"
+    - task: "compute-checksum"
+      vars:
+        DATA_DIR: "{{.OUTPUT_DIR}}"
+        OUTPUT_FILE: "{{.CHECKSUM_FILE}}"
+`
+                    }/>
 
                 <p>Thus, the task will re-run if either:</p>
                 <ul>
@@ -645,40 +522,24 @@ const Taskfiles = () => {
                         &emsp;
                     <strong>Example</strong>
                 </p>
-                <p className={"admonition code"}>
-                    <code>
-                        my-task-1:
-                        <br/>
-                            &emsp;cmds:
-                        <br/>
-                            &emsp;&emsp;- &ldquo;echo
-                        {" "}
-                        {"{{.TASK}}"}
-                        &rdquo;
-                        <br/>
-                        <br/>
-                        my-task-2:
-                        <br/>
-                            &emsp;cmds:
-                        <br/>
-                            &emsp;&emsp;- &ldquo;echo
-                        {" "}
-                        {"{{.TASK}}"}
-                        &rdquo;
-                        <br/>
-                        <br/>
-                        my-internal-task:
-                        <br/>
-                            &emsp;internal: true
-                        <br/>
-                            &emsp;cmds:
-                        <br/>
-                            &emsp;&emsp;- &ldquo;echo
-                        {" "}
-                        {"{{.TASK}}"}
-                        &rdquo;
-                    </code>
-                </p>
+                <CodeBlock
+                    language={"yaml"}
+                    showCopy={true}
+                    code={
+                        `my-task-1:
+  cmds:
+    - "echo {{.TASK}}"
+
+my-task-2:
+  cmds:
+    - "echo {{.TASK}}"
+
+my-internal-task:
+  internal: true
+  cmds:
+    - "echo {{.TASK}}"
+`
+                    }/>
 
                 <p>
                     2. Within the internal or non-internal group of tasks, tasks should be
@@ -832,40 +693,27 @@ const Taskfiles = () => {
                 <p>
                     <strong>Example</strong>
                 </p>
-                <p className={"admonition code"}>
-                    <code>
-                        my-task:
-                        <br/>
-                            &emsp;vars:
-                        <br/>
-                            &emsp;&emsp;PARENT_VAR: &ldquo;parent&rdquo;
-                        <br/>
-                            &emsp;&emsp;CHILD_VAR: &ldquo;
-                        {"{{.PARENT_VAR}}"}
-                        -child&rdquo;
-                        <br/>
-                            &emsp;sources:
-                        <br/>
-                            &emsp;&emsp;- &ldquo;source1.txt&rdquo;
-                        <br/>
-                            &emsp;&emsp;- &ldquo;source2.txt&rdquo;
-                        <br/>
-                            &emsp;generates:
-                        <br/>
-                            &emsp;&emsp;# Binaries
-                        <br/>
-                            &emsp;&emsp;- &ldquo;binary1&rdquo;
-                        <br/>
-                            &emsp;&emsp;- &ldquo;binary2&rdquo;
-                        <br/>
-                        <br/>
-                            &emsp;&emsp;# Libraries
-                        <br/>
-                            &emsp;&emsp;- &ldquo;lib1&rdquo;
-                        <br/>
-                            &emsp;&emsp;- &ldquo;lib2&rdquo;
-                    </code>
-                </p>
+                <CodeBlock
+                    language={"yaml"}
+                    showCopy={true}
+                    code={
+                        `my-task:
+  vars:
+    PARENT_VAR: "parent"
+    CHILD_VAR: "{{.PARENT_VAR}}-child"
+  sources:
+    - "source1.txt"
+    - "source2.txt"
+  generates:
+    # Binaries
+    - "binary1"
+    - "binary2"
+
+    # Libraries
+    - "lib1"
+    - "lib2"
+`
+                    }/>
 
                 <br/>
                 <h1>Task docstrings</h1>
@@ -875,47 +723,19 @@ const Taskfiles = () => {
                     demonstrates the syntax:
                 </p>
 
-                <p className={"admonition code"}>
-                    <code>
-                        # Task description including a description of any side effects or
-                        outputs generated by this task.
-                        <br/>
-                        #
-                        <br/>
-                        # @param
-                        {" "}
-                        {"{param_type}"}
-                        {" "}
-                        PARAM_1 Description for a required parameter.
-                        <br/>
-                        # @param
-                        {" "}
-                        {"{param_type}"}
-                        {" "}
-                        [PARAM_2] Description for an optional parameter.
-                        <br/>
-                        # @param
-                        {" "}
-                        {"{param_type}"}
-                        {" "}
-                        [PARAM_3=default_value] Description for an optional parameter with a
-                        default
-                        <br/>
-                        # value.
-                        <br/>
-                        # @param
-                        {" "}
-                        {"{[]param_type}"}
-                        {" "}
-                        PARAM_4 Description for a required parameter that&apos;s an array.
-                        <br/>
-                        # @param
-                        {" "}
-                        {"{map[key_type]value_type}"}
-                        {" "}
-                        PARAM_5 Description for a required parameter that&apos;s a map.
-                    </code>
-                </p>
+                <CodeBlock
+                    language={"text"}
+                    showCopy={true}
+                    code={
+                        `# Task description including a description of any side effects or outputs generated by this task.
+#
+# @param {param_type} PARAM_1 Description for a required parameter.
+# @param {param_type} [PARAM_2] Description for an optional parameter.
+# @param {param_type} [PARAM_3=default_value] Description for an optional parameter with a default value.
+# @param {[]param_type} PARAM_4 Description for a required parameter that's an array.
+# @param {map[key_type]value_type} PARAM_5 Description for a required parameter that's a map.
+`
+                    }/>
 
                 <ul>
                     <li>
@@ -932,22 +752,19 @@ const Taskfiles = () => {
                     </li>
                 </ul>
 
-                <p className={"admonition note"}>
-                    <p className={"admonition-note-title"}>Note</p>
+                <Admonition type={"note"}>
                     <p>
                         Tasks have an optional
                         {" "}
                         <a href={"https://taskfile.dev/reference/schema#task"}>desc</a>
                         {" "}
-                        attribute that technically serves the same purpose as the task
-                        description in the docstring. However, the description in the docstring
-                        can be easier to format, and we recommend against using
+                        attribute that technically serves the same purpose as the task description in the docstring. However, the description in the docstring can be easier to format, and we recommend against using
                         {" "}
                         <code>desc</code>
                         {" "}
                         when a docstring is present.
                     </p>
-                </p>
+                </Admonition>
             </div>
         </section>
     );
