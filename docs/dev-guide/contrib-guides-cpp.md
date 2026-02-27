@@ -130,31 +130,37 @@ returns a result containing an error code if unsuccessful or the object if succe
 
 #### Declaration order
 
-Within each section, order declarations as follows:
+We prioritize our [general ordering guidelines](./contrib-guides-general.md#declaration-order)
+causing us to have a different declaration grouping and ordering within an access specifier compared
+to [Google's style guide](google-cpp-style-declaration-order).
 
-1. Types and type aliases (`typedef`, `using`, `enum`, nested structs and classes, and `friend`
-   types).
-2. Static constants.
-3. Static functions:
-   * Factory functions.
-   * Other functions.
-4. Static variables.
-5. Constructors.
-6. Copy & move constructors and assignment operators.
-7. The destructor.
-8. Methods (member functions):
-   * Overridden methods.
-   * Implemented abstract methods.
-   * All other methods.
-9. Data members.
+Under every existing access specifier of a class we require that declarations are organized into
+sections that begin with a title comment. The list below defines each of these sections and the
+order they should appear. The name of each section should be used as the organizational title
+comment.
 
-The differences between our declaration order and the order in Google's style guide is to conform
-with our general [ordering guidelines](./contrib-guides-general.md#declaration-order).
+1. Types
+    * This includes type aliases (`typedef`, `using`, `enum`), nested structs and classes, and
+      `friend` types.
+2. Static constants
+3. Static methods
+4. Static data members
+5. Constructors
+6. Operators
+7. Destructor
+8. Methods implementing InheritedClass
+    * Declarations of methods implementing abstract methods from the class InheritedClass.
+9. Methods overriding InheritedClass
+    * Declarations of methods overriding virtual methods from the class InheritedClass.
+10. Methods
+11. Data members
 
 [adding-cpp-linting]: https://github.com/y-scope/yscope-dev-utils/blob/main/docs/lint-tools-cpp.md
 [clang-format-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-format
 [clang-tidy-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-tidy
+[cpp-core-guidelines-protected-data]: https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c133-avoid-protected-data
 [google-cpp-style-guide]: https://google.github.io/styleguide/cppguide.html
 [google-cpp-style-guide-classes]: https://google.github.io/styleguide/cppguide.html#Classes
+[google-cpp-style-declaration-order]: https://google.github.io/styleguide/cppguide.html#Declaration_Order
 [google-styleguide-8f97e24]: https://github.com/google/styleguide/tree/8f97e24da04753c7a15eda6b02114a01ec3146f5
 [issue]: https://github.com/y-scope/yscope-docs/issues/new
