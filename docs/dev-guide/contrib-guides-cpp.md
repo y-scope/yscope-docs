@@ -158,7 +158,6 @@ comment.
 [adding-cpp-linting]: https://github.com/y-scope/yscope-dev-utils/blob/main/docs/lint-tools-cpp.md
 [clang-format-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-format
 [clang-tidy-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-tidy
-[cpp-core-guidelines-protected-data]: https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c133-avoid-protected-data
 [google-cpp-style-guide]: https://google.github.io/styleguide/cppguide.html
 [google-cpp-style-guide-classes]: https://google.github.io/styleguide/cppguide.html#Classes
 [google-cpp-style-declaration-order]: https://google.github.io/styleguide/cppguide.html#Declaration_Order
