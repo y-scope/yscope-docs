@@ -39,7 +39,7 @@ Each project and its versions should be listed in `conf/projects.json` so that
    ```shell
    cd build/project-docs/<project>/<version>
    task docs:site
-   cd ../
+   cd -
    ```
 
 4. Assemble a release:
@@ -50,4 +50,4 @@ Each project and its versions should be listed in `conf/projects.json` so that
 
    The tar will be written to `build/yscope-docs-release.tar.gz`.
 5. Upload the tar to the deployment server and untar it.
-6. Move the extracted content to wherever the webserve expects it to be.
+6. Move the extracted content to wherever the webserver expects it to be.
