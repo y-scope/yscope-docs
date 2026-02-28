@@ -18,7 +18,7 @@ assembling them into a single deployment.
 ## Adding new projects
 
 Each project and its versions should be listed in `conf/projects.json` so that
-`scripts/download-projects.sh` can download the repos and check out the correct versions.
+`scripts/download-projects.py` can download the repos and check out the correct versions.
 
 ## Step-by-step guide
 
@@ -37,7 +37,7 @@ Each project and its versions should be listed in `conf/projects.json` so that
 3. Build the docs for each project and version in `conf/projects.json`:
 
    ```shell
-   cd build/<project>-<version>
+   cd build/project-docs/<project>/<version>
    task docs:site
    cd ../
    ```
