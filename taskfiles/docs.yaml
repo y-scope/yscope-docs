@@ -16,7 +16,6 @@ vars:
 tasks:
   build-main-docs:
     internal: true
-    run: "once"
     vars:
       CHECKSUM_FILE: "{{.G_BUILD_DIR}}/{{.TASK | replace \":\" \"#\"}}.md5"
       OUTPUT_DIR: "{{.G_MAIN_DOCS_OUTPUT_DIR}}"
@@ -25,6 +24,7 @@ tasks:
       - "{{.ROOT_DIR}}/docs/**/*"
       - "{{.TASKFILE}}"
     generates: ["{{.CHECKSUM_FILE}}"]
+    run: "once"
     deps:
       - task: "utils:checksum:validate"
         vars:
