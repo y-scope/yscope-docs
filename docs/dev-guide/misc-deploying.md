@@ -2,7 +2,7 @@
 
 A deployment of YScope docs includes both the current site and the sites of several other YScope
 repos and their release versions, complicating the build and deployment processes. The end goal is
-to use a single webserve to serve each site at a different URL prefix (e.g., CLP at `/clp/main` and
+to use a single webserver to serve each site at a different URL prefix (e.g., CLP at `/clp/main` and
 clp-ffi-py at `/clp-ffi-py/main`). We also want the layout on disk to be predictable so that we can
 use a simple config file to configure all the sites that need to be served.
 
