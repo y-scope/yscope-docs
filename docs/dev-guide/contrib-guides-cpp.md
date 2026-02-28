@@ -132,7 +132,7 @@ returns a result containing an error code if unsuccessful or the object if succe
 
 We prioritize our [general ordering guidelines](./contrib-guides-general.md#declaration-order)
 causing us to have a different declaration grouping and ordering within an access specifier compared
-to [Google's style guide](google-cpp-style-declaration-order).
+to [Google's style guide][google-cpp-style-declaration-order].
 
 Under every existing access specifier of a class we require that declarations are organized into
 sections that begin with a title comment. The list below defines each of these sections and the
