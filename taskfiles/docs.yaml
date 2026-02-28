@@ -104,7 +104,7 @@ tasks:
     run: "once"
     cmds:
       - |-
-        cd "{{.G_PROJECTS_DOCS_DIR}}"
+        cd "{{.G_PROJECTS_DOCS_DIR}}" || exit 0
         for project_dir in */; do
           project_name="${project_dir%/}"
 
