@@ -143,7 +143,7 @@ def main(argv):
         project: Project = Project.model_validate(project_dict, strict=True)
 
         for version in project.versions:
-            repo_dir = build_dir / f"{project.name}-{version}"
+            repo_dir = build_dir / project.name / version
             if repo_dir.exists():
                 if (
                         _dir_contains_repo(repo_dir, project.repo_url)

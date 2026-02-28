@@ -6,15 +6,20 @@ includes:
     taskfile: "../tools/yscope-dev-utils/exports/taskfiles/utils/utils.yaml"
 
 vars:
-  G_SOURCE_DIR: "{{.ROOT_DIR}}/server"
+  G_MAIN_DOCS_OUTPUT_DIR: "{{.G_BUILD_DIR}}/main-docs"
+  G_NODE_DEPS_DIR: "{{.G_BUILD_DIR}}/node-deps"
+  G_PROJECTS_DOCS_DIR: "{{.G_BUILD_DIR}}/project-docs"
+  G_PUBLISHABLE_OUTPUT_DIR: "{{.G_BUILD_DIR}}/html"
   G_VENV_CHECKSUM_FILE: "{{.G_BUILD_DIR}}/docs#venv.md5"
   G_VENV_DIR: "{{.G_BUILD_DIR}}/venv"
 
 tasks:
-  build:
+  build-main-docs:
+    internal: true
+    run: "once"
     vars:
       CHECKSUM_FILE: "{{.G_BUILD_DIR}}/{{.TASK | replace \":\" \"#\"}}.md5"
-      OUTPUT_DIR: "{{.G_BUILD_DIR}}/html"
+      OUTPUT_DIR: "{{.G_MAIN_DOCS_OUTPUT_DIR}}"
     sources:
       - "{{.G_VENV_CHECKSUM_FILE}}"
       - "{{.ROOT_DIR}}/docs/**/*"
@@ -37,82 +42,85 @@ tasks:
           CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
           INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
 
+  build:
+    deps: ["build-main-docs"]
+    cmds:
+      - "rm -rf '{{.G_PUBLISHABLE_OUTPUT_DIR}}'"
+      - "cp -r '{{.G_MAIN_DOCS_OUTPUT_DIR}}' '{{.G_PUBLISHABLE_OUTPUT_DIR}}'"
+      - task: "symlink-project-docs"
+
   download-projects:
     deps: ["venv"]
     cmds:
       - |-
         . "{{.G_VENV_DIR}}/bin/activate"
-        python3 scripts/download-projects.py --build-dir "{{.G_BUILD_DIR}}"
+        python3 scripts/download-projects.py --build-dir "{{.G_PROJECTS_DOCS_DIR}}"
 
   release-tar:
-    vars:
-      OUTPUT_DIR_NAME: "yscope-docs-release"
-      OUTPUT_DIR: "{{.G_BUILD_DIR}}/{{.OUTPUT_DIR_NAME}}"
-      SITE_PUBLIC_DIR: "{{.OUTPUT_DIR}}/public"
     deps: ["build"]
-    cmds:
-      - "rm -rf '{{.OUTPUT_DIR}}'"
-      - "mkdir -p '{{.OUTPUT_DIR}}'"
-      - >-
-        rsync
-        --archive
-        --relative
-        conf/projects.json
-        server/.env
-        server/src
-        server/package.json
-        server/package-lock.json
-        server/README.md
-        "{{.OUTPUT_DIR}}"
-      - "mkdir '{{.SITE_PUBLIC_DIR}}'"
-      - "rsync -a '{{.G_BUILD_DIR}}/html' {{.SITE_PUBLIC_DIR}}"
-      - |-
-        cd "{{.G_BUILD_DIR}}"
-        find -type d -regex ".*/build/docs/html" -exec \
-          rsync \
-          --archive \
-          --relative \
-          {} \
-          "{{.SITE_PUBLIC_DIR}}" \
-          \;
-      - >-
-        tar czf "{{.G_BUILD_DIR}}/{{.OUTPUT_DIR_NAME}}.tar.gz" --directory "{{.OUTPUT_DIR}}/.."
-        "{{.OUTPUT_DIR_NAME}}"
+    cmd: >-
+      tar czf "{{.G_BUILD_DIR}}/yscope-docs.tar.gz"
+      -h
+      -C "$(dirname "{{.G_PUBLISHABLE_OUTPUT_DIR}}")"
+      "$(basename "{{.G_PUBLISHABLE_OUTPUT_DIR}}")"
 
   serve:
     deps:
       - "build"
-      - "server"
+      - "http-server"
     cmd: |-
-      cd "{{.G_SOURCE_DIR}}"
-      PUBLIC_DIR="{{.G_BUILD_DIR}}" npm run dev
+      npm --prefix '{{.G_NODE_DEPS_DIR}}' exec http-server '{{.G_PUBLISHABLE_OUTPUT_DIR}}' -c-1
 
-  server:
+  http-server:
     internal: true
     vars:
       CHECKSUM_FILE: "{{.G_BUILD_DIR}}/{{.TASK | replace \":\" \"#\"}}.md5"
-      OUTPUT_DIR: "{{.G_SOURCE_DIR}}/node_modules"
+      OUTPUT_DIR: "{{.G_NODE_DEPS_DIR}}"
     sources:
-      - "{{.G_SOURCE_DIR}}/package.json"
+      - "{{.ROOT_TASKFILE}}"
       - "{{.TASKFILE}}"
     generates: ["{{.CHECKSUM_FILE}}"]
     run: "once"
     deps:
+      - ":init"
       - task: "utils:checksum:validate"
         vars:
           CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
           INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
     cmds:
       - "rm -rf '{{.OUTPUT_DIR}}'"
-      - |-
-        cd "{{.G_SOURCE_DIR}}"
-        npm install
+      - "npm --prefix '{{.OUTPUT_DIR}}' install http-server"
 
       # This command must be last
       - task: "utils:checksum:compute"
         vars:
           CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
           INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
+
+  # For each project in `G_PROJECT_DOCS_DIR`, and each version of a project, symlinks their built
+  # docs (if they exist) into the publishable output directory.
+  symlink-project-docs:
+    internal: true
+    run: "once"
+    cmds:
+      - |-
+        cd "{{.G_PROJECTS_DOCS_DIR}}"
+        for project_dir in */; do
+          project_name="${project_dir%/}"
+
+          for version_dir in "${project_dir}"/*/; do
+            version_name=$(basename "${version_dir}")
+
+            built_docs_dir="${version_dir}/build/docs/html"
+            if [ -d "${built_docs_dir}" ]; then
+              link_target="{{.G_PUBLISHABLE_OUTPUT_DIR}}/${project_name}/${version_name}"
+              mkdir -p "$(dirname "${link_target}")"
+              ln -sf "$(readlink -f "${built_docs_dir}")" "${link_target}"
+            else
+              echo "Warning: No built docs found for ${project_name}@${version_name}"
+            fi
+          done
+        done
 
   venv:
     internal: true
