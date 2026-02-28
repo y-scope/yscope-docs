@@ -14,34 +14,6 @@ vars:
   G_VENV_DIR: "{{.G_BUILD_DIR}}/venv"
 
 tasks:
-  build-main-docs:
-    internal: true
-    vars:
-      CHECKSUM_FILE: "{{.G_BUILD_DIR}}/{{.TASK | replace \":\" \"#\"}}.md5"
-      OUTPUT_DIR: "{{.G_MAIN_DOCS_OUTPUT_DIR}}"
-    sources:
-      - "{{.G_VENV_CHECKSUM_FILE}}"
-      - "{{.ROOT_DIR}}/docs/**/*"
-      - "{{.TASKFILE}}"
-    generates: ["{{.CHECKSUM_FILE}}"]
-    run: "once"
-    deps:
-      - task: "utils:checksum:validate"
-        vars:
-          CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
-          INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
-      - "venv"
-    cmds:
-      - |-
-        . "{{.G_VENV_DIR}}/bin/activate"
-        sphinx-build -a -E -c docs -b html docs "{{.OUTPUT_DIR}}"
-
-      # This command must be last
-      - task: "utils:checksum:compute"
-        vars:
-          CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
-          INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
-
   build:
     deps: ["build-main-docs"]
     cmds:
@@ -70,6 +42,34 @@ tasks:
       - "http-server"
     cmd: |-
       npm --prefix '{{.G_NODE_DEPS_DIR}}' exec http-server '{{.G_PUBLISHABLE_OUTPUT_DIR}}' -c-1
+
+  build-main-docs:
+    internal: true
+    vars:
+      CHECKSUM_FILE: "{{.G_BUILD_DIR}}/{{.TASK | replace \":\" \"#\"}}.md5"
+      OUTPUT_DIR: "{{.G_MAIN_DOCS_OUTPUT_DIR}}"
+    sources:
+      - "{{.G_VENV_CHECKSUM_FILE}}"
+      - "{{.ROOT_DIR}}/docs/**/*"
+      - "{{.TASKFILE}}"
+    generates: ["{{.CHECKSUM_FILE}}"]
+    run: "once"
+    deps:
+      - task: "utils:checksum:validate"
+        vars:
+          CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
+          INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
+      - "venv"
+    cmds:
+      - |-
+        . "{{.G_VENV_DIR}}/bin/activate"
+        sphinx-build -a -E -c docs -b html docs "{{.OUTPUT_DIR}}"
+
+      # This command must be last
+      - task: "utils:checksum:compute"
+        vars:
+          CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
+          INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
 
   http-server:
     internal: true
