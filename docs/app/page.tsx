@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 "use client";
 import {
@@ -6,11 +5,36 @@ import {
     useState,
 } from "react";
 
+import {Zap} from "lucide-react";
+import Image from "next/image";
+
+import {ContactSection} from "../components/sections/ContactSection";
+import {getCategories} from "./content";
 import {useTheme} from "./shared/ThemeProvider";
 
+import {Button} from "@/components/ui/button";
+import {
+    Card,
+    CardContent,
+} from "@/components/ui/card";
+
+
+const GITHUB_ICON_PATH = (
+    "M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285" +
+    "-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.08" +
+    "9-.745.083-.729.083-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.834 2.809 1.304 3.495.997.1" +
+    "08-.775.418-1.305.762-1.605-2.665-.305-5.466-1.334-5.466-5.93 0-1.31.469-2.381 1.236-3.221-" +
+    ".124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.301 1.23a11.52 11.52 0 0 1 3.003-.404c1.018" +
+    ".005 2.045.138 3.003.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.873.118 3.176.77" +
+    ".84 1.235 1.911 1.235 3.221 0 4.609-2.803 5.624 -5.475 5.921.43.371.823 1.102.823 2.222 0 1" +
+    ".606-.014 2.898-.014 3.293 0 .322.218.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627" +
+    "-5.373-12-12-12"
+);
 
 /**
+ * Renders a horizontal divider with whitespace.
  *
+ * @return the divider component.
  */
 const Divider = () => {
     return (
@@ -21,6 +45,101 @@ const Divider = () => {
         </div>
     );
 };
+
+/**
+ * Renders an icon link card.
+ *
+ * @param external.external
+ * @param external whether the link should open in a new tab.
+ * @param href the URL to navigate to.
+ * @param imgAlt alt text for the image.
+ * @param imgSrc source URL for the image.
+ * @param imgStyle optional inline styles for the image.
+ * @param label the link label text.
+ * @param external.href
+ * @param external.imgAlt
+ * @param external.imgSrc
+ * @param external.imgStyle
+ * @param external.label
+ * @return the icon link component.
+ */
+const IconLink = ({
+    external,
+    href,
+    imgAlt,
+    imgSrc,
+    imgStyle,
+    label,
+}: {
+    external?: boolean;
+    href: string;
+    imgAlt: string;
+    imgSrc: string;
+    imgStyle?: any;
+    label: string;
+}) => (
+    <Card
+        className={"col-auto p-0 border-0 shadow-none homepage_icon_row transition-all " +
+        "duration-300 hover:-translate-y-1"}
+    >
+        <CardContent>
+            <a
+                href={href}
+                className={
+                    "d-flex flex-row align-items-center " +
+                    "text-decoration-none text-body"
+                }
+                {...(external ?
+                    {rel: "noreferrer noopener", target: "_blank"} :
+                    {})}
+            >
+                <div
+                    style={{marginRight: "10px"}}
+                    className={
+                        "rounded homepage_icon_box d-flex " +
+                        "align-items-center justify-content-center"
+                    }
+                >
+                    <img
+                        alt={imgAlt}
+                        className={"homepage_icon"}
+                        src={imgSrc}
+                        style={imgStyle}/>
+                </div>
+                <small className={"mt-2"}>
+                    {label}
+                </small>
+            </a>
+        </CardContent>
+    </Card>
+);
+
+/**
+ * Renders a category section with icon links.
+ *
+ * @param root the category object
+ * @param root.title name of category
+ * @param root.items array of icon links
+ * @return the category component
+ */
+const Category = ({title, items}: {title: string; items: Array<any>}) => (
+    <div className={"row align-items-center justify-content-center"}>
+        <div className={"col-lg-3 mb-3 mb-lg-0"}>
+            <h3 className={"h5 mb-1"}>
+                {title}
+            </h3>
+        </div>
+        <div className={"col-lg-7"}>
+            <div className={"row g-2 homepage_icons_category mx-auto"}>
+                {items.map((it: any, i: number) => (
+                    <IconLink
+                        key={i}
+                        {...it}/>
+                ))}
+            </div>
+        </div>
+    </div>
+);
 
 /**
  * Renders the home page.
@@ -42,230 +161,27 @@ const Home = () => {
             "/assets/images/mcp_light.svg");
     }, [theme]);
 
-    /* Small reusable IconLink component to avoid repeating markup for each icon */
-    const IconLink = ({
-        external,
-        href,
-        imgAlt,
-        imgSrc,
-        imgStyle,
-        label,
-    }: {
-        external?: boolean;
-        href: string;
-        imgAlt: string;
-        imgSrc: string;
-        imgStyle?: any;
-        label: string;
-    }) => (
-        <div className={"col-auto homepage_icon_row"}>
-            <a
-                href={href}
-                className={
-                    "d-flex flex-row align-items-center " +
-                        "text-decoration-none text-body"
-                }
-                {...(external ?
-                    {rel: "noreferrer noopener", target: "_blank"} :
-                    {})}
-            >
-                <div
-                    style={{marginRight: "10px"}}
-                    className={
-                        "rounded homepage_icon_box d-flex " +
-                            "align-items-center justify-content-center"
-                    }
-                >
-                    <img
-                        alt={imgAlt}
-                        className={"homepage_icon"}
-                        src={imgSrc}
-                        style={imgStyle}/>
-                </div>
-                <small className={"mt-2"}>
-                    {label}
-                </small>
-            </a>
-        </div>
-    );
-
-    const Category = ({title, items}: {title: string; items: Array<any>}) => (
-        <div className={"row align-items-center justify-content-center"}>
-            <div className={"col-lg-3 mb-3 mb-lg-0"}>
-                <h3 className={"h5 mb-1"}>
-                    {title}
-                </h3>
-            </div>
-            <div className={"col-lg-7"}>
-                <div className={"row g-2 homepage_icons_category"}>
-                    {items.map((it: any, i: number) => (
-                        <IconLink
-                            key={i}
-                            {...it}/>
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
-
-    const categories = [
-        {
-            title: "Deploy CLP",
-            items: [
-                {
-                    href: "/clp/main/user-docs/quick-start/index",
-                    imgAlt: "Single-node",
-                    imgSrc: "/assets/images/single-node.svg",
-                    label: "Single Node",
-                },
-                {
-                    href: "/clp/main/user-docs/guides-docker-compose-deployment.html",
-                    imgAlt: "Docker Compose",
-                    imgSrc: "/assets/images/docker-compose_icon.svg",
-                    label: "Docker Compose",
-                },
-                {
-                    href: "/clp/main/user-docs/guides-k8s-deployment.html",
-                    imgAlt: "Kubernetes",
-                    imgSrc: "/assets/images/kubernetes.svg",
-                    label: "Kubernetes",
-                },
-            ],
-        },
-        {
-            title: "Log Input",
-            items: [
-                {
-                    href: "/clp/main/user-docs/guides-using-object-storage/index",
-                    imgAlt: "S3",
-                    imgSrc: "/assets/images/s3.svg",
-                    label: "S3",
-                },
-                {
-                    external: true,
-                    href: "https://github.com/y-scope/clp-loglib-py",
-                    imgAlt: "Python Library",
-                    imgSrc: "/assets/images/python.svg",
-                    label: "Python",
-                },
-                {
-                    href: "/clp/main/user-docs/guides-using-log-ingestor.html",
-                    imgAlt: "Log Ingestor",
-                    imgSrc: "/assets/images/log-ingestor.svg",
-                    label: "Log Ingestor",
-                },
-            ],
-        },
-        {
-            title: "Analyze & View",
-            items: [
-                {
-                    href: "/clp/main/user-docs/guides-using-presto.html",
-                    imgAlt: "Presto",
-                    imgSrc: prestoSrc,
-                    imgStyle: {transform: "scale(1.2)", transformOrigin: "center"},
-                    label: "Presto",
-                },
-                {
-                    href: "/clp/main/user-docs/guides-mcp-server/index.html",
-                    imgAlt: "MCP",
-                    imgSrc: mcpSrc,
-                    label: "MCP Server",
-                },
-                {
-                    href: "/clp/main/user-docs/guides-using-the-api-server.html",
-                    imgAlt: "API Server",
-                    imgSrc: "/assets/images/api-server.svg",
-                    label: "API Server",
-                },
-                {
-                    href: "/yscope-log-viewer/main/",
-                    imgAlt: "Log viewer",
-                    imgSrc: "/assets/images/log-viewer_icon.svg",
-                    label: "Log Viewer",
-                },
-                {
-                    href: "/clp/main/user-docs/reference-json-search-syntax",
-                    imgAlt: "JSON Search",
-                    imgSrc: "/assets/images/json.svg",
-                    label: "JSON Search",
-                },
-                {
-                    href: "/clp/main/user-docs/reference-text-search-syntax",
-                    imgAlt: "Text Search",
-                    imgSrc: "/assets/images/text.svg",
-                    label: "Text Search",
-                },
-            ],
-        },
-        {
-            title: "Resources",
-            items: [
-                {
-                    href: "/clp/main/user-docs/resources-datasets.html",
-                    imgAlt: "Datasets",
-                    imgSrc: "/assets/images/datasets.svg",
-                    label: "Datasets",
-                },
-                {
-                    external: true,
-                    href: "https://benchmarks.yscope.com/log-archival-bench/",
-                    imgAlt: "Benchmarks",
-                    imgSrc: "/assets/images/benchmarks.svg",
-                    label: "Benchmarks",
-                },
-                {
-                    external: true,
-                    href: "https://blog.yscope.com/",
-                    imgAlt: "Blog",
-                    imgSrc: "/assets/images/blog.svg",
-                    label: "Blog",
-                },
-            ],
-        },
-        {
-            title: "References",
-            items: [
-                {
-                    external: true,
-                    href: "https://www.yscope.com/publications",
-                    imgAlt: "Publications",
-                    imgSrc: "/assets/images/publications.svg",
-                    label: "Publications",
-                },
-                {
-                    href: "/clp/main/user-docs/reference-sbin-scripts/index",
-                    imgAlt: "Package Scripts",
-                    imgSrc: "/assets/images/scripts.svg",
-                    label: "Package Scripts",
-                },
-                {
-                    href: "/clp/main/user-docs/reference-unstructured-schema-file",
-                    imgAlt: "Schema File Syntax",
-                    imgSrc: "/assets/images/schema-file-syntax.svg",
-                    label: "Schema File Syntax",
-                },
-            ],
-        },
-    ];
+    const categories = getCategories(prestoSrc, mcpSrc);
 
     return (
-        <section className={"section main-section"}>
-            <div className={"container"}>
+        <>
+            <div className={"container mx-auto mt-5"}>
                 <div
-                    className={"row align-items-center justify-content-center"}
+                    className={"row align-items-center justify-content-center homepage-hero-row"}
                     style={{marginBottom: "2.5rem"}}
                 >
-                    <div className={"col col-lg-5"}>
-                        <h1>
+                    <div className={"col"}>
+                        <h1 className={"flex align-items-center gap-2 homepage-hero-title"}>
                             Welcome to
                             {" "}
-                            <img
-                                alt={"CLP"}
+                            <Image
+                                alt={"CLP Logo"}
+                                height={0}
                                 src={"/assets/images/clp-logo.png"}
+                                unoptimized={true}
+                                width={0}
                                 style={{
-                                    height: "0.9em",
-                                    paddingBottom: "3.5px",
+                                    height: "0.8em",
                                     verticalAlign: "middle",
                                     width: "auto",
                                 }}/>
@@ -277,34 +193,72 @@ const Home = () => {
                             examples, documentation and resources.
                         </p>
                     </div>
-                    <div className={"col col-lg-5 text-center"}>
-                        <a
-                            className={"btn btn-quickstart btn-primary btn-lg me-3 mb-2"}
-                            href={"/clp/main/user-docs/quick-start/index"}
-                        >
-                            <i
-                                aria-hidden={"true"}
-                                className={"bi bi-lightning-charge-fill me-1"}/>
-                            {" "}
-                            Quickstart
-                        </a>
-                        <a
-                            className={"btn btn-outline-primary btn-lg mb-2"}
-                            href={"https://github.com/y-scope/clp/releases"}
-                            rel={"noreferrer noopener"}
-                            target={"_blank"}
-                        >
-                            <i
-                                aria-hidden={"true"}
-                                className={"bi bi-github me-1"}/>
-                            {" "}
-                            Current Release
-                        </a>
+                    <div className={"col my-4"}>
+                        <div className={"row gap-4 px-4 align-items-center justify-content-center"}>
+                            <Button
+                                asChild={true}
+                                size={"lg"}
+                                variant={"outline"}
+                                className={"text-white bg-[var(--brilliant-azure-550)] " +
+                                         "hover:bg-[var(--brilliant-azure-700)] px-8 " +
+                                         "mobile-menu-btn hover:shadow-xl transition-all " +
+                                         "duration-300 hover:-translate-y-1"}
+                                style={{
+                                    fontSize: "1.5rem",
+                                    height: "3rem",
+                                    width: "fit-content",
+                                }}
+                            >
+                                <a
+                                    className={"text-decoration-none"}
+                                    href={"/clp/main/user-docs/quick-start/index"}
+                                >
+                                    <Zap
+                                        aria-hidden={"true"}
+                                        size={20}/>
+                                    {" "}
+                                    Quickstart
+                                </a>
+                            </Button>
+                            <Button
+                                asChild={true}
+                                size={"lg"}
+                                variant={"outline"}
+                                className={"text-white bg-[var(--turquoise-600)] " +
+                                         "hover:bg-[var(--turquoise-700)] px-8 mobile-menu-btn " +
+                                         "hover:shadow-xl transition-all duration-300 " +
+                                         "hover:-translate-y-1"}
+                                style={{
+                                    fontSize: "1.5rem",
+                                    height: "3rem",
+                                    width: "fit-content",
+                                }}
+                            >
+                                <a
+                                    className={"text-decoration-none"}
+                                    href={"https://github.com/y-scope/clp/releases"}
+                                    rel={"noreferrer noopener"}
+                                    target={"_blank"}
+                                >
+                                    <svg
+                                        fill={"currentColor"}
+                                        height={"25"}
+                                        viewBox={"0 0 24 24"}
+                                        width={"25"}
+                                        xmlns={"http://www.w3.org/2000/svg"}
+                                    >
+                                        <path d={GITHUB_ICON_PATH}/>
+                                    </svg>
+                                    {" "}
+                                    Current Release
+                                </a>
+                            </Button>
+                        </div>
                     </div>
                 </div>
 
                 {/* Replaced repeated markup with data-driven categories */}
-                <div className={"col align-items-center justify-content-center"}>
+                <div className={"row align-items-center justify-content-center"}>
                     {categories.map((c, idx) => (
                         <div key={c.title}>
                             <Category
@@ -316,138 +270,9 @@ const Home = () => {
                 </div>
 
                 <Divider/>
-
-                <div className={"row align-items-center justify-content-center below-fold"}>
-                    <div className={"col-lg-10"}>
-                        <div className={"row"}>
-                            <div className={"col-lg-6"}>
-                                <section
-                                    className={"d-flex flex-column justify-content-center"}
-                                    id={"getting-in-touch"}
-                                    style={{marginTop: 0}}
-                                >
-                                    <h3 style={{marginBottom: "1rem", textAlign: "left"}}>
-                                        <svg
-                                            aria-hidden={"true"}
-                                            fill={"currentColor"}
-                                            height={"22"}
-                                            style={{marginRight: 4}}
-                                            viewBox={"0 0 24 24"}
-                                            width={"22"}
-                                        >
-                                            <path
-                                                d={"M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 " +
-                                                        "16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 " +
-                                                        "0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 " +
-                                                        "8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 " +
-                                                        "3.5V19h14v-2.5C15 14.17 10.33 13 8 13zm8" +
-                                                        " 0c-.29 0-.62.02-.97.05 1.16.84 1.97 " +
-                                                        "2.08 1.97 3.45V19h6v-2.5c0-2.33-4.67-" +
-                                                        "3.5-7-3.5z"}/>
-                                        </svg>
-                                        Community
-                                    </h3>
-                                    <p>Need help? Join us on one of our community servers:</p>
-                                    <div
-                                        style={{
-                                            gap: "1.5rem",
-                                            marginTop: "0.5rem",
-                                            marginBottom: "1rem",
-                                            textAlign: "center",
-                                        }}
-                                    >
-                                        <a
-                                            className={"btn btn-primary btn-md me-3 mb-2"}
-                                            href={"https://discord.gg/7kZA2m5G87"}
-                                            rel={"noopener noreferrer"}
-                                            style={{backgroundColor: "#7289da", border: "none"}}
-                                            target={"_blank"}
-                                        >
-                                            <img
-                                                alt={"Discord"}
-                                                src={"/assets/images/discord.svg"}
-                                                style={{
-                                                    height: 32,
-                                                    marginRight: 10,
-                                                    verticalAlign: "middle",
-                                                }}/>
-                                            {""}
-                                            Discord
-                                        </a>
-
-                                        <a
-                                            className={"btn btn-primary btn-md me-3 mb-2"}
-                                            href={"https://communityinviter.com/apps/yscopecommunity/yscope-community"}
-                                            rel={"noopener noreferrer"}
-                                            style={{backgroundColor: "#4A154B", border: "none"}}
-                                            target={"_blank"}
-                                        >
-                                            <img
-                                                alt={"Slack"}
-                                                src={"/assets/images/slack.svg"}
-                                                style={{
-                                                    height: 32,
-                                                    marginRight: 10,
-                                                    verticalAlign: "middle",
-                                                }}/>
-                                            {""}
-                                            Slack
-                                        </a>
-
-                                        <a
-                                            className={"btn btn-primary btn-md me-3 mb-2"}
-                                            href={"https://yscope-clp.zulipchat.com"}
-                                            rel={"noopener noreferrer"}
-                                            style={{backgroundColor: "#323234", border: "none"}}
-                                            target={"_blank"}
-                                        >
-                                            <img
-                                                alt={"Zulip"}
-                                                src={"/assets/images/zulip.svg"}
-                                                style={{
-                                                    height: 32,
-                                                    marginRight: 10,
-                                                    verticalAlign: "middle",
-                                                }}/>
-                                            {""}
-                                            Zulip
-                                        </a>
-                                    </div>
-                                    <p>Need help? Join us on one of our community servers:</p>
-                                    <a
-                                        className={"btn btn-github w-100"}
-                                        href={"https://www.yscope.com/contact-us"}
-                                        rel={"noreferrer noopener"}
-                                        style={{marginTop: "0.5rem", marginBottom: "1rem"}}
-                                        target={"_blank"}
-                                    >
-                                        Contact Us
-                                    </a>
-                                </section>
-                            </div>
-                            <div className={"col-lg-6"}>
-                                <section
-                                    className={"d-flex flex-column justify-content-center"}
-                                    id={"newsletter-signup"}
-                                    style={{marginTop: 0}}
-                                >
-                                    <h3
-                                        style={{marginBottom: "1rem", textAlign: "left"}}
-                                    >
-                                        Subscribe to our Newsletter
-                                    </h3>
-                                    <iframe
-                                        className={"w-100 border-0"}
-                                        src={"https://zgnp-zngp.maillist-manage.com/ua/Optin?od=11287ecd51e435&zx=128d06ea5&tD=115eb0ad4019fbcaf&sD=115eb0ad401a078b2"}
-                                        style={{height: "230px", maxWidth: "500px"}}
-                                        title={"Newsletter signup"}/>
-                                </section>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-        </section>
+            <ContactSection/>
+        </>
     );
 };
 

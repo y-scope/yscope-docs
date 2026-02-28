@@ -11,22 +11,24 @@ interface Props {
 }
 
 const titleMap: Record<AdmonitionType, string> = {
+    code: "Code",
+    danger: "Danger",
+    info: "Info",
     note: "Note",
     tip: "Tip",
     warning: "Warning",
-    info: "Info",
-    code: "Code",
-    danger: "Danger",
 };
 
 /**
+ * Renders an admonition component with a specified type, title, and content.
  *
- * @param root0
- * @param root0.type
- * @param root0.title
- * @param root0.children
+ * @param root0 The component props
+ * @param root0.type The type of admonition (note, tip, warning, info, code, or danger)
+ * @param root0.title Optional custom title for the admonition
+ * @param root0.children The content to display within the admonition
+ * @return A styled admonition component
  */
-const Admonition = ({type, title, children}: Props) => {
+const Admonition = ({type = "note", title, children}: Props) => {
     const displayTitle = title || titleMap[type];
 
     return (

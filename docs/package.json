@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "postbuild": "next-sitemap --config next-sitemap.config.js && npm run copy-sitemap",
+    "copy-bootstrap": "cp node_modules/bootstrap/dist/js/bootstrap.bundle.min.js public/",
+    "build": "npm run copy-bootstrap && next build",
+    "postbuild": "next-sitemap --config next-sitemap.config.mjs && npm run copy-sitemap",
     "copy-sitemap": "cp -r public/sitemap*.xml public/robots.txt out/",
     "start": "next start",
     "lint": "npm run lint:check",
@@ -16,15 +17,24 @@
   },
   "dependencies": {
     "@next/third-parties": "^16.0.7",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-slot": "^1.2.4",
     "bootstrap-icons": "^1.13.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.563.0",
     "next": "^16.0.7",
     "next-sitemap": "^4.0.0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
-    "prismjs": "^1.29.0"
+    "react-icons": "^4.11.0",
+    "prismjs": "^1.29.0",
+    "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^22.15.31",
+    "@types/prismjs": "^1.26.6",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/parser": "^8.34.0",
@@ -37,6 +47,8 @@
     "stylelint-config-clean-order": "^6.1.0",
     "stylelint-config-standard": "^36.0.1",
     "stylelint-prettier": "^5.0.3",
+    "tailwindcss": "^4",
+    "tw-animate-css": "^1.4.0",
     "typescript": "5.7.3"
   }
 }

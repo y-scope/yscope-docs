@@ -3,11 +3,27 @@ import type {
     Metadata,
     Viewport,
 } from "next";
+import {
+    Geist,
+    Geist_Mono,
+} from "next/font/google";
+import Script from "next/script";
 
-import Footer from "./Footer";
-import Navbar from "./Navbar";
+import Footer from "../components/sections/Footer";
+import Navbar from "../components/sections/Navbar";
 
 import "./assets/scss/styles.scss";
+
+
+const geistSans = Geist({
+    variable: "--font-geist-sans",
+    subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+    variable: "--font-geist-mono",
+    subsets: ["latin"],
+});
 
 
 export const metadata: Metadata = {
@@ -39,7 +55,22 @@ const RootLayout = ({
     return (
         <html lang={"en"}>
             <GoogleAnalytics gaId={"G-C4R8TV71EE"}/>
-            <body>
+            <head>
+                <link
+                    href={"https://fonts.googleapis.com"}
+                    rel={"preconnect"}/>
+                <link
+                    crossOrigin={""}
+                    href={"https://fonts.gstatic.com"}
+                    rel={"preconnect"}/>
+                <link
+                    href={"https://fonts.googleapis.com/css2?family=ABeeZee&display=swap"}
+                    rel={"stylesheet"}/>
+            </head>
+            <body className={`${geistSans.variable} ${geistMono.variable}`}>
+                <Script
+                    src={"/bootstrap.bundle.min.js"}
+                    strategy={"afterInteractive"}/>
                 <ThemeProvider>
                     <Navbar/>
                     {children}

@@ -20,9 +20,11 @@ import "prismjs/themes/prism-tomorrow.css";
 
 
 /**
+ * A button component that copies text to the clipboard with visual feedback.
  *
  * @param root0
- * @param root0.text
+ * @param root0.text The text content to copy when the button is clicked
+ * @return A button element that copies text and shows a "Copied" confirmation
  */
 const CopyButton = ({text}: {text: string}) => {
     const [copied, setCopied] = useState(false);
@@ -55,12 +57,14 @@ const CopyButton = ({text}: {text: string}) => {
 };
 
 /**
+ * A syntax-highlighted code block component with optional filename display and copy button.
  *
  * @param root0
- * @param root0.code
- * @param root0.language
- * @param root0.filename
- * @param root0.showCopy
+ * @param root0.code The code content to display
+ * @param root0.language The programming language for syntax highlighting (optional)
+ * @param root0.filename The filename to display above the code (optional)
+ * @param root0.showCopy Whether to display a copy button (optional)
+ * @return A code block element with syntax highlighting and optional features
  */
 const CodeBlock = ({
     code,
