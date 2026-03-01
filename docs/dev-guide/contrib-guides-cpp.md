@@ -140,20 +140,22 @@ order they should appear. The name of each section should be used as the organiz
 comment.
 
 1. Types
-    * This includes type aliases (`typedef`, `using`, `enum`), nested structs and classes, and
-      `friend` types.
+  * This includes type aliases (`typedef`, `using`, `enum`), nested structs and classes, and
+    `friend` types.
 2. Static constants
-3. Static methods
-4. Static data members
-5. Constructors
-6. Operators
-7. Destructor
-8. Methods implementing InheritedClass
-    * Declarations of methods implementing abstract methods from the class InheritedClass.
-9. Methods overriding InheritedClass
-    * Declarations of methods overriding virtual methods from the class InheritedClass.
-10. Methods
-11. Data members
+3. Factory methods
+  * Declarations of static methods that return an object of the class being defined.
+4. Static methods
+5. Static data members
+6. Constructors
+7. Operators
+8. Destructor
+9. Methods implementing InheritedClass
+  * Declarations of methods implementing abstract methods from the class InheritedClass.
+10. Methods overriding InheritedClass
+  * Declarations of methods overriding virtual methods from the class InheritedClass.
+11. Methods
+12. Data members
 
 [adding-cpp-linting]: https://github.com/y-scope/yscope-dev-utils/blob/main/docs/lint-tools-cpp.md
 [clang-format-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-format
