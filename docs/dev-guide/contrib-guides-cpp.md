@@ -134,7 +134,7 @@ We prioritize our [general ordering guidelines](./contrib-guides-general.md#decl
 causing us to have a different declaration grouping and ordering within an access specifier compared
 to [Google's style guide][google-cpp-style-declaration-order].
 
-Under every existing access specifier of a class we require that declarations are organized into
+Under every existing access specifier of a class, we require that declarations are organized into
 sections that begin with a title comment. The list below defines each of these sections and the
 order they should appear. The name of each section should be used as the organizational title
 comment.
@@ -150,12 +150,15 @@ comment.
 6. Constructors
 7. Operators
 8. Destructor
-9. Methods implementing InheritedClass
-  * Declarations of methods implementing abstract methods from the class InheritedClass.
-10. Methods overriding InheritedClass
-  * Declarations of methods overriding virtual methods from the class InheritedClass.
+9. Methods implementing <InheritedClass>
+  * Declarations of methods implementing abstract methods from the class <InheritedClass>.
+10. Methods overriding <InheritedClass>
+  * Declarations of methods overriding virtual methods from the class <InheritedClass>.
 11. Methods
 12. Data members
+
+Note, <InheritedClass> is a placeholder that should be replaced with the class originally declaring
+the virtual method.
 
 [adding-cpp-linting]: https://github.com/y-scope/yscope-dev-utils/blob/main/docs/lint-tools-cpp.md
 [clang-format-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-format
