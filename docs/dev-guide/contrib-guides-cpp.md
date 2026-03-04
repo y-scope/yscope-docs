@@ -150,14 +150,14 @@ comment.
 6. Constructors
 7. Operators
 8. Destructor
-9. Methods implementing <InheritedClass>
-  * Declarations of methods implementing abstract methods from the class <InheritedClass>.
-10. Methods overriding <InheritedClass>
-  * Declarations of methods overriding virtual methods from the class <InheritedClass>.
+9. Methods implementing `InheritedClass`
+  * Declarations of methods implementing abstract methods from the class `InheritedClass`.
+10. Methods overriding `InheritedClass`
+  * Declarations of methods overriding virtual methods from the class `InheritedClass`.
 11. Methods
 12. Data members
 
-Note, <InheritedClass> is a placeholder that should be replaced with the class originally declaring
+Note, `InheritedClass` is a placeholder that should be replaced with the class originally declaring
 the virtual method.
 
 [adding-cpp-linting]: https://github.com/y-scope/yscope-dev-utils/blob/main/docs/lint-tools-cpp.md
