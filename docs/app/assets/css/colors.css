@@ -1,0 +1,85 @@
+/* CSS variables exported from Tailwind color config */
+:root {
+  --white: #ffffff;
+  --black: #000000;
+
+  --light-bg: #ffffff;
+  --dark-bg: #16181b;
+
+  --light-bg-alt: #efefef;
+  --dark-bg-alt: #111315;
+
+  /* Brilliant Azure */
+  --brilliant-azure: #1888FA;
+  --brilliant-azure-50: #e6f2fe;
+  --brilliant-azure-100: #cde5fe;
+  --brilliant-azure-150: #b5d9fd;
+  --brilliant-azure-200: #9bccfd;
+  --brilliant-azure-300: #69b2fc;
+  --brilliant-azure-400: #3799fb;
+  --brilliant-azure-500: #057ffa;
+  --brilliant-azure-550: #0573e1;
+  --brilliant-azure-600: #0466c8;
+  --brilliant-azure-700: #034c96;
+  --brilliant-azure-800: #023364;
+  --brilliant-azure-850: #02264B;
+  --brilliant-azure-900: #011932;
+  --brilliant-azure-950: #011223;
+
+  /* Turquoise */
+  --turquoise: #62D6BF;
+  --turquoise-50: #ebfaf7;
+  --turquoise-100: #d6f5ef;
+  --turquoise-200: #aeeade;
+  --turquoise-300: #85e0ce;
+  --turquoise-400: #5dd5bd;
+  --turquoise-500: #34cbad;
+  --turquoise-600: #2aa28a;
+  --turquoise-700: #18786f;
+  --turquoise-800: #094f4d;
+  --turquoise-850: #043C3B;
+  --turquoise-900: #002928;
+  --turquoise-950: #001e1d;
+
+  /* Space Indigo */
+  --space-indigo: #201E50;
+  --space-indigo-50: #ededf8;
+  --space-indigo-100: #dbdaf1;
+  --space-indigo-200: #b7b5e3;
+  --space-indigo-300: #9290d5;
+  --space-indigo-400: #6e6bc7;
+  --space-indigo-500: #4a46b9;
+  --space-indigo-600: #3b3894;
+  --space-indigo-700: #2c2a6f;
+  --space-indigo-800: #1e1c4a;
+  --space-indigo-900: #0f0e25;
+  --space-indigo-950: #0a0a1a;
+
+  /* Dark Spruce */
+  --dark-spruce: #2C5530;
+  --dark-spruce-50: #eef6ef;
+  --dark-spruce-100: #ddeedf;
+  --dark-spruce-200: #bcdcbf;
+  --dark-spruce-300: #9acb9f;
+  --dark-spruce-400: #78ba7f;
+  --dark-spruce-500: #57a85f;
+  --dark-spruce-600: #45874c;
+  --dark-spruce-700: #346539;
+  --dark-spruce-800: #234326;
+  --dark-spruce-900: #112213;
+  --dark-spruce-950: #0c180d;
+
+  /* Tuscan Sun */
+  --tuscan-sun: #F7C548;
+  --tuscan-sun-50: #fef7e7;
+  --tuscan-sun-100: #fdf0ce;
+  --tuscan-sun-200: #fbe09d;
+  --tuscan-sun-300: #f9d16c;
+  --tuscan-sun-400: #f7c23b;
+  --tuscan-sun-500: #f5b20a;
+  --tuscan-sun-600: #c48f08;
+  --tuscan-sun-700: #936b06;
+  --tuscan-sun-800: #624704;
+  --tuscan-sun-900: #312402;
+  --tuscan-sun-950: #221901;
+}

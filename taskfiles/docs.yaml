@@ -28,8 +28,16 @@ tasks:
       - "venv"
     cmds:
       - |-
-        . "{{.G_VENV_DIR}}/bin/activate"
-        sphinx-build -a -E -c docs -b html docs "{{.OUTPUT_DIR}}"
+        # Build the Next.js site and copy the exported static output into the
+        # task build output directory expected by other tasks.
+        cd docs
+        npm install --no-audit --no-fund
+        npm run build
+        # Try exporting static files to "out/". Support multiple next versions
+        # (some expect a bare directory argument, others accept -o/--outdir).
+        cd -
+        mkdir -p "{{.OUTPUT_DIR}}"
+        rsync -a docs/out/ "{{.OUTPUT_DIR}}/"
 
       # This command must be last
       - task: "utils:checksum:compute"
@@ -85,6 +93,9 @@ tasks:
       - "server"
     cmd: |-
       cd "{{.G_SOURCE_DIR}}"
+      # Serve the exported static site placed into build/html. PUBLIC_DIR
+      # should point to the top-level build directory; the server appends
+      # "html" when registering the main site's static route.
       PUBLIC_DIR="{{.G_BUILD_DIR}}" npm run dev
 
   server:

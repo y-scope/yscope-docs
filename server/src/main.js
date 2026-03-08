@@ -1,11 +1,12 @@
+import fastifyCors from "@fastify/cors";
+
+import routes from "./routes.js";
+
+import "dotenv/config.js";
 import Fastify from "fastify";
 import path from "node:path";
 import process from "node:process";
 
-import fastifyCors from "@fastify/cors";
-import "dotenv/config.js";
-
-import routes from "./routes.js";
 
 // eslint-disable-next-line new-cap
 const fastify = Fastify({
