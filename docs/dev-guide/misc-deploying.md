@@ -1,19 +1,20 @@
 # Deploying this site
 
 A deployment of YScope docs includes both the current site and the sites of several other YScope
-repos and their release versions, complicating the build and deployment processes. The end goal is
-to use a single webserver to serve each site at a different URL prefix (e.g., CLP at `/clp/main` and
-clp-ffi-py at `/clp-ffi-py/main`). We also want the layout on disk to be predictable so that we can
-use a simple config file to configure all the sites that need to be served.
+repos and their release versions, complicating the build and deployment processes. Ideally, we want:
 
-One approach would be to build all the sites using Task and then assemble them into a single
-deployment. However, since each site (and version) might have different build dependencies, we can't
-easily build them without several containers. Instead, we plan to have a GitHub workflow per repo
-which builds the site in a container and then publishes it directly to docs.yscope.com at the
-expected location.
+* to use a single webserver to serve each site at a different URL prefix (e.g., CLP at `/clp/main`
+  and clp-ffi-py at `/clp-ffi-py/main`).
+* the layout on disk to be predictable so that we can use a simple config file to configure all the
+  sites that need to be served.
 
-Until those workflows are ready, we will deploy by building all the sites individually and
-assembling them into a single deployment.
+Each site (one for each unique project and version of that project) may have different build
+dependencies, requiring unique building environments. This prevents us from building and assembling
+all the sites together using a single Task invocation. Instead, we build all sites individually
+before assembling them into a single deployment.
+
+In the future, for each repo, we plan to have a GitHub workflow that builds the site in a container
+and then publishes it directly to docs.yscope.com at the expected location.
 
 ## Adding new projects
 
@@ -39,8 +40,12 @@ Each project and its versions should be listed in `conf/projects.json` so that
    ```shell
    cd build/project-docs/<project>/<version>
    task docs:site
-   cd -
    ```
+
+   :::{note}
+   Each project may have dependencies (e.g., a C++/Rust compiler) required to build the docs. See
+   the project's docs for details.
+   :::
 
 4. Assemble a release:
 
