@@ -10,6 +10,8 @@ vars:
   G_NODE_DEPS_DIR: "{{.G_BUILD_DIR}}/node-deps"
   G_PROJECTS_DOCS_DIR: "{{.G_BUILD_DIR}}/project-docs"
   G_PUBLISHABLE_OUTPUT_DIR: "{{.G_BUILD_DIR}}/html"
+  G_SPHINX_OUTPUT_DIR: "{{.G_BUILD_DIR}}/sphinx-html"
+  G_NEXT_OUTPUT_DIR: "{{.G_BUILD_DIR}}/next-html"
   G_VENV_CHECKSUM_FILE: "{{.G_BUILD_DIR}}/docs#venv.md5"
   G_VENV_DIR: "{{.G_BUILD_DIR}}/venv"
 
@@ -18,7 +20,8 @@ tasks:
     deps: ["build-main-docs"]
     cmds:
       - "rm -rf '{{.G_PUBLISHABLE_OUTPUT_DIR}}'"
-      - "cp -r '{{.G_MAIN_DOCS_OUTPUT_DIR}}' '{{.G_PUBLISHABLE_OUTPUT_DIR}}'"
+      - "mkdir -p '{{.G_PUBLISHABLE_OUTPUT_DIR}}'"
+      - "rsync -a '{{.G_MAIN_DOCS_OUTPUT_DIR}}/' '{{.G_PUBLISHABLE_OUTPUT_DIR}}/'"
       - task: "symlink-project-docs"
 
   download-projects:
@@ -62,8 +65,32 @@ tasks:
       - "venv"
     cmds:
       - |-
+        # Build Sphinx docs
         . "{{.G_VENV_DIR}}/bin/activate"
-        sphinx-build -a -E -c docs -b html docs "{{.OUTPUT_DIR}}"
+        sphinx-build -a -E -c docs -b html docs "{{.G_SPHINX_OUTPUT_DIR}}"
+
+      - |-
+        # Build Next.js homepage
+        rm -rf docs/out docs/.next
+        cd docs
+        npm install --no-audit --no-fund
+        npm run build
+        cd -
+        mkdir -p "{{.G_NEXT_OUTPUT_DIR}}"
+        rsync -a docs/out/ "{{.G_NEXT_OUTPUT_DIR}}/"
+
+      - |-
+        # Merge outputs: Sphinx first, then Next.js (homepage handling)
+        mkdir -p "{{.OUTPUT_DIR}}"
+        
+        # Copy Sphinx docs (dev-guide/ and other content)
+        rsync -a "{{.G_SPHINX_OUTPUT_DIR}}/" "{{.OUTPUT_DIR}}/"
+        
+        # Remove Sphinx's root index.html (we'll replace with Next.js)
+        rm -f "{{.OUTPUT_DIR}}/index.html"
+        
+        # Copy Next.js export (includes root index.html for /)
+        rsync -a "{{.G_NEXT_OUTPUT_DIR}}/" "{{.OUTPUT_DIR}}/"
 
       # This command must be last
       - task: "utils:checksum:compute"
