@@ -131,34 +131,34 @@ returns a result containing an error code if unsuccessful or the object if succe
 #### Declaration order
 
 We prioritize our [general ordering guidelines](./contrib-guides-general.md#declaration-order)
-causing us to have a different declaration grouping and ordering within an access specifier compared
-to [Google's style guide][google-cpp-style-declaration-order].
+which means we use a different declaration grouping and ordering within an access specifier group
+compared to [Google's style guide][google-cpp-style-declaration-order].
 
-Under every existing access specifier of a class, we require that declarations are organized into
-sections that begin with a title comment. The list below defines each of these sections and the
-order they should appear. The name of each section should be used as the organizational title
-comment.
+Under every access specifier of a class, we require that declarations are organized into sections
+that begin with a title comment, where the comment is simply the name of the section. For example:
+
 
 1. Types
-  * This includes type aliases (`typedef`, `using`, `enum`), nested structs and classes, and
-    `friend` types.
+    * This includes type aliases (`typedef`, `using`, `enum`), nested structs and classes, and
+      `friend` types.
 2. Static constants
 3. Factory methods
-  * Declarations of static methods that return an object of the class being defined.
+    * I.e., static methods that return an object of the class being defined.
 4. Static methods
 5. Static data members
 6. Constructors
 7. Operators
 8. Destructor
-9. Methods implementing `InheritedClass`
-  * Declarations of methods implementing abstract methods from the class `InheritedClass`.
-10. Methods overriding `InheritedClass`
-  * Declarations of methods overriding virtual methods from the class `InheritedClass`.
+9. Methods implementing `<InheritedClass>`
+    * I.e., methods implementing abstract methods from the class `<InheritedClass>`.
+10. Methods overriding `<InheritedClass>`
+    * Methods overriding virtual methods from the class `<InheritedClass>`.
 11. Methods
+    * I.e., all other methods.
 12. Data members
 
-Note, `InheritedClass` is a placeholder that should be replaced with the class originally declaring
-the virtual method.
+Note, `<InheritedClass>` is a placeholder that should be replaced with the name of the class that
+first declares the virtual method.
 
 [adding-cpp-linting]: https://github.com/y-scope/yscope-dev-utils/blob/main/docs/lint-tools-cpp.md
 [clang-format-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-format
