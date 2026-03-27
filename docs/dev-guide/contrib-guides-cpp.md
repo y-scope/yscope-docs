@@ -137,7 +137,6 @@ compared to [Google's style guide][google-cpp-style-declaration-order].
 Under every access specifier of a class, we require that declarations are organized into sections
 that begin with a title comment, where the comment is simply the name of the section. For example:
 
-
 1. Types
     * This includes type aliases (`typedef`, `using`, `enum`), nested structs and classes, and
       `friend` types.
