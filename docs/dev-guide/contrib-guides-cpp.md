@@ -26,13 +26,13 @@ track it.
 
 ## Guidelines
 
-We adhere to [Google's C++ style guide][google-cpp-style-guide] (as of
+We adhere to [Google's C++ style guide][google-cpp-style] (as of
 [8f97e24][google-styleguide-8f97e24]) with the following exceptions (organized according to the
 sections in Google's style guide).
 
 :::{note}
 This section is a work in progress and does not yet include all exceptions after the
-[Classes][google-cpp-style-guide-classes] section of Google's style guide.
+[Classes][google-cpp-style-classes] section of Google's style guide.
 :::
 
 ### Header files
@@ -162,8 +162,8 @@ first declares the virtual method.
 [adding-cpp-linting]: https://github.com/y-scope/yscope-dev-utils/blob/main/docs/lint-tools-cpp.md
 [clang-format-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-format
 [clang-tidy-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-tidy
-[google-cpp-style-guide]: https://google.github.io/styleguide/cppguide.html
-[google-cpp-style-guide-classes]: https://google.github.io/styleguide/cppguide.html#Classes
+[google-cpp-style]: https://google.github.io/styleguide/cppguide.html
+[google-cpp-style-classes]: https://google.github.io/styleguide/cppguide.html#Classes
 [google-cpp-style-declaration-order]: https://google.github.io/styleguide/cppguide.html#Declaration_Order
 [google-styleguide-8f97e24]: https://github.com/google/styleguide/tree/8f97e24da04753c7a15eda6b02114a01ec3146f5
 [issue]: https://github.com/y-scope/yscope-docs/issues/new
