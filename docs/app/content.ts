@@ -1,3 +1,15 @@
+import type {CSSProperties} from "react";
+
+
+export type CategoryItem = {
+    href: string;
+    imgAlt: string;
+    imgSrc: string;
+    label: string;
+    external?: boolean;
+    imgStyle?: CSSProperties;
+};
+
 export const getCategories = (prestoSrc: string, mcpSrc: string) => {
     return [
         {
@@ -141,4 +153,4 @@ export const getCategories = (prestoSrc: string, mcpSrc: string) => {
     ];
 };
 
-export type Category = {title: string; items: Array<any>};
+export type Category = {title: string; items: Array<CategoryItem>};

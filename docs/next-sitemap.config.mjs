@@ -1,9 +1,8 @@
-/** @import * as next from 'next'; */
-// eslint-disable @typescript-eslint/require-await
-// eslint-disable @typescript-eslint/no-unsafe-assignment
+// eslint-disable `@typescript-eslint/require-await`
+// eslint-disable `@typescript-eslint/no-unsafe-assignment`
 // eslint-disable sort-keys
 
-/** @type {next.NextConfig} */
+/** `@type` {import('next-sitemap').IConfig} */
 const config = {
     changefreq: "daily",
     exclude: ["/api/*"],

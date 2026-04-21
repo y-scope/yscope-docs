@@ -12,7 +12,7 @@ type Props = {
 
 const ZUID = "128d06ea5";
 const FORM_IX =
-  "3ze0e35dd1451790f3dfce02b61f9f4a924dfe224e3d364b4cc15fde65ac838ab9";
+    "3ze0e35dd1451790f3dfce02b61f9f4a924dfe224e3d364b4cc15fde65ac838ab9";
 
 /**
  * A Zoho newsletter signup form component that integrates with Zoho's optin service.
@@ -24,6 +24,9 @@ const FORM_IX =
 const ZohoSignupForm = ({className}: Props) => {
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
+    const [emailError, setEmailError] = useState<string | null>(null);
+    const [firstNameError, setFirstNameError] = useState<string | null>(null);
+    const [formError, setFormError] = useState<string | null>(null);
     const [successVisible, setSuccessVisible] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const iframeName = "_zcSignup";
@@ -60,6 +63,9 @@ const ZohoSignupForm = ({className}: Props) => {
     // If the Zoho endpoint returns to the hidden iframe we can show a success
     useEffect(() => {
         const handleMessage = (ev: MessageEvent) => {
+            if (false === ev.origin.includes("zoho.com")) {
+                return;
+            }
             if ("string" === typeof ev.data && ev.data.includes("Thank you")) {
                 setSuccessVisible(true);
             }
@@ -125,9 +131,46 @@ const ZohoSignupForm = ({className}: Props) => {
                     method={"POST"}
                     ref={formRef}
                     target={iframeName}
-                    onSubmit={() => {
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        if (submitting) {
+                            return;
+                        }
+
+                        // clear previous errors
+                        setEmailError(null);
+                        setFirstNameError(null);
+                        setFormError(null);
+
+                        // basic validations
+                        const emailVal = email.trim();
+                        const nameVal = firstName.trim();
+
+                        const isEmailValid = (/^\S+@\S+\.\S+$/).test(emailVal);
+                        if (!isEmailValid || 5 > emailVal.length) {
+                            setEmailError("Please enter a valid email address.");
+                        }
+
+                        if (2 > nameVal.length) {
+                            setFirstNameError("Please enter your name.");
+                        }
+
+                        if (!isEmailValid || 2 > nameVal.length) {
+                            setFormError("Please fix the errors above.");
+
+                            return;
+                        }
+
                         // mark that we've initiated a submit so iframe load can trigger success
                         setSubmitting(true);
+
+                        // submit the form programmatically to honor the target iframe
+                        try {
+                            formRef.current && (formRef.current).submit();
+                        } catch (err) {
+                            setSubmitting(false);
+                            setFormError("Submission failed. Please try again.");
+                        }
                     }}
                 >
                     <div className={"w-100 text-muted mt-3"}>
@@ -139,7 +182,16 @@ const ZohoSignupForm = ({className}: Props) => {
                             value={email}
                             onChange={(e) => {
                                 setEmail(e.target.value);
+                                emailError && setEmailError(null);
                             }}/>
+                        {emailError && (
+                            <div
+                                role={"alert"}
+                                style={{color: "#b91c1c", marginTop: 6}}
+                            >
+                                {emailError}
+                            </div>
+                        )}
                     </div>
 
                     <div className={"w-100 text-muted mt-3"}>
@@ -151,15 +203,36 @@ const ZohoSignupForm = ({className}: Props) => {
                             value={firstName}
                             onChange={(e) => {
                                 setFirstName(e.target.value);
+                                firstNameError && setFirstNameError(null);
                             }}/>
+                        {firstNameError && (
+                            <div
+                                role={"alert"}
+                                style={{color: "#b91c1c", marginTop: 6}}
+                            >
+                                {firstNameError}
+                            </div>
+                        )}
                     </div>
 
                     <div className={"w-100 mt-3"}>
                         <input
+                            aria-disabled={submitting}
                             className={"w-100 bg-[var(--brilliant-azure-550)] hover:bg-[var(--brilliant-azure-700)] text-lg text-white px-4 py-2 rounded-md cursor-pointer"}
+                            disabled={submitting}
                             id={"zcWebOptin"}
                             type={"submit"}
-                            value={"Join Now"}/>
+                            value={submitting ?
+                                "Submitting…" :
+                                "Join Now"}/>
+                        {formError && (
+                            <div
+                                role={"alert"}
+                                style={{color: "#b91c1c", marginTop: 8}}
+                            >
+                                {formError}
+                            </div>
+                        )}
                     </div>
 
                     {/* Hidden fields copied from original form */}

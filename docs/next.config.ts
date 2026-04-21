@@ -2,9 +2,7 @@
 const nextConfig = {
     output: "export",
     trailingSlash: true,
-    experimental: {
-        turboPack: true, // Enable Turbopack
-    },
+    turbopack: {},
 
     /**
      *

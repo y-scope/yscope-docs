@@ -27,8 +27,8 @@ import {
 const DiscordIcon = () => (
     <img
         alt={"Discord"}
-        src={"/assets/images/discord.svg"}
-        style={{width: "24px", height: "24px"}}/>
+        className={"size-6"}
+        src={"/assets/images/discord.svg"}/>
 );
 
 /**
@@ -39,8 +39,8 @@ const DiscordIcon = () => (
 const SlackIcon = () => (
     <img
         alt={"Slack"}
-        src={"/assets/images/slack.svg"}
-        style={{width: "24px", height: "24px"}}/>
+        className={"size-6"}
+        src={"/assets/images/slack.svg"}/>
 );
 
 /**
@@ -51,8 +51,8 @@ const SlackIcon = () => (
 const ZulipIcon = () => (
     <img
         alt={"Zulip"}
-        src={"/assets/images/zulip.svg"}
-        style={{width: "24px", height: "24px"}}/>
+        className={"size-6"}
+        src={"/assets/images/zulip.svg"}/>
 );
 
 const communityLinks = [
@@ -82,13 +82,10 @@ const communityLinks = [
  * @return The contact section component.
  */
 export const ContactSection = () => {
-    const containerRef = useRef<HTMLDivElement>(null);
-
     return (
         <section
             className={"section bg-muted/30"}
             id={"connect-with-us"}
-            ref={containerRef}
         >
             <div className={"container mx-auto"}>
                 <div className={"text-center mb-6"}>
@@ -122,7 +119,7 @@ export const ContactSection = () => {
                                                 rel={"noopener noreferrer"}
                                                 target={"_blank"}
                                                 className={
-                                                    "inline-flex items-center gap-2 px-4 py-2 " +
+                                                    "inline-flex items-center gap-1 px-4 py-2 " +
                                                     "rounded-md text-white text-sm font-medium " +
                                                     `transition-colors ${link.color} ` +
                                                     "text-decoration-none"
@@ -181,10 +178,6 @@ export const ContactSection = () => {
                                 {"Keep up with the latest CLP news, releases, and tips."}
                             </p>
                             <ZohoSignupForm/>
-                            {/* <iframe
-                                className={"w-full h-[230px] border-0"}
-                                src={"https://zgnp-zngp.maillist-manage.com/ua/Optin?od=11287ecd51e435&zx=128d06ea5&tD=115eb0ad4019fbcaf&sD=115eb0ad401a078b2"}
-                                title={"Newsletter signup"}/> */}
                         </CardContent>
                     </Card>
                 </div>

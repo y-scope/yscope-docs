@@ -16,13 +16,20 @@ import React, {
  */
 const getInitialTheme = (): "light" | "dark" => {
     if ("undefined" !== typeof window) {
+        const attr = (document.body && document.body.getAttribute("data-bs-theme")) ||
+            (document.documentElement && document.documentElement.getAttribute("data-bs-theme"));
+
+        if ("dark" === attr || "light" === attr) {
+            return attr;
+        }
+
         const stored = localStorage.getItem("ui-theme");
         if ("dark" === stored || "light" === stored) {
             return stored;
         }
 
         // Optionally, use prefers-color-scheme
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
             return "dark";
         }
     }
@@ -43,7 +50,12 @@ export const ThemeProvider: React.FC<{children: React.ReactNode}> = ({children})
     // Update <body> attribute and localStorage when theme changes
     useEffect(() => {
         if ("undefined" !== typeof window) {
-            document.body.setAttribute("data-bs-theme", theme);
+            if (document.body) {
+                document.body.setAttribute("data-bs-theme", theme);
+            }
+            if (document.documentElement) {
+                document.documentElement.setAttribute("data-bs-theme", theme);
+            }
             localStorage.setItem("ui-theme", theme);
         }
     }, [theme]);

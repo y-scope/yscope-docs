@@ -15,7 +15,8 @@ Follow the steps below to build and view the site locally.
 
 ## Building
 
-* Initialize, update, and clone any submodules within a Git repository
+* Clone any submodules:
+
   ```shell
   git submodule update --init --recursive
   ```

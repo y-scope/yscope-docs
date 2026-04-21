@@ -18,6 +18,16 @@
 
 @import "../../../node_modules/bootstrap/scss/utilities/api";
 
+/* Prevent horizontal scrolling from accidental overflow and ensure padding
+   does not increase element width unexpectedly. */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  overflow-x: hidden;
+}
+
 /* Fade utility (used by modals, etc.) */
 .fade {
   transition: opacity .15s linear;

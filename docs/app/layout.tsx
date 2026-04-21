@@ -11,6 +11,7 @@ import Script from "next/script";
 
 import Footer from "../components/sections/Footer";
 import Navbar from "../components/sections/Navbar";
+import {ThemeProvider} from "./shared/ThemeProvider";
 
 import "./assets/scss/styles.scss";
 
@@ -36,8 +37,6 @@ export const viewport: Viewport = {
     width: "device-width",
     initialScale: 1,
 };
-
-import {ThemeProvider} from "./shared/ThemeProvider";
 
 
 /**
@@ -66,6 +65,19 @@ const RootLayout = ({
                 <link
                     href={"https://fonts.googleapis.com/css2?family=ABeeZee&display=swap"}
                     rel={"stylesheet"}/>
+                <script
+                    dangerouslySetInnerHTML={{__html: `(() => {
+                        try {
+                            var stored = null;
+                            try { stored = localStorage.getItem('ui-theme'); } catch(e) {}
+                            var prefersDark = false;
+                            try { prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; } catch(e) {}
+                            var theme = (stored === 'dark' || stored === 'light') ? stored : (prefersDark ? 'dark' : 'light');
+                            document.documentElement.setAttribute('data-bs-theme', theme);
+                        } catch (e) {
+                            // ignore
+                        }
+                    })();`}}/>
             </head>
             <body className={`${geistSans.variable} ${geistMono.variable}`}>
                 <Script

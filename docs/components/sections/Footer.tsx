@@ -38,6 +38,7 @@ const Footer = () => {
                             className={"d-flex col-12 justify-content-center"}
                         >
                             <a
+                                aria-label={"YScope on LinkedIn"}
                                 className={"nav-link-btn-alt"}
                                 href={"https://www.linkedin.com/company/yscope"}
                                 rel={"noopener noreferrer"}
@@ -47,6 +48,7 @@ const Footer = () => {
                                 <SiLinkedin size={18}/>
                             </a>
                             <a
+                                aria-label={"YScope on YouTube"}
                                 className={"nav-link-btn-alt"}
                                 href={"https://www.youtube.com/channel/UC9y5QY1pdXcYfaYnwFuk18Q"}
                                 rel={"noopener noreferrer"}
@@ -56,6 +58,7 @@ const Footer = () => {
                                 <SiYoutube size={18}/>
                             </a>
                             <a
+                                aria-label={"Contact YScope via email"}
                                 className={"nav-link-btn-alt"}
                                 href={"mailto:info@yscope.com"}
                                 rel={"noopener noreferrer"}
@@ -85,7 +88,10 @@ const Footer = () => {
                     className={"text-center"}
                     style={{fontSize: "0.8rem"}}
                 >
-                    Copyright © 2015-2026 YScope Inc.
+                    Copyright © 2015-
+                    {new Date().getFullYear()}
+                    {" "}
+                    YScope Inc.
                 </p>
             </div>
         </footer>
