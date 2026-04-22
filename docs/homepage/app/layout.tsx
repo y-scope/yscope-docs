@@ -4,8 +4,9 @@ import type {
     Viewport,
 } from "next";
 import {
-    Geist as geistFont,
-    Geist_Mono as geistMonoFont,
+ABeeZee as abeezeeFont,
+Geist as geistFont,
+Geist_Mono as geistMonoFont
 } from "next/font/google";
 import Script from "next/script";
 
@@ -24,6 +25,13 @@ const geistSans = geistFont({
 const geistMono = geistMonoFont({
     variable: "--font-geist-mono",
     subsets: ["latin"],
+});
+
+const abeezee = abeezeeFont({
+    variable: "--font-abeezee",
+    subsets: ["latin"],
+    display: "swap",
+    weight: ["400"],
 });
 
 
@@ -53,18 +61,7 @@ const RootLayout = ({
 }>) => {
     return (
         <html lang={"en"}>
-            <GoogleAnalytics gaId={"G-C4R8TV71EE"}/>
             <head>
-                <link
-                    href={"https://fonts.googleapis.com"}
-                    rel={"preconnect"}/>
-                <link
-                    crossOrigin={""}
-                    href={"https://fonts.gstatic.com"}
-                    rel={"preconnect"}/>
-                <link
-                    href={"https://fonts.googleapis.com/css2?family=ABeeZee&display=swap"}
-                    rel={"stylesheet"}/>
                 <script
                     dangerouslySetInnerHTML={{__html: `(() => {
                         try {
@@ -79,7 +76,7 @@ const RootLayout = ({
                         }
                     })();`}}/>
             </head>
-            <body className={`${geistSans.variable} ${geistMono.variable}`}>
+            <body className={`${geistSans.variable} ${geistMono.variable} ${abeezee.variable}`}>
                 <Script
                     src={"/bootstrap.bundle.min.js"}
                     strategy={"afterInteractive"}/>
@@ -89,6 +86,7 @@ const RootLayout = ({
                     <Footer/>
                 </ThemeProvider>
             </body>
+            <GoogleAnalytics gaId={"G-C4R8TV71EE"}/>
         </html>
     );
 };

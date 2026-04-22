@@ -27,9 +27,18 @@ const getInitialTheme = (): "light" | "dark" => {
         if ("dark" === stored || "light" === stored) {
             return stored;
         }
-
-        // Optionally, use prefers-color-scheme
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        try {
+            const stored = localStorage.getItem("ui-theme");
+            if ("dark" === stored || "light" === stored) {
+                return stored;
+            }
+        } catch {
+            // Ignore storage access failures.
+        }
+ 
+         // Optionally, use prefers-color-scheme
+        if ("function" === typeof window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches) {
             return "dark";
         }
     }

@@ -5,6 +5,7 @@ import {
 } from "react-icons/si";
 
 import {Mail} from "lucide-react";
+import Link from "next/link";
 
 
 /**
@@ -18,7 +19,7 @@ const Footer = () => {
             <div className={"container"}>
                 <div className={"row justify-content-center"}>
                     <div className={"col-lg-6 mb-3 text-center"}>
-                        <a
+                        <Link
                             className={"logo"}
                             href={"/"}
                             style={{
@@ -28,7 +29,7 @@ const Footer = () => {
                             }}
                         >
                             YScope
-                        </a>
+                        </Link>
                         <h5
                             style={{fontSize: "1.2rem"}}
                         >
@@ -61,8 +62,6 @@ const Footer = () => {
                                 aria-label={"Contact YScope via email"}
                                 className={"nav-link-btn-alt"}
                                 href={"mailto:info@yscope.com"}
-                                rel={"noopener noreferrer"}
-                                target={"_blank"}
                             >
                                 <Mail size={18}/>
                             </a>
@@ -82,17 +81,18 @@ const Footer = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className={"row"}>
-                <p
-                    className={"text-center"}
-                    style={{fontSize: "0.8rem"}}
-                >
-                    Copyright © 2015-
-                    {new Date().getFullYear()}
-                    {" "}
-                    YScope Inc.
-                </p>
+
+                <div className={"row"}>
+                    <p
+                        className={"text-center"}
+                        style={{fontSize: "0.8rem"}}
+                    >
+                        Copyright © 2015-
+                        {new Date().getFullYear()}
+                        {" "}
+                        YScope Inc.
+                    </p>
+                </div>
             </div>
         </footer>
     );

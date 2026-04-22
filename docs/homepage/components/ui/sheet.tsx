@@ -143,8 +143,8 @@ const SheetContent = ({
                         "data-[state=closed]:slide-out-to-bottom" +
                         " data-[state=open]:slide-in-from-bottom",
                     "bottom" === side && "inset-x-0 bottom-0 h-auto",
-                    className,
-                    "mobile-menu-sheet"
+                    "mobile-menu-sheet",
+                    className
                 )}
                 {...props}
             >

@@ -186,7 +186,7 @@ const Home = () => {
                         </p>
                     </div>
                     <div className={"col my-4"}>
-                        <div className={"row gap-4 px-4 align-items-center justify-content-center"}>
+                        <div className={"d-flex flex-wrap gap-4 px-4 align-items-center justify-content-center"}>
                             <Button
                                 isChild={true}
                                 size={"lg"}

@@ -1,9 +1,13 @@
-// @ts-nocheck
+import type { NextConfig } from "next";
+import path from "path";
 
-const nextConfig = {
+
+const nextConfig: NextConfig = {
     output: "export",
     trailingSlash: true,
-    turbopack: {},
+    sassOptions: {
+        includePaths: [path.join(__dirname, "node_modules")],
+    },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

@@ -13,7 +13,7 @@ import { SVGProps } from "react";
  * @param root0.props
  * @return SVG element
  */
-const GithubIcon = ({height = 20, width = 20, fill = "currentColor", ...props}: SVGProps<SVGSVGElement> & {height?: number; width?: number; fill?: string}) => (
+const GithubIcon = ({height = 20, width = 20, fill = "currentColor", ...props}: Omit<SVGProps<SVGSVGElement>, "height" | "width" | "fill"> & {height?: string | number; width?: string | number; fill?: string}) => (
     <svg
         fill={fill}
         height={height}

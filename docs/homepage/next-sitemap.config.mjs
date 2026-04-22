@@ -1,7 +1,3 @@
-// eslint-disable `@typescript-eslint/require-await`
-// eslint-disable `@typescript-eslint/no-unsafe-assignment`
-// eslint-disable sort-keys
-
 /** `@type` {import('next-sitemap').IConfig} */
 const config = {
     changefreq: "daily",
@@ -14,8 +10,8 @@ const config = {
         return {
             loc: path,
             lastmod: new Date().toISOString(),
-            changefreq: "daily",
-            priority: 0.7,
+            changefreq: _config.changefreq,
+            priority: _config.priority,
         };
     },
 };

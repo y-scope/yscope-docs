@@ -50,6 +50,7 @@ const Navbar = () => {
     const [githubStars, setGithubStars] = useState<number | null>(null);
     const [projectDocsOpen, setProjectDocsOpen] = useState(false);
     const projectDocsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const projectDocsContainerRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         return () => {
@@ -70,6 +71,30 @@ const Navbar = () => {
         projectDocsTimeoutRef.current = setTimeout(() => {
             setProjectDocsOpen(false);
         }, PROJECT_DOCS_MENU_CLOSE_DELAY_MS);
+    };
+
+    const focusFirstProjectDocsItem = () => {
+        const el = projectDocsContainerRef.current?.querySelector('a');
+        if (el instanceof HTMLElement) {
+            el.focus();
+        }
+    };
+
+    const handleProjectDocsKeyDown = (e: React.KeyboardEvent) => {
+        if ("Enter" === e.key || " " === e.key) {
+            e.preventDefault();
+            setProjectDocsOpen((v) => {
+                const next = !v;
+                // If opening, focus first item.
+                if (next) {
+                    // Delay slightly to allow menu to render
+                    setTimeout(focusFirstProjectDocsItem, 0);
+                }
+                return next;
+            });
+        } else if ("Escape" === e.key) {
+            setProjectDocsOpen(false);
+        }
     };
 
     useEffect(() => {
@@ -138,10 +163,30 @@ const Navbar = () => {
                             className={"relative text-sm"}
                             onMouseEnter={handleProjectDocsEnter}
                             onMouseLeave={handleProjectDocsLeave}
+                            onFocus={() => {
+                                if (projectDocsTimeoutRef.current) {
+                                    clearTimeout(projectDocsTimeoutRef.current);
+                                }
+                                setProjectDocsOpen(true);
+                            }}
+                            onBlur={handleProjectDocsLeave}
+                            ref={projectDocsContainerRef}
                         >
                             <Button
                                 className={"flex items-center gap-1"}
                                 variant={"navlink"}
+                                aria-haspopup={"menu"}
+                                aria-expanded={projectDocsOpen}
+                                onClick={() => {
+                                    setProjectDocsOpen((v) => {
+                                        const next = !v;
+                                        if (next) {
+                                            setTimeout(focusFirstProjectDocsItem, 0);
+                                        }
+                                        return next;
+                                    });
+                                }}
+                                onKeyDown={handleProjectDocsKeyDown}
                             >
                                 Project Docs
                                 <ChevronDown
@@ -155,23 +200,24 @@ const Navbar = () => {
                                     "border bg-popover p-1 shadow-md mobile-menu-sheet z-[200]"}
                                 >
                                     {projectDocsLinks.map((link) => (
-                                        <a
-                                            className={"text-decoration-none text-sm"}
-                                            href={link.href}
+                                        <Button
+                                            isChild={true}
                                             key={link.href}
-                                            onClick={(e) => {
-                                            // Prevent parent onClick, which goes to /#solutions,
-                                            // from running when clicking a specific solution link.
-                                                e.stopPropagation();
-                                            }}
+                                            className={"flex"}
+                                            variant={"navlink"}
                                         >
-                                            <Button
-                                                className={"flex items-center"}
-                                                variant={"navlink"}
+                                            <a
+                                                className={"text-decoration-none text-sm"}
+                                                href={link.href}
+                                                onClick={(e) => {
+                                                    // Prevent parent onClick, which goes to /#solutions,
+                                                    // from running when clicking a specific solution link.
+                                                    e.stopPropagation();
+                                                }}
                                             >
                                                 {link.name}
-                                            </Button>
-                                        </a>
+                                            </a>
+                                        </Button>
                                     ))}
                                 </div>
                             )}
@@ -273,18 +319,21 @@ const Navbar = () => {
                                         asChild={true}
                                         key={link.href}
                                     >
-                                        <a
-                                            className={"text-decoration-none"}
-                                            href={link.href}
+                                        <Button
+                                            isChild={true}
+                                            className={"flex text-decoration-none"}
+                                            style={{marginLeft: "1.25rem"}}
+                                            variant={"navlink"}
                                         >
-                                            <Button
-                                                className={"flex items-center"}
-                                                style={{marginLeft: "1.25rem"}}
-                                                variant={"navlink"}
+                                            <a
+                                                href={link.href}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                }}
                                             >
                                                 {link.name}
-                                            </Button>
-                                        </a>
+                                            </a>
+                                        </Button>
                                     </SheetClose>
                                 ))}
                             </div>

@@ -1,31 +1,27 @@
 @import "tailwindcss";
 @import "../css/colors.css";
-@import "../../../node_modules/tw-animate-css/dist/tw-animate.css";
+@import url("tw-animate-css");
 
-@import "../../../node_modules/bootstrap/scss/functions";
-@import "../../../node_modules/bootstrap/scss/variables";
-@import "../../../node_modules/bootstrap/scss/variables-dark";
-@import "../../../node_modules/bootstrap/scss/maps";
-@import "../../../node_modules/bootstrap/scss/mixins";
-@import "../../../node_modules/bootstrap/scss/utilities";
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
 
 // Layout & components
-@import "../../../node_modules/bootstrap/scss/root";
-@import "../../../node_modules/bootstrap/scss/reboot";
-@import "../../../node_modules/bootstrap/scss/type";
-@import "../../../node_modules/bootstrap/scss/containers";
-@import "../../../node_modules/bootstrap/scss/grid";
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
 
-@import "../../../node_modules/bootstrap/scss/utilities/api";
+@import "bootstrap/scss/utilities/api";
 
 /* Prevent horizontal scrolling from accidental overflow and ensure padding
    does not increase element width unexpectedly. */
 *, *::before, *::after {
   box-sizing: border-box;
-}
-
-html, body {
-  overflow-x: hidden;
 }
 
 /* Fade utility (used by modals, etc.) */
@@ -398,17 +394,15 @@ h6 {
 /* Map legacy `.container` class to Tailwind's container utility so existing markup keeps working */
 .container {
   @apply container mx-auto;
+
+/* Override Bootstrap container gutter so Tailwind padding wins on large screens */
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
 }
 
 .container-fluid {
   width: 100%;
   @apply px-4;
-}
-
-/* Override Bootstrap container gutter so Tailwind padding wins on large screens */
-.container {
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
 }
 
 @media (min-width: 1140px) {

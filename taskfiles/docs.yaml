@@ -73,7 +73,7 @@ tasks:
       # Build the homepage
       - |-
         rm -rf docs/homepage/out docs/homepage/.next
-        cd docs/homepage || exit 0
+        cd docs/homepage || exit 1
         npm install --no-audit --no-fund
         npm run build
         cd -

@@ -6,7 +6,7 @@ export type CategoryItem = {
     imgAlt: string;
     imgSrc: string;
     label: string;
-    external?: boolean;
+    isExternal?: boolean;
     imgStyle?: CSSProperties;
 };
 
@@ -46,10 +46,10 @@ export const getCategories = (prestoSrc: string, mcpSrc: string) => {
                     label: "S3",
                 },
                 {
-                    external: true,
                     href: "https://github.com/y-scope/clp-loglib-py",
                     imgAlt: "Python Library",
                     imgSrc: "/assets/images/python.svg",
+                    isExternal: true,
                     label: "Python",
                 },
                 {
@@ -112,17 +112,17 @@ export const getCategories = (prestoSrc: string, mcpSrc: string) => {
                     label: "Datasets",
                 },
                 {
-                    external: true,
                     href: "https://benchmarks.yscope.com/log-archival-bench/",
                     imgAlt: "Benchmarks",
                     imgSrc: "/assets/images/benchmarks.svg",
+                    isExternal: true,
                     label: "Benchmarks",
                 },
                 {
-                    external: true,
                     href: "https://blog.yscope.com/",
                     imgAlt: "Blog",
                     imgSrc: "/assets/images/blog.svg",
+                    isExternal: true,
                     label: "Blog",
                 },
             ],
@@ -143,10 +143,10 @@ export const getCategories = (prestoSrc: string, mcpSrc: string) => {
                     label: "Schema File Syntax",
                 },
                 {
-                    external: true,
                     href: "https://www.yscope.com/publications",
                     imgAlt: "Publications",
                     imgSrc: "/assets/images/publications.svg",
+                    isExternal: true,
                     label: "Publications",
                 },
             ],

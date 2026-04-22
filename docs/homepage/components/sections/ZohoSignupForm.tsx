@@ -50,7 +50,7 @@ const ZohoSignupForm = ({className}: Props) => {
         const nameVal = firstName.trim();
 
         const isEmailValid = (/^\S+@\S+\.\S+$/).test(emailVal);
-        if (!isEmailValid || MIN_EMAIL_LENGTH > emailVal.length) {
+        if (false === isEmailValid || MIN_EMAIL_LENGTH > emailVal.length) {
             setEmailError("Please enter a valid email address.");
             formHasErrors = true;
         }
