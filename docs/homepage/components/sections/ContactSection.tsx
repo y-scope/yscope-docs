@@ -1,7 +1,4 @@
 "use client";
-
-import {useRef} from "react";
-
 import {
     Mail,
     MessageSquare,
@@ -144,7 +141,7 @@ export const ContactSection = () => {
                                     hear from you.
                                 </p>
                                 <Button
-                                    asChild={true}
+                                    isChild={true}
                                     variant={"outline"}
                                     className={
                                         "w-full bg-[var(--turquoise-600)] " +

@@ -56,8 +56,8 @@ const buttonVariants = cva(
  * @param root0 The button component props
  * @param root0.className Additional CSS classes to apply
  * @param root0.variant The visual variant of the button
- * @param root0.size The size of the button
- * @param root0.asChild If true, renders as a Slot component instead of a button element
+ * @param root0.size The size variant of the button (default, xs, sm, lg, icon, icon-xs, icon-sm, icon-lg)
+ * @param root0.isChild If true, renders as a Slot component instead of a button element
  * @param root0.props Additional HTML button attributes
  * @return The rendered button component
  */
@@ -65,13 +65,13 @@ const Button = ({
     className,
     variant = "default",
     size = "default",
-    asChild = false,
+    isChild = false,
     ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
-      asChild?: boolean;
+      isChild?: boolean;
   }) => {
-    const Comp = asChild ?
+    const Comp = isChild ?
         Slot :
         "button";
 

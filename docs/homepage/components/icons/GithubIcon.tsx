@@ -1,5 +1,8 @@
 "use client";
 
+import { SVGProps } from "react";
+
+
 /**
  * GitHub icon component that renders an SVG GitHub logo.
  *
@@ -10,7 +13,7 @@
  * @param root0.props
  * @return SVG element
  */
-const GithubIcon = ({height = 20, width = 20, fill = "currentColor", ...props}: any) => (
+const GithubIcon = ({height = 20, width = 20, fill = "currentColor", ...props}: SVGProps<SVGSVGElement> & {height?: number; width?: number; fill?: string}) => (
     <svg
         fill={fill}
         height={height}

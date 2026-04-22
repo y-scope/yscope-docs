@@ -37,29 +37,24 @@ const Divider = () => {
 /**
  * Renders an icon link card.
  *
- * @param external.external
- * @param external whether the link should open in a new tab.
- * @param href the URL to navigate to.
- * @param imgAlt alt text for the image.
- * @param imgSrc source URL for the image.
- * @param imgStyle optional inline styles for the image.
- * @param label the link label text.
- * @param external.href
- * @param external.imgAlt
- * @param external.imgSrc
- * @param external.imgStyle
- * @param external.label
+ * @param root0
+ * @param root0.isExternal whether the link should open in a new tab.
+ * @param root0.href the URL to navigate to.
+ * @param root0.imgAlt alt text for the image.
+ * @param root0.imgSrc source URL for the image.
+ * @param root0.imgStyle optional inline styles for the image.
+ * @param root0.label the link label text.
  * @return the icon link component.
  */
 const IconLink = ({
-    external,
+    isExternal,
     href,
     imgAlt,
     imgSrc,
     imgStyle,
     label,
 }: {
-    external?: boolean;
+    isExternal?: boolean;
     href: string;
     imgAlt: string;
     imgSrc: string;
@@ -77,7 +72,7 @@ const IconLink = ({
                     "d-flex flex-row align-items-center " +
                     "text-decoration-none text-body"
                 }
-                {...(external ?
+                {...(isExternal ?
                     {rel: "noreferrer noopener", target: "_blank"} :
                     {})}
             >
@@ -103,7 +98,7 @@ const IconLink = ({
 );
 
 interface IconLinkItem {
-    external?: boolean;
+    isExternal?: boolean;
     href: string;
     imgAlt: string;
     imgSrc: string;
@@ -193,7 +188,7 @@ const Home = () => {
                     <div className={"col my-4"}>
                         <div className={"row gap-4 px-4 align-items-center justify-content-center"}>
                             <Button
-                                asChild={true}
+                                isChild={true}
                                 size={"lg"}
                                 variant={"outline"}
                                 className={"text-white bg-[var(--brilliant-azure-550)] " +
@@ -208,7 +203,7 @@ const Home = () => {
                             >
                                 <a
                                     className={"text-decoration-none"}
-                                    href={"/clp/main/user-docs/quick-start/index"}
+                                    href={"/clp/main/user-docs/quick-start/"}
                                 >
                                     <Zap
                                         aria-hidden={"true"}
@@ -218,7 +213,7 @@ const Home = () => {
                                 </a>
                             </Button>
                             <Button
-                                asChild={true}
+                                isChild={true}
                                 size={"lg"}
                                 variant={"outline"}
                                 className={"text-white bg-[var(--turquoise-600)] " +

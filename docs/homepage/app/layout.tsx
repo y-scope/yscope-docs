@@ -4,8 +4,8 @@ import type {
     Viewport,
 } from "next";
 import {
-    Geist,
-    Geist_Mono,
+    Geist as geistFont,
+    Geist_Mono as geistMonoFont,
 } from "next/font/google";
 import Script from "next/script";
 
@@ -16,12 +16,12 @@ import {ThemeProvider} from "./shared/ThemeProvider";
 import "./assets/scss/styles.scss";
 
 
-const geistSans = Geist({
+const geistSans = geistFont({
     variable: "--font-geist-sans",
     subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
+const geistMono = geistMonoFont({
     variable: "--font-geist-mono",
     subsets: ["latin"],
 });

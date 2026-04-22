@@ -67,20 +67,22 @@ tasks:
       # Build dev docs
       - |-
         . "{{.G_VENV_DIR}}/bin/activate"
-        sphinx-build -a -E -c docs -b html docs "{{.G_DEV_DOCS_OUTPUT_DIR}}"
+        rm -rf "{{.G_DEV_DOCS_OUTPUT_DIR}}"
+        sphinx-build -a -E -c docs/dev-docs -b html docs/dev-docs "{{.G_DEV_DOCS_OUTPUT_DIR}}"
 
       # Build the homepage
       - |-
-        rm -rf docs/out docs/.next
-        cd docs
+        rm -rf docs/homepage/out docs/homepage/.next
+        cd docs/homepage || exit 0
         npm install --no-audit --no-fund
         npm run build
         cd -
         mkdir -p "{{.G_HOMEPAGE_OUTPUT_DIR}}"
-        rsync -a docs/out/ "{{.G_HOMEPAGE_OUTPUT_DIR}}/"
+        rsync -a docs/homepage/out/ "{{.G_HOMEPAGE_OUTPUT_DIR}}/"
 
       # Merge the homepage and dev docs
       - |-
+        rm -rf "{{.OUTPUT_DIR}}"
         mkdir -p "{{.OUTPUT_DIR}}"
         
         # Copy dev docs

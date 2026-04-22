@@ -100,7 +100,7 @@ const Navbar = () => {
         {href: "/clp/main/", name: "CLP"},
         {href: "/yscope-log-viewer/main/", name: "Log Viewer"},
         {href: "/log-surgeon/main/", name: "Log Surgeon"},
-        {href: "/clp-ffi-py/main/api/clp_ffi_py.html", name: "Python FFI API"},
+        {href: "/clp-ffi-py/main/api/clp_ffi_py", name: "Python FFI API"},
     ];
 
     return (
@@ -182,7 +182,7 @@ const Navbar = () => {
                 {/* Desktop Actions */}
                 <div className={"hidden lg:flex items-center gap-3"}>
                     <Button
-                        asChild={true}
+                        isChild={true}
                         className={"h-8 dev-docs-btn"}
                         size={"sm"}
                     >
@@ -194,7 +194,7 @@ const Navbar = () => {
                         </a>
                     </Button>
                     <Button
-                        asChild={true}
+                        isChild={true}
                         className={"h-8 px-2"}
                         size={"sm"}
                         variant={"github"}
@@ -290,7 +290,7 @@ const Navbar = () => {
                             </div>
                             <div className={"mt-auto pb-8 space-y-3"}>
                                 <Button
-                                    asChild={true}
+                                    isChild={true}
                                     className={"w-full dev-docs-btn"}
                                 >
                                     <a
@@ -301,7 +301,7 @@ const Navbar = () => {
                                     </a>
                                 </Button>
                                 <Button
-                                    asChild={true}
+                                    isChild={true}
                                     className={"w-full"}
                                     variant={"github"}
                                 >

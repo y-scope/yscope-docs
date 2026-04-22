@@ -10,25 +10,26 @@ export type CategoryItem = {
     imgStyle?: CSSProperties;
 };
 
+// eslint-disable-next-line max-lines-per-function
 export const getCategories = (prestoSrc: string, mcpSrc: string) => {
     return [
         {
             title: "Deploy CLP",
             items: [
                 {
-                    href: "/dev-guide/user-docs/quick-start/",
+                    href: "/clp/main/user-docs/guides-using-object-storage/",
                     imgAlt: "Single-node",
                     imgSrc: "/assets/images/single-node.svg",
                     label: "Single Node",
                 },
                 {
-                    href: "/dev-guide/user-docs/guides-docker-compose-deployment/",
+                    href: "/clp/main/user-docs/guides-docker-compose-deployment",
                     imgAlt: "Docker Compose",
                     imgSrc: "/assets/images/docker-compose_icon.svg",
                     label: "Docker Compose",
                 },
                 {
-                    href: "/dev-guide/user-docs/guides-k8s-deployment/",
+                    href: "/clp/main/user-docs/guides-k8s-deployment",
                     imgAlt: "Kubernetes",
                     imgSrc: "/assets/images/kubernetes.svg",
                     label: "Kubernetes",
@@ -39,7 +40,7 @@ export const getCategories = (prestoSrc: string, mcpSrc: string) => {
             title: "Log Input",
             items: [
                 {
-                    href: "/dev-guide/user-docs/guides-using-object-storage/",
+                    href: "/clp/main/user-docs/guides-using-object-storage/",
                     imgAlt: "S3",
                     imgSrc: "/assets/images/s3.svg",
                     label: "S3",
@@ -52,7 +53,7 @@ export const getCategories = (prestoSrc: string, mcpSrc: string) => {
                     label: "Python",
                 },
                 {
-                    href: "/dev-guide/user-docs/guides-using-log-ingestor/",
+                    href: "/clp/main/user-docs/guides-using-log-ingestor",
                     imgAlt: "Log Ingestor",
                     imgSrc: "/assets/images/log-ingestor.svg",
                     label: "Log Ingestor",
@@ -63,20 +64,20 @@ export const getCategories = (prestoSrc: string, mcpSrc: string) => {
             title: "Analyze & View",
             items: [
                 {
-                    href: "/dev-guide/user-docs/guides-using-presto/",
+                    href: "/clp/main/user-docs/guides-using-presto",
                     imgAlt: "Presto",
                     imgSrc: prestoSrc,
                     imgStyle: {transform: "scale(1.2)", transformOrigin: "center"},
                     label: "Presto",
                 },
                 {
-                    href: "/dev-guide/user-docs/guides-mcp-server/",
+                    href: "/clp/main/user-docs/guides-mcp-server/",
                     imgAlt: "MCP",
                     imgSrc: mcpSrc,
                     label: "MCP Server",
                 },
                 {
-                    href: "/dev-guide/user-docs/guides-using-the-api-server/",
+                    href: "/clp/main/user-docs/guides-using-the-api-server",
                     imgAlt: "API Server",
                     imgSrc: "/assets/images/api-server.svg",
                     label: "API Server",
@@ -88,13 +89,13 @@ export const getCategories = (prestoSrc: string, mcpSrc: string) => {
                     label: "Log Viewer",
                 },
                 {
-                    href: "/dev-guide/user-docs/reference-json-search-syntax/",
+                    href: "/clp/main/user-docs/reference-json-search-syntax",
                     imgAlt: "JSON Search",
                     imgSrc: "/assets/images/json.svg",
                     label: "JSON Search",
                 },
                 {
-                    href: "/dev-guide/user-docs/reference-text-search-syntax/",
+                    href: "/clp/main/user-docs/reference-text-search-syntax",
                     imgAlt: "Text Search",
                     imgSrc: "/assets/images/text.svg",
                     label: "Text Search",
@@ -105,7 +106,7 @@ export const getCategories = (prestoSrc: string, mcpSrc: string) => {
             title: "Resources",
             items: [
                 {
-                    href: "/dev-guide/user-docs/resources-datasets/",
+                    href: "/clp/main/user-docs/resources-datasets",
                     imgAlt: "Datasets",
                     imgSrc: "/assets/images/datasets.svg",
                     label: "Datasets",
@@ -130,13 +131,13 @@ export const getCategories = (prestoSrc: string, mcpSrc: string) => {
             title: "References",
             items: [
                 {
-                    href: "/dev-guide/user-docs/reference-sbin-scripts/",
+                    href: "/clp/main/user-docs/reference-sbin-scripts/",
                     imgAlt: "Package Scripts",
                     imgSrc: "/assets/images/scripts.svg",
                     label: "Package Scripts",
                 },
                 {
-                    href: "/dev-guide/user-docs/reference-unstructured-schema-file/",
+                    href: "/clp/main/user-docs/reference-unstructured-schema-file",
                     imgAlt: "Schema File Syntax",
                     imgSrc: "/assets/images/schema-file-syntax.svg",
                     label: "Schema File Syntax",

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 import React, {
     useEffect,
@@ -21,6 +22,16 @@ const FORM_IX =
  * @param root0.className Optional CSS class name to apply to the root container
  * @return A React component rendering the newsletter signup form
  */
+const MIN_EMAIL_LENGTH = 5;
+const MIN_NAME_LENGTH = 2;
+
+/**
+ * A Zoho newsletter signup form component that integrates with Zoho's optin service.
+ *
+ * @param root0
+ * @param root0.className Optional CSS class name to apply to the root container
+ * @return A React component rendering the newsletter signup form
+ */
 const ZohoSignupForm = ({className}: Props) => {
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
@@ -31,6 +42,40 @@ const ZohoSignupForm = ({className}: Props) => {
     const [submitting, setSubmitting] = useState(false);
     const iframeName = "_zcSignup";
     const formRef = useRef<HTMLFormElement | null>(null);
+
+    const handleFormSubmit = () => {
+        // basic validations
+        let formHasErrors = false;
+        const emailVal = email.trim();
+        const nameVal = firstName.trim();
+
+        const isEmailValid = (/^\S+@\S+\.\S+$/).test(emailVal);
+        if (!isEmailValid || MIN_EMAIL_LENGTH > emailVal.length) {
+            setEmailError("Please enter a valid email address.");
+            formHasErrors = true;
+        }
+
+        if (MIN_NAME_LENGTH > nameVal.length) {
+            setFirstNameError("Please enter your name.");
+            formHasErrors = true;
+        }
+
+        if (formHasErrors) {
+            setFormError("Please fix the errors above.");
+            return;
+        }
+
+        // mark that we've initiated a submit so iframe load can trigger success
+        setSubmitting(true);
+
+        // submit the form programmatically to honor the target iframe
+        try {
+            formRef.current?.submit();
+        } catch {
+            setSubmitting(false);
+            setFormError("Submission failed. Please try again.");
+        }
+    };
 
     useEffect(() => {
         const existing = document.querySelector(
@@ -47,17 +92,18 @@ const ZohoSignupForm = ({className}: Props) => {
         s.onload = () => {
             try {
                 // setupSF is provided by the loaded Zoho script
-                (window as any).setupSF &&
-          (window as any).setupSF(FORM_IX, "ZCFORMVIEW", false, "light");
-            } catch (e) {
+                const windowObj = window as unknown;
+                if ("object" === typeof windowObj && null !== windowObj && "setupSF" in windowObj) {
+                    const {setupSF} = (windowObj as Record<string, unknown>);
+                    if ("function" === typeof setupSF) {
+                        (setupSF as (formIx: string, trackCode: string, autoOptIn: boolean, theme: string) => void)(FORM_IX, "ZCFORMVIEW", false, "light");
+                    }
+                }
+            } catch {
                 // ignore
             }
         };
         document.body.appendChild(s);
-
-        return () => {
-            // keep script (idempotent) — no cleanup required
-        };
     }, []);
 
     // If the Zoho endpoint returns to the hidden iframe we can show a success
@@ -87,7 +133,8 @@ const ZohoSignupForm = ({className}: Props) => {
                 style={{display: "none"}}
                 title={"zc-iframe"}
                 onLoad={() => {
-                    // If we submitted and the iframe finished loading, assume submission completed
+                    // If we submitted and the iframe finished loading, assume submission completed.
+                    // -> Currently treats any iframe load during submission as a success
                     if (submitting) {
                         setSuccessVisible(true);
 
@@ -136,41 +183,10 @@ const ZohoSignupForm = ({className}: Props) => {
                         if (submitting) {
                             return;
                         }
-
-                        // clear previous errors
                         setEmailError(null);
                         setFirstNameError(null);
                         setFormError(null);
-
-                        // basic validations
-                        const emailVal = email.trim();
-                        const nameVal = firstName.trim();
-
-                        const isEmailValid = (/^\S+@\S+\.\S+$/).test(emailVal);
-                        if (!isEmailValid || 5 > emailVal.length) {
-                            setEmailError("Please enter a valid email address.");
-                        }
-
-                        if (2 > nameVal.length) {
-                            setFirstNameError("Please enter your name.");
-                        }
-
-                        if (!isEmailValid || 2 > nameVal.length) {
-                            setFormError("Please fix the errors above.");
-
-                            return;
-                        }
-
-                        // mark that we've initiated a submit so iframe load can trigger success
-                        setSubmitting(true);
-
-                        // submit the form programmatically to honor the target iframe
-                        try {
-                            formRef.current && (formRef.current).submit();
-                        } catch (err) {
-                            setSubmitting(false);
-                            setFormError("Submission failed. Please try again.");
-                        }
+                        handleFormSubmit();
                     }}
                 >
                     <div className={"w-100 text-muted mt-3"}>
@@ -182,7 +198,9 @@ const ZohoSignupForm = ({className}: Props) => {
                             value={email}
                             onChange={(e) => {
                                 setEmail(e.target.value);
-                                emailError && setEmailError(null);
+                                if (emailError) {
+                                    setEmailError(null);
+                                }
                             }}/>
                         {emailError && (
                             <div
@@ -203,7 +221,9 @@ const ZohoSignupForm = ({className}: Props) => {
                             value={firstName}
                             onChange={(e) => {
                                 setFirstName(e.target.value);
-                                firstNameError && setFirstNameError(null);
+                                if (firstNameError) {
+                                    setFirstNameError(null);
+                                }
                             }}/>
                         {firstNameError && (
                             <div
