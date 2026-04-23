@@ -4,9 +4,9 @@ import type {
     Viewport,
 } from "next";
 import {
-ABeeZee as abeezeeFont,
-Geist as geistFont,
-Geist_Mono as geistMonoFont
+    ABeeZee as abeezeeFont,
+    Geist as geistFont,
+    Geist_Mono as geistMonoFont
 } from "next/font/google";
 import Script from "next/script";
 

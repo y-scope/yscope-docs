@@ -15,13 +15,6 @@ const ZUID = "128d06ea5";
 const FORM_IX =
     "3ze0e35dd1451790f3dfce02b61f9f4a924dfe224e3d364b4cc15fde65ac838ab9";
 
-/**
- * A Zoho newsletter signup form component that integrates with Zoho's optin service.
- *
- * @param root0
- * @param root0.className Optional CSS class name to apply to the root container
- * @return A React component rendering the newsletter signup form
- */
 const MIN_EMAIL_LENGTH = 5;
 const MIN_NAME_LENGTH = 2;
 
@@ -77,12 +70,27 @@ const ZohoSignupForm = ({className}: Props) => {
         }
     };
 
+    const callSetup = () => {
+        try {
+            const windowObj = window as unknown;
+            if ("object" === typeof windowObj && null !== windowObj && "setupSF" in windowObj) {
+                const {setupSF} = (windowObj as Record<string, unknown>);
+                if ("function" === typeof setupSF) {
+                    (setupSF as (formIx: string, trackCode: string, autoOptIn: boolean, theme: string) => void)(FORM_IX, "ZCFORMVIEW", false, "light");
+                }
+            }
+        } catch {
+            // ignore
+        }
+    }
+
     useEffect(() => {
         const existing = document.querySelector(
             "script[src*=\"ma.zoho.com/js/optin.min.js\"]"
         );
 
         if (existing) {
+            callSetup();
             return;
         }
 
@@ -90,18 +98,7 @@ const ZohoSignupForm = ({className}: Props) => {
         s.src = "https://ma.zoho.com/js/optin.min.js";
         s.async = true;
         s.onload = () => {
-            try {
-                // setupSF is provided by the loaded Zoho script
-                const windowObj = window as unknown;
-                if ("object" === typeof windowObj && null !== windowObj && "setupSF" in windowObj) {
-                    const {setupSF} = (windowObj as Record<string, unknown>);
-                    if ("function" === typeof setupSF) {
-                        (setupSF as (formIx: string, trackCode: string, autoOptIn: boolean, theme: string) => void)(FORM_IX, "ZCFORMVIEW", false, "light");
-                    }
-                }
-            } catch {
-                // ignore
-            }
+            callSetup();
         };
         document.body.appendChild(s);
     }, []);

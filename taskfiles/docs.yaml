@@ -86,7 +86,7 @@ tasks:
         mkdir -p "{{.OUTPUT_DIR}}"
         
         # Copy dev docs
-        rsync -a --exclude='/index.html' --include='*/index.html' "{{.G_DEV_DOCS_OUTPUT_DIR}}/" "{{.OUTPUT_DIR}}/"
+        rsync -a --exclude='/index.html' "{{.G_DEV_DOCS_OUTPUT_DIR}}/" "{{.OUTPUT_DIR}}/"
          
         # Copy the homepage
         rsync -a "{{.G_HOMEPAGE_OUTPUT_DIR}}/" "{{.OUTPUT_DIR}}/"

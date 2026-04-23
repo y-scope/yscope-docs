@@ -23,13 +23,13 @@ export const getCategories = (prestoSrc: string, mcpSrc: string) => {
                     label: "Single Node",
                 },
                 {
-                    href: "/clp/main/user-docs/guides-docker-compose-deployment",
+                    href: "/clp/main/user-docs/guides-docker-compose-deployment.html",
                     imgAlt: "Docker Compose",
                     imgSrc: "/assets/images/docker-compose_icon.svg",
                     label: "Docker Compose",
                 },
                 {
-                    href: "/clp/main/user-docs/guides-k8s-deployment",
+                    href: "/clp/main/user-docs/guides-k8s-deployment.html",
                     imgAlt: "Kubernetes",
                     imgSrc: "/assets/images/kubernetes.svg",
                     label: "Kubernetes",
@@ -53,7 +53,7 @@ export const getCategories = (prestoSrc: string, mcpSrc: string) => {
                     label: "Python",
                 },
                 {
-                    href: "/clp/main/user-docs/guides-using-log-ingestor",
+                    href: "/clp/main/user-docs/guides-using-log-ingestor.html",
                     imgAlt: "Log Ingestor",
                     imgSrc: "/assets/images/log-ingestor.svg",
                     label: "Log Ingestor",
@@ -64,7 +64,7 @@ export const getCategories = (prestoSrc: string, mcpSrc: string) => {
             title: "Analyze & View",
             items: [
                 {
-                    href: "/clp/main/user-docs/guides-using-presto",
+                    href: "/clp/main/user-docs/guides-using-presto.html",
                     imgAlt: "Presto",
                     imgSrc: prestoSrc,
                     imgStyle: {transform: "scale(1.2)", transformOrigin: "center"},
@@ -77,7 +77,7 @@ export const getCategories = (prestoSrc: string, mcpSrc: string) => {
                     label: "MCP Server",
                 },
                 {
-                    href: "/clp/main/user-docs/guides-using-the-api-server",
+                    href: "/clp/main/user-docs/guides-using-the-api-server.html",
                     imgAlt: "API Server",
                     imgSrc: "/assets/images/api-server.svg",
                     label: "API Server",
@@ -89,13 +89,13 @@ export const getCategories = (prestoSrc: string, mcpSrc: string) => {
                     label: "Log Viewer",
                 },
                 {
-                    href: "/clp/main/user-docs/reference-json-search-syntax",
+                    href: "/clp/main/user-docs/reference-json-search-syntax.html",
                     imgAlt: "JSON Search",
                     imgSrc: "/assets/images/json.svg",
                     label: "JSON Search",
                 },
                 {
-                    href: "/clp/main/user-docs/reference-text-search-syntax",
+                    href: "/clp/main/user-docs/reference-text-search-syntax.html",
                     imgAlt: "Text Search",
                     imgSrc: "/assets/images/text.svg",
                     label: "Text Search",
@@ -106,7 +106,7 @@ export const getCategories = (prestoSrc: string, mcpSrc: string) => {
             title: "Resources",
             items: [
                 {
-                    href: "/clp/main/user-docs/resources-datasets",
+                    href: "/clp/main/user-docs/resources-datasets.html",
                     imgAlt: "Datasets",
                     imgSrc: "/assets/images/datasets.svg",
                     label: "Datasets",
@@ -137,7 +137,7 @@ export const getCategories = (prestoSrc: string, mcpSrc: string) => {
                     label: "Package Scripts",
                 },
                 {
-                    href: "/clp/main/user-docs/reference-unstructured-schema-file",
+                    href: "/clp/main/user-docs/reference-unstructured-schema-file.html",
                     imgAlt: "Schema File Syntax",
                     imgSrc: "/assets/images/schema-file-syntax.svg",
                     label: "Schema File Syntax",

@@ -83,11 +83,15 @@ const IconLink = ({
                         "align-items-center justify-content-center"
                     }
                 >
-                    <img
+                    <Image
                         alt={imgAlt}
                         className={"homepage_icon"}
                         src={imgSrc}
-                        style={imgStyle}/>
+                        style={imgStyle}
+                        width={40}
+                        height={40}
+                        unoptimized={true}
+                    />
                 </div>
                 <small className={"mt-2"}>
                     {label}

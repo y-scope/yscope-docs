@@ -84,7 +84,7 @@ const Navbar = () => {
         if ("Enter" === e.key || " " === e.key) {
             e.preventDefault();
             setProjectDocsOpen((v) => {
-                const next = !v;
+                const next = false === v;
                 // If opening, focus first item.
                 if (next) {
                     // Delay slightly to allow menu to render
@@ -179,7 +179,7 @@ const Navbar = () => {
                                 aria-expanded={projectDocsOpen}
                                 onClick={() => {
                                     setProjectDocsOpen((v) => {
-                                        const next = !v;
+                                        const next = false === v;
                                         if (next) {
                                             setTimeout(focusFirstProjectDocsItem, 0);
                                         }
@@ -251,17 +251,9 @@ const Navbar = () => {
                             rel={"noopener noreferrer"}
                             target={"_blank"}
                         >
-                            <svg
-                                fill={"currentColor"}
-                                height={"20"}
-                                viewBox={"0 0 24 24"}
-                                width={"20"}
-                                xmlns={"http://www.w3.org/2000/svg"}
-                            >
-                                <GithubIcon
-                                    height={20}
-                                    width={20}/>
-                            </svg>
+                            <GithubIcon
+                                height={20}
+                                width={20}/>
                             {null !== githubStars && (
                                 formatNumber(githubStars)
                             )}
@@ -307,13 +299,9 @@ const Navbar = () => {
                     >
                         <div className={"flex flex-col h-full pt-8 px-4"}>
                             <div className={"space-y-3"}>
-                                <Button
-                                    className={"flex items-center"}
-                                    size={"xs"}
-                                    variant={"navlink"}
-                                >
+                                <h3 className={"flex items-center text-xs font-medium"}>
                                     Project Docs
-                                </Button>
+                                </h3>
                                 {projectDocsLinks.map((link) => (
                                     <SheetClose
                                         asChild={true}
@@ -361,18 +349,9 @@ const Navbar = () => {
                                         className={"flex items-center justify-center gap-2 " +
                                             "no-underline"}
                                     >
-                                        <svg
-                                            fill={"currentColor"}
-                                            height={"20"}
-                                            viewBox={"0 0 24 24"}
-                                            width={"20"}
-                                            xmlns={"http://www.w3.org/2000/svg"}
-                                        >
-                                            <GithubIcon
-                                                height={20}
-                                                width={20}/>
-                                        </svg>
-                                        GitHub
+                                        <GithubIcon
+                                            height={20}
+                                            width={20}/>
                                         {null !== githubStars && (
                                             <>
                                                 {" ("}
