@@ -163,7 +163,7 @@ const Home = () => {
         <>
             <div className={"container mx-auto mt-5"}>
                 <div
-                    className={"row align-items-center justify-content-center homepage-hero-row"}
+                    className={"row g-0 mx-0 align-items-center justify-content-center homepage-hero-row"}
                     style={{marginBottom: "2.5rem"}}
                 >
                     <div className={"col"}>
@@ -248,7 +248,7 @@ const Home = () => {
                 </div>
 
                 {/* Replaced repeated markup with data-driven categories */}
-                <div className={"row align-items-center justify-content-center"}>
+                <div className={"row g-0 mx-0 align-items-center justify-content-center"}>
                     {categories.map((c, idx) => (
                         <div key={c.title}>
                             <Category

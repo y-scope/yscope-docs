@@ -31,7 +31,7 @@ const ZohoSignupForm = ({className}: Props) => {
     const [emailError, setEmailError] = useState<string | null>(null);
     const [firstNameError, setFirstNameError] = useState<string | null>(null);
     const [formError, setFormError] = useState<string | null>(null);
-    const [successVisible, setSuccessVisible] = useState(false);
+    const [submissionSentVisible, setSubmissionSentVisible] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const iframeName = "_zcSignup";
     const formRef = useRef<HTMLFormElement | null>(null);
@@ -58,7 +58,7 @@ const ZohoSignupForm = ({className}: Props) => {
             return;
         }
 
-        // mark that we've initiated a submit so iframe load can trigger success
+        // mark that we've initiated a submit so iframe load can trigger the sent state
         setSubmitting(true);
 
         // submit the form programmatically to honor the target iframe
@@ -85,39 +85,28 @@ const ZohoSignupForm = ({className}: Props) => {
     }
 
     useEffect(() => {
+        let s: HTMLScriptElement | null = null;
+
         const existing = document.querySelector(
             "script[src*=\"ma.zoho.com/js/optin.min.js\"]"
         );
 
         if (existing) {
             callSetup();
-            return;
+        } else {
+            s = document.createElement("script");
+            s.src = "https://ma.zoho.com/js/optin.min.js";
+            s.async = true;
+            s.onload = () => {
+                callSetup();
+            };
+            document.body.appendChild(s);
         }
-
-        const s = document.createElement("script");
-        s.src = "https://ma.zoho.com/js/optin.min.js";
-        s.async = true;
-        s.onload = () => {
-            callSetup();
-        };
-        document.body.appendChild(s);
-    }, []);
-
-    // If the Zoho endpoint returns to the hidden iframe we can show a success
-    useEffect(() => {
-        const handleMessage = (ev: MessageEvent) => {
-            if (false === ev.origin.includes("zoho.com")) {
-                return;
-            }
-            if ("string" === typeof ev.data && ev.data.includes("Thank you")) {
-                setSuccessVisible(true);
-            }
-        };
-
-        window.addEventListener("message", handleMessage);
-
+        
         return () => {
-            window.removeEventListener("message", handleMessage);
+            if (s) {
+                s.onload = null;
+            }
         };
     }, []);
 
@@ -130,12 +119,12 @@ const ZohoSignupForm = ({className}: Props) => {
                 style={{display: "none"}}
                 title={"zc-iframe"}
                 onLoad={() => {
-                    // If we submitted and the iframe finished loading, assume submission completed.
-                    // -> Currently treats any iframe load during submission as a success
+                    // Zoho uses double opt-in, so treat iframe completion as "request sent"
+                    // rather than confirmed subscription success.
                     if (submitting) {
-                        setSuccessVisible(true);
+                        setSubmissionSentVisible(true);
 
-                        // clear controlled inputs after successful submission
+                        // clear controlled inputs after the opt-in request is sent
                         setEmail("");
                         setFirstName("");
                         setSubmitting(false);
@@ -156,7 +145,7 @@ const ZohoSignupForm = ({className}: Props) => {
                     Join YScope&apos;s Newsletter
                 </div>
 
-                {successVisible && (
+                {submissionSentVisible && (
                     <div
                         style={{
                             backgroundColor: "var(--tuscan-sun-300)",
@@ -165,7 +154,7 @@ const ZohoSignupForm = ({className}: Props) => {
                             margin: 8,
                         }}
                     >
-                        Thank you for Signing Up
+                        Request sent. Please check your email to confirm your subscription.
                     </div>
                 )}
 

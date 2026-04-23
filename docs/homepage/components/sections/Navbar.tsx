@@ -38,6 +38,13 @@ const formatNumber = (num: number): string => {
     return num.toLocaleString();
 };
 
+const projectDocsLinks = [
+    {href: "/clp/main/", name: "CLP"},
+    {href: "/yscope-log-viewer/main/", name: "Log Viewer"},
+    {href: "/log-surgeon/main/", name: "Log Surgeon"},
+    {href: "/clp-ffi-py/main/api/clp_ffi_py", name: "Python FFI API"},
+];
+
 /**
  * Renders the navigation bar component.
  *
@@ -51,6 +58,17 @@ const Navbar = () => {
     const [projectDocsOpen, setProjectDocsOpen] = useState(false);
     const projectDocsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const projectDocsContainerRef = useRef<HTMLDivElement | null>(null);
+    const focusTimeoutRef = useRef<number | null>(null);
+
+    const scheduleFocus = (fn: () => void) => {
+        if (focusTimeoutRef.current) {
+            clearTimeout(focusTimeoutRef.current);
+        }
+        focusTimeoutRef.current = window.setTimeout(() => {
+            focusTimeoutRef.current = null;
+            fn();
+        }, 0);
+    };
 
     useEffect(() => {
         return () => {
@@ -60,11 +78,58 @@ const Navbar = () => {
         };
     }, []);
 
-    const handleProjectDocsEnter = () => {
+    const focusFirstProjectDocsItem = () => {
+        const el = projectDocsContainerRef.current?.querySelector('a');
+        if (el instanceof HTMLElement) {
+            el.focus();
+        }
+    };
+
+    const focusRelativeProjectDocsItem = (current: HTMLElement, offset: number) => {
+        const container = projectDocsContainerRef.current;
+        if (!container) {return;}
+        const items = Array.from(container.querySelectorAll('a')) as HTMLElement[];
+        const idx = items.indexOf(current);
+        if (-1 === idx) {return;}
+        let next = idx + offset;
+        if (0 > next) {next = items.length - 1;}
+        if (next >= items.length) {next = 0;}
+        const el = items[next];
+        el.focus();
+    };
+
+    const focusLastProjectDocsItem = () => {
+        const items = Array.from(projectDocsContainerRef.current?.querySelectorAll('a') || []) as HTMLElement[];
+        const el = items.length ? items[items.length - 1] : null;
+        if (el) {
+            el.focus();
+        }
+    };
+
+    const toggleProjectDocs = (open?: boolean, focusOnOpen = true) => {
         if (projectDocsTimeoutRef.current) {
             clearTimeout(projectDocsTimeoutRef.current);
         }
-        setProjectDocsOpen(true);
+
+        if ("boolean" === typeof open) {
+            setProjectDocsOpen(open);
+            if (open && focusOnOpen) {
+                scheduleFocus(focusFirstProjectDocsItem);
+            }
+            return;
+        }
+
+        setProjectDocsOpen((v) => {
+            const next = false === v;
+            if (next && focusOnOpen) {
+                scheduleFocus(focusFirstProjectDocsItem);
+            }
+            return next;
+        });
+    };
+
+    const handleProjectDocsEnter = () => {
+        toggleProjectDocs(true);
     };
 
     const handleProjectDocsLeave = () => {
@@ -73,27 +138,42 @@ const Navbar = () => {
         }, PROJECT_DOCS_MENU_CLOSE_DELAY_MS);
     };
 
-    const focusFirstProjectDocsItem = () => {
-        const el = projectDocsContainerRef.current?.querySelector('a');
-        if (el instanceof HTMLElement) {
-            el.focus();
+    const handleProjectDocsBlur = () => {
+        if (projectDocsTimeoutRef.current) {
+            clearTimeout(projectDocsTimeoutRef.current);
         }
+
+        // Defer check until after focus has moved; use document.activeElement
+        projectDocsTimeoutRef.current = setTimeout(() => {
+            const active = document.activeElement as Node | null;
+            if (projectDocsContainerRef.current && active && projectDocsContainerRef.current.contains(active)) {
+                // Focus remained inside the container; keep menu open.
+                if (projectDocsTimeoutRef.current) {
+                    clearTimeout(projectDocsTimeoutRef.current);
+                }
+                return;
+            }
+
+            setProjectDocsOpen(false);
+        }, 0);
     };
 
     const handleProjectDocsKeyDown = (e: React.KeyboardEvent) => {
         if ("Enter" === e.key || " " === e.key) {
             e.preventDefault();
-            setProjectDocsOpen((v) => {
-                const next = false === v;
-                // If opening, focus first item.
-                if (next) {
-                    // Delay slightly to allow menu to render
-                    setTimeout(focusFirstProjectDocsItem, 0);
-                }
-                return next;
-            });
+            toggleProjectDocs();
+        } else if ("ArrowDown" === e.key) {
+            e.preventDefault();
+            // Open and focus first item
+            toggleProjectDocs(true, false);
+            scheduleFocus(focusFirstProjectDocsItem);
+        } else if ("ArrowUp" === e.key) {
+            e.preventDefault();
+            // Open and focus last item
+            toggleProjectDocs(true, false);
+            scheduleFocus(focusLastProjectDocsItem);
         } else if ("Escape" === e.key) {
-            setProjectDocsOpen(false);
+            toggleProjectDocs(false);
         }
     };
 
@@ -112,21 +192,17 @@ const Navbar = () => {
                     setGithubStars(data.stargazers_count);
                 }
             })
-            .catch(() => {
-                // Ignore abort errors
+            .catch((err: unknown) => {
+                if (err instanceof DOMException && "AbortError" === err.name) {
+                    return;
+                }
+                console.error("Failed to fetch GitHub stars:", err);
             });
 
         return () => {
             controller.abort();
         };
     }, []);
-
-    const projectDocsLinks = [
-        {href: "/clp/main/", name: "CLP"},
-        {href: "/yscope-log-viewer/main/", name: "Log Viewer"},
-        {href: "/log-surgeon/main/", name: "Log Surgeon"},
-        {href: "/clp-ffi-py/main/api/clp_ffi_py", name: "Python FFI API"},
-    ];
 
     return (
         <header className={"sticky top-0 z-50 w-full bg-[color:var(--bs-body-bg)] nav-border"}>
@@ -163,13 +239,8 @@ const Navbar = () => {
                             className={"relative text-sm"}
                             onMouseEnter={handleProjectDocsEnter}
                             onMouseLeave={handleProjectDocsLeave}
-                            onFocus={() => {
-                                if (projectDocsTimeoutRef.current) {
-                                    clearTimeout(projectDocsTimeoutRef.current);
-                                }
-                                setProjectDocsOpen(true);
-                            }}
-                            onBlur={handleProjectDocsLeave}
+                            onFocus={() => { toggleProjectDocs(true, false); }}
+                            onBlur={handleProjectDocsBlur}
                             ref={projectDocsContainerRef}
                         >
                             <Button
@@ -177,15 +248,7 @@ const Navbar = () => {
                                 variant={"navlink"}
                                 aria-haspopup={"menu"}
                                 aria-expanded={projectDocsOpen}
-                                onClick={() => {
-                                    setProjectDocsOpen((v) => {
-                                        const next = false === v;
-                                        if (next) {
-                                            setTimeout(focusFirstProjectDocsItem, 0);
-                                        }
-                                        return next;
-                                    });
-                                }}
+                                onClick={() => { toggleProjectDocs(); }}
                                 onKeyDown={handleProjectDocsKeyDown}
                             >
                                 Project Docs
@@ -207,7 +270,18 @@ const Navbar = () => {
                                             variant={"navlink"}
                                         >
                                             <a
-                                                className={"text-decoration-none text-sm"}
+                                                    className={"text-decoration-none text-sm"}
+                                                    tabIndex={0}
+                                                    onKeyDown={(ev) => {
+                                                        const target = ev.currentTarget as HTMLElement;
+                                                        if ("ArrowDown" === ev.key) {
+                                                            ev.preventDefault();
+                                                            focusRelativeProjectDocsItem(target, 1);
+                                                        } else if ("ArrowUp" === ev.key) {
+                                                            ev.preventDefault();
+                                                            focusRelativeProjectDocsItem(target, -1);
+                                                        }
+                                                    }}
                                                 href={link.href}
                                                 onClick={(e) => {
                                                     // Prevent parent onClick, which goes to /#solutions,
