@@ -87,7 +87,7 @@ const Navbar = () => {
 
     const focusRelativeProjectDocsItem = (current: HTMLElement, offset: number) => {
         const container = projectDocsContainerRef.current;
-        if (!container) {return;}
+        if (null === container) {return;}
         const items = Array.from(container.querySelectorAll('a')) as HTMLElement[];
         const idx = items.indexOf(current);
         if (-1 === idx) {return;}
@@ -129,7 +129,7 @@ const Navbar = () => {
     };
 
     const handleProjectDocsEnter = () => {
-        toggleProjectDocs(true);
+        toggleProjectDocs(true, false);
     };
 
     const handleProjectDocsLeave = () => {
@@ -280,6 +280,8 @@ const Navbar = () => {
                                                         } else if ("ArrowUp" === ev.key) {
                                                             ev.preventDefault();
                                                             focusRelativeProjectDocsItem(target, -1);
+                                                        } else if ("Escape" === ev.key) {
+                                                            toggleProjectDocs(false);
                                                         }
                                                     }}
                                                 href={link.href}
@@ -320,6 +322,7 @@ const Navbar = () => {
                         variant={"github"}
                     >
                         <a
+                            aria-label={"View CLP on GitHub"}
                             className={"flex items-center gap-2 no-underline text-xs"}
                             href={"https://github.com/y-scope/clp"}
                             rel={"noopener noreferrer"}
@@ -335,6 +338,9 @@ const Navbar = () => {
                     </Button>
                     {mounted && (
                         <Button
+                            aria-label={"dark" === theme ?
+                                "Switch to light mode" :
+                                "Switch to dark mode"}
                             className={"h-8 w-8 theme-toggle-btn"}
                             size={"icon-sm"}
                             variant={"themeToggle"}
@@ -360,6 +366,7 @@ const Navbar = () => {
                         className={"lg:hidden"}
                     >
                         <Button
+                            aria-label={"Open navigation menu"}
                             className={"mobile-menu-btn"}
                             size={"icon-lg"}
                             variant={"outline"}
@@ -417,6 +424,7 @@ const Navbar = () => {
                                     variant={"github"}
                                 >
                                     <a
+                                        aria-label={"View CLP on GitHub"}
                                         href={"https://github.com/y-scope/clp"}
                                         rel={"noopener noreferrer"}
                                         target={"_blank"}
