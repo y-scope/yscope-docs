@@ -26,13 +26,13 @@ track it.
 
 ## Guidelines
 
-We adhere to [Google's C++ style guide][google-cpp-style-guide] (as of
+We adhere to [Google's C++ style guide][google-cpp-style] (as of
 [8f97e24][google-styleguide-8f97e24]) with the following exceptions (organized according to the
 sections in Google's style guide).
 
 :::{note}
 This section is a work in progress and does not yet include all exceptions after the
-[Classes][google-cpp-style-guide-classes] section of Google's style guide.
+[Classes][google-cpp-style-classes] section of Google's style guide.
 :::
 
 ### Header files
@@ -130,31 +130,40 @@ returns a result containing an error code if unsuccessful or the object if succe
 
 #### Declaration order
 
-Within each section, order declarations as follows:
+We prioritize our [general ordering guidelines](./contrib-guides-general.md#declaration-order)
+which means we use a different declaration grouping and ordering within an access specifier group
+compared to [Google's style guide][google-cpp-style-declaration-order].
 
-1. Types and type aliases (`typedef`, `using`, `enum`, nested structs and classes, and `friend`
-   types).
-2. Static constants.
-3. Static functions:
-   * Factory functions.
-   * Other functions.
-4. Static variables.
-5. Constructors.
-6. Copy & move constructors and assignment operators.
-7. The destructor.
-8. Methods (member functions):
-   * Overridden methods.
-   * Implemented abstract methods.
-   * All other methods.
-9. Data members.
+Under every access specifier of a class, we require that declarations are organized into sections
+that begin with a title comment, where the comment is simply the name of the section. For example:
 
-The differences between our declaration order and the order in Google's style guide is to conform
-with our general [ordering guidelines](./contrib-guides-general.md#declaration-order).
+1. Types
+    * This includes type aliases (`typedef`, `using`, `enum`), nested structs and classes, and
+      `friend` types.
+2. Static constants
+3. Factory methods
+    * I.e., static methods that return an object of the class being defined.
+4. Static methods
+5. Static data members
+6. Constructors
+7. Operators
+8. Destructor
+9. Methods implementing `<InheritedClass>`
+    * I.e., methods implementing abstract methods from the class `<InheritedClass>`.
+10. Methods overriding `<InheritedClass>`
+    * Methods overriding virtual methods from the class `<InheritedClass>`.
+11. Methods
+    * I.e., all other methods.
+12. Data members
+
+Note, `<InheritedClass>` is a placeholder that should be replaced with the name of the class that
+first declares the virtual method.
 
 [adding-cpp-linting]: https://github.com/y-scope/yscope-dev-utils/blob/main/docs/lint-tools-cpp.md
 [clang-format-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-format
 [clang-tidy-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-tidy
-[google-cpp-style-guide]: https://google.github.io/styleguide/cppguide.html
-[google-cpp-style-guide-classes]: https://google.github.io/styleguide/cppguide.html#Classes
+[google-cpp-style]: https://google.github.io/styleguide/cppguide.html
+[google-cpp-style-classes]: https://google.github.io/styleguide/cppguide.html#Classes
+[google-cpp-style-declaration-order]: https://google.github.io/styleguide/cppguide.html#Declaration_Order
 [google-styleguide-8f97e24]: https://github.com/google/styleguide/tree/8f97e24da04753c7a15eda6b02114a01ec3146f5
 [issue]: https://github.com/y-scope/yscope-docs/issues/new
