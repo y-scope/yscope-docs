@@ -60,10 +60,7 @@ my-task:
 
 ## Built-in variables
 
-1. Don't use the variable `{{.ROOT_TASKFILE}}`
-   * v3.35.1 has a bug that makes it equivalent to `ROOT_DIR` (i.e., the parent directory of the root
-     Taskfile, rather than the path to the root Taskfile).
-2. When using the variable `{{.TASK}}` in a task within a namespace (e.g., it's in a nested
+1. When using the variable `{{.TASK}}` in a task within a namespace (e.g., it's in a nested
    Taskfile), replace the `:` in the name with `#` as follows: `{{.TASK | replace \":\" \"#\"}}`.
    * This ensures the task name can be used as a filename.
 
