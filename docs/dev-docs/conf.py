@@ -18,16 +18,6 @@ extensions = [
     "sphinx_design"
 ]
 
-exclude_patterns = [
-    "node_modules",
-    "app",
-    "components",
-    "lib",
-    "public",
-    ".next",
-    "out",
-]
-
 # -- MyST extensions -----------------------------------------------------------
 # https://myst-parser.readthedocs.io/en/stable/syntax/optional.html
 myst_enable_extensions = [

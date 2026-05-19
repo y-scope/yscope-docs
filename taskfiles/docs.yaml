@@ -17,12 +17,25 @@ vars:
 
 tasks:
   build:
-    deps: ["build-main-docs"]
+    deps: ["clean", "build-main-docs"]
     cmds:
-      - "rm -rf '{{.G_PUBLISHABLE_OUTPUT_DIR}}'"
       - "mkdir -p '{{.G_PUBLISHABLE_OUTPUT_DIR}}'"
       - "rsync -a '{{.G_MAIN_DOCS_OUTPUT_DIR}}/' '{{.G_PUBLISHABLE_OUTPUT_DIR}}/'"
       - task: "symlink-project-docs"
+
+  clean:
+    cmds:
+      - "rm -rf '{{.G_PUBLISHABLE_OUTPUT_DIR}}'"
+      - "rm -rf '{{.G_DEV_DOCS_OUTPUT_DIR}}'"
+      - "rm -rf '{{.G_HOMEPAGE_OUTPUT_DIR}}'"
+      - "rm -rf '{{.G_MAIN_DOCS_OUTPUT_DIR}}'"
+      - "rm -rf docs/homepage/node_modules"
+      - "rm -rf docs/homepage/.next"
+      - "rm -f docs/homepage/next-env.d.ts"
+      - "rm -rf docs/homepage/out"
+      - "rm -f docs/homepage/public/robots.txt"
+      - "rm -f docs/homepage/public/sitemap-0.xml"
+      - "rm -f docs/homepage/public/sitemap.xml"
 
   download-projects:
     deps: ["venv"]
@@ -67,22 +80,20 @@ tasks:
       # Build dev docs
       - |-
         . "{{.G_VENV_DIR}}/bin/activate"
-        rm -rf "{{.G_DEV_DOCS_OUTPUT_DIR}}"
         sphinx-build -a -E -c docs/dev-docs -b html docs/dev-docs "{{.G_DEV_DOCS_OUTPUT_DIR}}"
 
       # Build the homepage
       - |-
-        rm -rf docs/homepage/out docs/homepage/.next
         cd docs/homepage || exit 1
         npm install --no-audit --no-fund
         npm run build
         cd -
-        mkdir -p "{{.G_HOMEPAGE_OUTPUT_DIR}}"
-        rsync -a docs/homepage/out/ "{{.G_HOMEPAGE_OUTPUT_DIR}}/"
+        # mkdir -p "{{.G_HOMEPAGE_OUTPUT_DIR}}"
+        mv docs/homepage/out/ "{{.G_HOMEPAGE_OUTPUT_DIR}}/"
 
       # Merge the homepage and dev docs
       - |-
-        rm -rf "{{.OUTPUT_DIR}}"
+        #rm -rf "{{.OUTPUT_DIR}}"
         mkdir -p "{{.OUTPUT_DIR}}"
         
         # Copy dev docs
