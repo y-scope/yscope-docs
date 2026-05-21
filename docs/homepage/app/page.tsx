@@ -173,7 +173,7 @@ const Home = () => {
                             <Image
                                 alt={"CLP Logo"}
                                 height={0}
-                                src={"/assets/images/clp-logo.png"}
+                                src={"/assets/images/clp-logo.svg"}
                                 unoptimized={true}
                                 width={0}
                                 style={{

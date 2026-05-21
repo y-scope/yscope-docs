@@ -215,7 +215,7 @@ const Navbar = () => {
                     >
                         <img
                             alt={"CLP"}
-                            src={"/assets/images/clp-logo.png"}
+                            src={"/assets/images/clp-logo.svg"}
                             style={{
                                 height: "1.6rem",
                                 paddingBottom: "3.5px",
