@@ -24,13 +24,16 @@ tasks:
       - task: "symlink-project-docs"
 
   clean:
+    deps: ["clean-main-docs"]
+
+  clean-main-docs:
     cmds:
       - "rm -rf '{{.G_PUBLISHABLE_OUTPUT_DIR}}'"
       - "rm -rf '{{.G_DEV_DOCS_OUTPUT_DIR}}'"
       - "rm -rf '{{.G_HOMEPAGE_OUTPUT_DIR}}'"
       - "rm -rf '{{.G_MAIN_DOCS_OUTPUT_DIR}}'"
-      - "rm -rf docs/homepage/node_modules"
       - "rm -rf docs/homepage/.next"
+      - "rm -rf docs/homepage/node_modules"
       - "rm -f docs/homepage/next-env.d.ts"
       - "rm -rf docs/homepage/out"
       - "rm -f docs/homepage/public/robots.txt"
@@ -69,14 +72,14 @@ tasks:
       - "{{.ROOT_DIR}}/docs/**/*"
       - "{{.TASKFILE}}"
     generates: ["{{.CHECKSUM_FILE}}"]
-    run: "once"
-    deps:
+    deps: ["clean-main-docs"]
+    cmds:
       - task: "utils:checksum:validate"
         vars:
           CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
           INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
-      - "venv"
-    cmds:
+
+      - task: "venv"
       # Build dev docs
       - |-
         . "{{.G_VENV_DIR}}/bin/activate"
@@ -88,12 +91,10 @@ tasks:
         npm install --no-audit --no-fund
         npm run build
         cd -
-        # mkdir -p "{{.G_HOMEPAGE_OUTPUT_DIR}}"
         mv docs/homepage/out/ "{{.G_HOMEPAGE_OUTPUT_DIR}}/"
 
       # Merge the homepage and dev docs
       - |-
-        #rm -rf "{{.OUTPUT_DIR}}"
         mkdir -p "{{.OUTPUT_DIR}}"
         
         # Copy dev docs
