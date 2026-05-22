@@ -28,10 +28,11 @@ tasks:
 
   clean-main-docs:
     cmds:
-      - "rm -rf '{{.G_PUBLISHABLE_OUTPUT_DIR}}'"
+      - "rm -rf '{{.G_BUILD_DIR}}/docs#build-main-docs.md5'"
       - "rm -rf '{{.G_DEV_DOCS_OUTPUT_DIR}}'"
       - "rm -rf '{{.G_HOMEPAGE_OUTPUT_DIR}}'"
       - "rm -rf '{{.G_MAIN_DOCS_OUTPUT_DIR}}'"
+      - "rm -rf '{{.G_PUBLISHABLE_OUTPUT_DIR}}'"
       - "rm -rf docs/homepage/.next"
       - "rm -rf docs/homepage/node_modules"
       - "rm -f docs/homepage/next-env.d.ts"
@@ -72,6 +73,7 @@ tasks:
       - "{{.ROOT_DIR}}/docs/**/*"
       - "{{.TASKFILE}}"
     generates: ["{{.CHECKSUM_FILE}}"]
+    run: "once"
     deps: ["clean-main-docs"]
     cmds:
       - task: "utils:checksum:validate"
