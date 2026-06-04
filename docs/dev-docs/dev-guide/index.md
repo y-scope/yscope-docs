@@ -1,6 +1,7 @@
 # Developer Guide
 
-This section contains docs describing our development practices such as format specifications, coding guidelines, and the like. [Contributions](#contributing) are welcome!
+This section contains docs describing our development practices such as coding guidelines, and the
+like. [Contributions](#contributing) are welcome!
 
 :::{toctree}
 :caption: Contribution guidelines
@@ -22,7 +23,7 @@ misc-project-docs
 ::::
 
 (contributing)=
-# Contributing
+## Contributing
 
 To edit existing docs, click the "{fas}`pencil` Edit on GitHub" link found in the right sidebar of
 the page you want to edit. To create new docs, go to the relevant project's repo and add pages

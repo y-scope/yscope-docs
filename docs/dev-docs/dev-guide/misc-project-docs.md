@@ -1,5 +1,6 @@
-# Project Docs
-Below are all links to our open-source projects with dedicated Documentation (so far).
+# Project docs
+
+Below are links to our open-source projects that have dedicated documentation (so far).
 
 ::::{grid} 1 1 2 2
 :gutter: 2
@@ -28,7 +29,6 @@ YScope Log Viewer (yscope-log-viewer)
 A web interface for viewing logs that use CLP’s IR stream format including features like filtering
 by log level and viewing large files.
 :::
-
 
 :::{grid-item-card}
 :link: /log-surgeon/main
