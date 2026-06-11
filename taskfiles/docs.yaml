@@ -6,7 +6,7 @@ includes:
     taskfile: "../tools/yscope-dev-utils/exports/taskfiles/utils/utils.yaml"
 
 vars:
-  G_DEV_DOCS_OUTPUT_DIR: "{{.G_BUILD_DIR}}/sphinx-html"
+  G_DEV_DOCS_OUTPUT_DIR: "{{.G_BUILD_DIR}}/dev-docs-html"
   G_HOMEPAGE_OUTPUT_DIR: "{{.ROOT_DIR}}/docs/homepage/out"
   G_NODE_DEPS_DIR: "{{.G_BUILD_DIR}}/node-deps"
   G_PROJECTS_DOCS_DIR: "{{.G_BUILD_DIR}}/project-docs"
