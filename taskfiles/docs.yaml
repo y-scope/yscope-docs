@@ -6,7 +6,9 @@ includes:
     taskfile: "../tools/yscope-dev-utils/exports/taskfiles/utils/utils.yaml"
 
 vars:
-  G_MAIN_DOCS_OUTPUT_DIR: "{{.G_BUILD_DIR}}/main-docs"
+  G_DEV_DOCS_OUTPUT_DIR: "{{.G_BUILD_DIR}}/dev-docs-html"
+  G_HOMEPAGE_SOURCE_DIR: "{{.ROOT_DIR}}/docs/homepage"
+  G_HOMEPAGE_OUTPUT_DIR: "{{.G_HOMEPAGE_SOURCE_DIR}}/out"
   G_NODE_DEPS_DIR: "{{.G_BUILD_DIR}}/node-deps"
   G_PROJECTS_DOCS_DIR: "{{.G_BUILD_DIR}}/project-docs"
   G_PUBLISHABLE_OUTPUT_DIR: "{{.G_BUILD_DIR}}/html"
@@ -15,11 +17,24 @@ vars:
 
 tasks:
   build:
-    deps: ["build-main-docs"]
+    deps:
+      - "build-dev-docs"
+      - "build-homepage"
     cmds:
       - "rm -rf '{{.G_PUBLISHABLE_OUTPUT_DIR}}'"
-      - "cp -r '{{.G_MAIN_DOCS_OUTPUT_DIR}}' '{{.G_PUBLISHABLE_OUTPUT_DIR}}'"
+      - "mkdir -p '{{.G_PUBLISHABLE_OUTPUT_DIR}}'"
+      - >-
+        rsync -a --exclude='/index.html'
+        "{{.G_DEV_DOCS_OUTPUT_DIR}}/"
+        "{{.G_PUBLISHABLE_OUTPUT_DIR}}/"
+      - "rsync -a '{{.G_HOMEPAGE_OUTPUT_DIR}}/' '{{.G_PUBLISHABLE_OUTPUT_DIR}}/'"
       - task: "symlink-project-docs"
+
+  clean:
+    deps:
+      - "clean-dev-docs"
+      - "clean-homepage"
+    cmd: "rm -rf '{{.G_PUBLISHABLE_OUTPUT_DIR}}'"
 
   download-projects:
     deps: ["venv"]
@@ -43,14 +58,15 @@ tasks:
     cmd: |-
       npm --prefix '{{.G_NODE_DEPS_DIR}}' exec http-server '{{.G_PUBLISHABLE_OUTPUT_DIR}}' -c-1
 
-  build-main-docs:
+  build-dev-docs:
     internal: true
     vars:
       CHECKSUM_FILE: "{{.G_BUILD_DIR}}/{{.TASK | replace \":\" \"#\"}}.md5"
-      OUTPUT_DIR: "{{.G_MAIN_DOCS_OUTPUT_DIR}}"
+      OUTPUT_DIR: "{{.G_DEV_DOCS_OUTPUT_DIR}}"
+      SOURCE_DIR: "{{.ROOT_DIR}}/docs/dev-docs"
     sources:
       - "{{.G_VENV_CHECKSUM_FILE}}"
-      - "{{.ROOT_DIR}}/docs/**/*"
+      - "{{.SOURCE_DIR}}/**/*"
       - "{{.TASKFILE}}"
     generates: ["{{.CHECKSUM_FILE}}"]
     run: "once"
@@ -63,13 +79,64 @@ tasks:
     cmds:
       - |-
         . "{{.G_VENV_DIR}}/bin/activate"
-        sphinx-build -a -E -c docs -b html docs "{{.OUTPUT_DIR}}"
+        sphinx-build -a -E -c '{{.SOURCE_DIR}}' -b html '{{.SOURCE_DIR}}' "{{.OUTPUT_DIR}}"
 
       # This command must be last
       - task: "utils:checksum:compute"
         vars:
           CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
           INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
+
+  build-homepage:
+    internal: true
+    vars:
+      CHECKSUM_FILE: "{{.G_BUILD_DIR}}/{{.TASK | replace \":\" \"#\"}}.md5"
+      OUTPUT_DIR: "{{.G_HOMEPAGE_OUTPUT_DIR}}"
+    sources:
+      - "{{.G_HOMEPAGE_SOURCE_DIR}}/**/*"
+      - "{{.TASKFILE}}"
+      - exclude: "{{.G_HOMEPAGE_SOURCE_DIR}}/.next/**/*"
+      - exclude: "{{.G_HOMEPAGE_SOURCE_DIR}}/node_modules/**/*"
+      - exclude: "{{.G_HOMEPAGE_SOURCE_DIR}}/next-env.d.ts"
+      - exclude: "{{.G_HOMEPAGE_SOURCE_DIR}}/out/**/*"
+      - exclude: "{{.G_HOMEPAGE_SOURCE_DIR}}/public/robots.txt"
+      - exclude: "{{.G_HOMEPAGE_SOURCE_DIR}}/public/sitemap*.xml"
+    generates: ["{{.CHECKSUM_FILE}}"]
+    run: "once"
+    deps:
+      - task: "utils:checksum:validate"
+        vars:
+          CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
+          INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
+    cmds:
+      - |-
+        cd '{{.G_HOMEPAGE_SOURCE_DIR}}' || exit 1
+        npm install --no-audit --no-fund
+        npm run build
+
+      # This command must be last
+      - task: "utils:checksum:compute"
+        vars:
+          CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
+          INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
+
+  clean-dev-docs:
+    internal: true
+    run: "once"
+    cmd: "rm -rf '{{.G_DEV_DOCS_OUTPUT_DIR}}'"
+
+  clean-homepage:
+    internal: true
+    run: "once"
+    cmds:
+      - "rm -rf '{{.G_HOMEPAGE_OUTPUT_DIR}}'"
+      - "rm -rf '{{.G_HOMEPAGE_SOURCE_DIR}}/.next'"
+      - "rm -rf '{{.G_HOMEPAGE_SOURCE_DIR}}/node_modules'"
+      - "rm -f '{{.G_HOMEPAGE_SOURCE_DIR}}/next-env.d.ts'"
+      - "rm -rf '{{.G_HOMEPAGE_SOURCE_DIR}}/out'"
+      - "rm -f '{{.G_HOMEPAGE_SOURCE_DIR}}/public/robots.txt'"
+      - "rm -f '{{.G_HOMEPAGE_SOURCE_DIR}}/public/sitemap-0.xml'"
+      - "rm -f '{{.G_HOMEPAGE_SOURCE_DIR}}/public/sitemap.xml'"
 
   http-server:
     internal: true

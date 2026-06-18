@@ -10,7 +10,10 @@ vars:
   G_BUILD_DIR: "{{.ROOT_DIR}}/build"
 
 tasks:
-  clean: "rm -rf '{{.G_BUILD_DIR}}'"
+  clean:
+    cmds:
+      - task: "docs:clean"
+      - "rm -rf '{{.G_BUILD_DIR}}'"
 
   init:
     internal: true

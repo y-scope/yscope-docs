@@ -1,0 +1,506 @@
+@import "tailwindcss";
+@import "../css/colors.css";
+@import url("tw-animate-css");
+
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
+
+// Layout & components
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+
+@import "bootstrap/scss/utilities/api";
+
+/* Prevent horizontal scrolling from accidental overflow and ensure padding
+   does not increase element width unexpectedly. */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Fade utility (used by modals, etc.) */
+.fade {
+  transition: opacity .15s linear;
+  opacity: 0;
+}
+
+.fade.show {
+  opacity: 1;
+}
+
+/* Collapse / Accordion basics: hide when not shown, simple height transition
+   for the JS-driven `.collapsing` state. */
+.collapse:not(.show) {
+  display: none;
+}
+
+.collapse.show {
+  display: block;
+}
+
+.collapsing {
+  height: 0;
+  overflow: hidden;
+  transition: height .35s ease;
+}
+
+/* Navbar collapse uses the same show/hide behavior */
+.navbar-collapse.collapse:not(.show) {
+  display: none;
+}
+
+.navbar-collapse.collapse.show {
+  display: block;
+}
+
+/* Provide a small transition for accordion content where helpful */
+.accordion-collapse {
+  transition: height .35s ease;
+}
+
+
+// Themed GitHub button styles
+.btn-github {
+  background: var(--white);
+  border: 1px solid #cccccc;
+  box-shadow: 0 2px 12px 0 rgba(0, 123, 255, 0.22);
+  border-radius: 8px;
+  color: #212529;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+  gap: 0.35em;
+  padding: 0.18em 0.5em 0.18em 0.45em;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s, border 0.2s, box-shadow 0.2s;
+}
+
+[data-bs-theme="dark"] .btn-github {
+  background: #212529;
+  color: var(--white);
+  border: 1px solid #444;
+}
+
+[data-bs-theme="dark"] .btn-github svg {
+  color: var(--white);
+}
+
+[data-bs-theme="light"] .btn-github svg {
+  color: #212529;
+}
+
+:root {
+  --bs-body-bg: var(--white);
+  --bs-body-bg-rgb: 255, 255, 255;
+}
+
+[data-bs-theme="dark"] {
+  --bs-body-bg: var(--dark-bg); //#212529; #0b0f13; #0E0D0E;
+  --bs-body-bg-rgb: 22, 24, 27;
+}
+
+$yscope-colors: (
+  "yscope-primary": #1888fa,
+  "yscope-secondary": #F7C548,
+);
+$theme-colors: map-merge($theme-colors, $yscope-colors);
+
+$yscope-colors-text: (
+  "yscope-primary": #1888fa,
+  "yscope-secondary": black,
+);
+$yscope-colors-bg-subtle: (
+  "yscope-primary": #1888fa,
+  "yscope-secondary": black,
+);
+$yscope-colors-border-subtle: (
+  "yscope-primary": #1888fa,
+  "yscope-secondary": black,
+);
+
+html {
+  font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 18px;
+}
+
+footer {
+  padding: 2rem 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.main-chart {
+  text-align: center;
+  padding: 0px 20px;
+}
+
+.section {
+  padding: 30px 0;
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    font-style: italic;
+  }
+}
+
+
+@media (min-width: 576px) {
+  .section {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .subtitle {
+      font-size: 1.3rem;
+    }
+  }
+}
+
+
+.theme-switcher-icon::before {
+  /* removed bootstrap-icons dependency; theme switcher uses JS-rendered SVG icons now */
+  display: none;
+}
+
+.btn-yscope-secondary {
+  border: solid 1px #cccccc;
+  border-radius: 8px;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+}
+
+[data-bs-theme="light"] .btn-yscope-secondary {
+  color: #3f3f3f;
+  border: solid 1px #cccccc;
+}
+
+[data-bs-theme="dark"] .btn-yscope-secondary {
+  color: #c2c2c2;
+  border: solid 1px #444;
+}
+
+.btn-yscope-secondary:hover {
+  color: var(--black);
+  background-color: var(--tuscan-sun);
+}
+
+[data-bs-theme="light"] {
+  footer {
+    border-top: #f2f2f2 solid 2px;
+  }
+
+  .theme-switcher-icon::before {
+    content: "\f497";
+  }
+}
+
+[data-bs-theme="dark"] {
+  footer {
+    border-top: #212529 solid 2px;
+  }
+
+  .btn-yscope-secondary {
+    --bs-btn-color: var(--white);
+  }
+
+  .theme-switcher-icon::before {
+    content: "\f5a2";
+  }
+}
+
+.logo {
+  color: var(--brilliant-azure);
+  font-family: 'Abeezee', abeezee, sans-serif;
+  font-weight: 700;
+  font-size: 2.2rem;
+}
+
+.logo-color {
+  color: var(--brilliant-azure);
+}
+
+.checkmark-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    position: relative;
+    padding-left: 1.8rem;
+    padding-bottom: 5px;
+    padding-top: 5px;
+  }
+
+  li::before {
+    /* replaced icon font glyph with a unicode checkmark to avoid bootstrap-icons dependency */
+    content: "\2713";
+    color: var(--brilliant-azure);
+    position: absolute;
+    left: 0;
+    top: 0.15rem;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  font-size: 1.1rem;
+}
+
+.policy-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+.main-section h2 {
+  font-weight: bold;
+}
+
+.accordion-button {
+  font-weight: 600;
+}
+
+/* Theme-aware styles for the nav bar border */
+.nav-border {
+  border-bottom: #f2f2f2 solid 2px;
+}
+
+[data-bs-theme="light"] .nav-border {
+  border-bottom: #f2f2f2 solid 2px;
+}
+
+
+[data-bs-theme="dark"] .nav-border {
+  border-bottom: #212529 solid 2px;
+}
+
+/* Theme-aware styles for the navlink button variant */
+.nav-link-btn {
+  transition: color 0.15s ease-in-out;
+}
+
+[data-bs-theme="light"] .nav-link-btn {
+  color: #717171;
+}
+
+[data-bs-theme="dark"] .nav-link-btn {
+  color: #a2a4a5;
+}
+
+.nav-link-btn:hover {
+  color: var(--brilliant-azure);
+}
+
+.nav-link-btn-alt {
+  transition: color 0.15s ease-in-out;
+}
+
+[data-bs-theme="light"] .nav-link-btn-alt {
+  color: var(--brilliant-azure-400);
+}
+
+[data-bs-theme="dark"] .nav-link-btn-alt {
+  color: var(--brilliant-azure-600);
+}
+
+.footer .nav-link-btn:hover,
+.footer .nav-link-btn-alt:hover {
+  color: var(--tuscan-sun);
+}
+
+
+/* Theme-aware styles for the theme toggle button variant */
+.theme-toggle-btn {
+  border: solid 1px #cccccc;
+  border-radius: 8px;
+  color: #a2a4a5;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+}
+
+[data-bs-theme="light"] .theme-toggle-btn {
+  color: #717171;
+  border: solid 1px #cccccc;
+}
+
+[data-bs-theme="light"] .theme-toggle-btn:hover {
+  color: var(--white);
+  background-color: var(--space-indigo);
+}
+
+[data-bs-theme="dark"] .theme-toggle-btn {
+  color: #a2a4a5;
+  background-color: #212529;
+  border: solid 1px #444;
+}
+
+[data-bs-theme="dark"] .theme-toggle-btn:hover {
+  color: var(--black);
+  background-color: var(--tuscan-sun);
+}
+
+.dev-docs-btn {
+  background-color: var(--brilliant-azure-550) !important;
+  border-radius: 8px;
+  color: var(--white);
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+}
+
+.dev-docs-btn:hover {
+  background-color: var(--brilliant-azure-700) !important;
+}
+
+.mobile-menu-btn {
+  border-radius: 8px;
+}
+
+/* Theme-aware styles for the mobile menu sheet */
+.mobile-menu-sheet {
+  background-color: var(--white);
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+}
+
+[data-bs-theme="light"] .mobile-menu-sheet {
+  background-color: var(--white);
+}
+
+[data-bs-theme="dark"] .mobile-menu-sheet {
+  background-color: #1A1D20;
+}
+
+/* Map legacy `.container` class to Tailwind's container utility so existing markup keeps working */
+.container {
+  @apply container mx-auto;
+
+/* Override Bootstrap container gutter so Tailwind padding wins on large screens */
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
+
+.container-fluid {
+  width: 100%;
+  @apply px-4;
+}
+
+@media (min-width: 1140px) {
+  .container {
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+}
+
+@media (min-width: 1420px) {
+  .container {
+    padding-left: 10rem;
+    padding-right: 10rem;
+  }
+}
+
+.newsletter-card {
+  background-color: var(--light-bg-alt);
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+[data-bs-theme="dark"] .newsletter-card {
+  background-color: var(--dark-bg-alt);
+  border: 1px solid #444;
+}
+
+.newsletter-card .text-input {
+  background-color: var(--white);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  width: 200px;
+}
+
+[data-bs-theme="dark"] .newsletter-card .text-input {
+  background-color: var(--dark-bg);
+  border: 1px solid #444;
+  color: var(--white);
+}
+
+.homepage_icons_category {
+  display: flex;
+  flex-flow: row wrap;
+  row-gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.homepage_icon {
+  width: 36px;
+  height: 36px;
+}
+
+.homepage_icon_box {
+  width: 56px;
+  height: 56px;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+}
+
+.homepage_icon_row {
+  width: 245px;
+}
+
+[data-bs-theme="light"] .homepage_icon_box { 
+  background-color: #f8f8f8;
+  border: 1px solid #e8e8e8;
+}
+
+[data-bs-theme="dark"] .homepage_icon_box { 
+  background-color: #555e6930;
+  border: 1px solid #555e69;
+}
+
+/* Stack welcome + buttons for screens < 1100px */
+@media (max-width: 1100px) {
+  .homepage-hero-row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .homepage-hero-row > .col {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .homepage-hero-row > .col.my-4 {
+    margin-top: 1rem;
+  }
+}
+
+/* Stack welcome + buttons for screens < 500px */
+@media (max-width: 500px) {
+  .homepage-hero-title{
+    font-size: 25px;
+  }
+}

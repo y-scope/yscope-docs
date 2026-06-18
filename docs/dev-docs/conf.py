@@ -8,7 +8,7 @@
 
 project = "YScope"
 # NOTE: We don't include a period after "Inc" since the theme adds one already.
-project_copyright = "2023-2024 YScope Inc"
+project_copyright = "2023-2026 YScope Inc"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
