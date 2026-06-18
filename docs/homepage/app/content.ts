@@ -17,7 +17,7 @@ export const getCategories = (prestoSrc: string, mcpSrc: string) => {
             title: "Deploy CLP",
             items: [
                 {
-                    href: "/clp/main/user-docs/guides-using-object-storage/",
+                    href: "/clp/main/user-docs/quick-start/",
                     imgAlt: "Single-node",
                     imgSrc: "/assets/images/single-node.svg",
                     label: "Single Node",
