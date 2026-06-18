@@ -7,7 +7,8 @@ includes:
 
 vars:
   G_DEV_DOCS_OUTPUT_DIR: "{{.G_BUILD_DIR}}/dev-docs-html"
-  G_HOMEPAGE_OUTPUT_DIR: "{{.ROOT_DIR}}/docs/homepage/out"
+  G_HOMEPAGE_SOURCE_DIR: "{{.ROOT_DIR}}/docs/homepage"
+  G_HOMEPAGE_OUTPUT_DIR: "{{.G_HOMEPAGE_SOURCE_DIR}}/out"
   G_NODE_DEPS_DIR: "{{.G_BUILD_DIR}}/node-deps"
   G_PROJECTS_DOCS_DIR: "{{.G_BUILD_DIR}}/project-docs"
   G_PUBLISHABLE_OUTPUT_DIR: "{{.G_BUILD_DIR}}/html"
@@ -62,9 +63,10 @@ tasks:
     vars:
       CHECKSUM_FILE: "{{.G_BUILD_DIR}}/{{.TASK | replace \":\" \"#\"}}.md5"
       OUTPUT_DIR: "{{.G_DEV_DOCS_OUTPUT_DIR}}"
+      SOURCE_DIR: "{{.ROOT_DIR}}/docs/dev-docs"
     sources:
       - "{{.G_VENV_CHECKSUM_FILE}}"
-      - "{{.ROOT_DIR}}/docs/dev-docs/**/*"
+      - "{{.SOURCE_DIR}}/**/*"
       - "{{.TASKFILE}}"
     generates: ["{{.CHECKSUM_FILE}}"]
     run: "once"
@@ -77,7 +79,7 @@ tasks:
     cmds:
       - |-
         . "{{.G_VENV_DIR}}/bin/activate"
-        sphinx-build -a -E -c docs/dev-docs -b html docs/dev-docs "{{.OUTPUT_DIR}}"
+        sphinx-build -a -E -c '{{.SOURCE_DIR}}' -b html '{{.SOURCE_DIR}}' "{{.OUTPUT_DIR}}"
 
       # This command must be last
       - task: "utils:checksum:compute"
@@ -91,14 +93,14 @@ tasks:
       CHECKSUM_FILE: "{{.G_BUILD_DIR}}/{{.TASK | replace \":\" \"#\"}}.md5"
       OUTPUT_DIR: "{{.G_HOMEPAGE_OUTPUT_DIR}}"
     sources:
-      - "{{.ROOT_DIR}}/docs/homepage/**/*"
+      - "{{.G_HOMEPAGE_SOURCE_DIR}}/**/*"
       - "{{.TASKFILE}}"
-      - exclude: "docs/homepage/.next/**/*"
-      - exclude: "docs/homepage/node_modules/**/*"
-      - exclude: "docs/homepage/next-env.d.ts"
-      - exclude: "docs/homepage/out/**/*"
-      - exclude: "docs/homepage/public/robots.txt"
-      - exclude: "docs/homepage/public/sitemap*.xml"
+      - exclude: "{{.G_HOMEPAGE_SOURCE_DIR}}/.next/**/*"
+      - exclude: "{{.G_HOMEPAGE_SOURCE_DIR}}/node_modules/**/*"
+      - exclude: "{{.G_HOMEPAGE_SOURCE_DIR}}/next-env.d.ts"
+      - exclude: "{{.G_HOMEPAGE_SOURCE_DIR}}/out/**/*"
+      - exclude: "{{.G_HOMEPAGE_SOURCE_DIR}}/public/robots.txt"
+      - exclude: "{{.G_HOMEPAGE_SOURCE_DIR}}/public/sitemap*.xml"
     generates: ["{{.CHECKSUM_FILE}}"]
     run: "once"
     deps:
@@ -108,7 +110,7 @@ tasks:
           INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
     cmds:
       - |-
-        cd docs/homepage || exit 1
+        cd '{{.G_HOMEPAGE_SOURCE_DIR}}' || exit 1
         npm install --no-audit --no-fund
         npm run build
 
@@ -128,13 +130,13 @@ tasks:
     run: "once"
     cmds:
       - "rm -rf '{{.G_HOMEPAGE_OUTPUT_DIR}}'"
-      - "rm -rf docs/homepage/.next"
-      - "rm -rf docs/homepage/node_modules"
-      - "rm -f docs/homepage/next-env.d.ts"
-      - "rm -rf docs/homepage/out"
-      - "rm -f docs/homepage/public/robots.txt"
-      - "rm -f docs/homepage/public/sitemap-0.xml"
-      - "rm -f docs/homepage/public/sitemap.xml"
+      - "rm -rf '{{.G_HOMEPAGE_SOURCE_DIR}}/.next'"
+      - "rm -rf '{{.G_HOMEPAGE_SOURCE_DIR}}/node_modules'"
+      - "rm -f '{{.G_HOMEPAGE_SOURCE_DIR}}/next-env.d.ts'"
+      - "rm -rf '{{.G_HOMEPAGE_SOURCE_DIR}}/out'"
+      - "rm -f '{{.G_HOMEPAGE_SOURCE_DIR}}/public/robots.txt'"
+      - "rm -f '{{.G_HOMEPAGE_SOURCE_DIR}}/public/sitemap-0.xml'"
+      - "rm -f '{{.G_HOMEPAGE_SOURCE_DIR}}/public/sitemap.xml'"
 
   http-server:
     internal: true
