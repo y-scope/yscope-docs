@@ -7,10 +7,10 @@ Follow the guidelines below when writing and updating any source files.
 ### Measurement units
 
 When handling data with measurement units, the unit must always be explicitly stated.
-If the unit is not statically available in the type information then it must be added to the name,
+If the unit is not statically available in the type information, then it must be added to the name,
 preferably as a suffix.
 
-For example, in C++ when storing a measure of kilobytes inside an integer type name the variable
+For example, in C++ when storing a measure of kilobytes inside an integer type, name the variable
 with a `_kb` suffix (e.g. `encoded_size_kb`). Similarly, when measuring milliseconds in an integer
 add an `_ms` suffix (e.g. `parsing_time_ms`).
 
