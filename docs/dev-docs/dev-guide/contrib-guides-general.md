@@ -2,6 +2,21 @@
 
 Follow the guidelines below when writing and updating any source files.
 
+## Naming
+
+### Units
+
+When handling data with units the unit must always be explicitly stated.
+If the unit is not statically available in the type information then it must be added to the name,
+preferably as a suffix.
+
+For example, in C++ when storing a measure of kilobytes inside an integer type name the variable
+with a `_kb` suffix (e.g. `encoded_size_kb`). Similarly, when measuring milliseconds in an integer
+add an `_ms` suffix (e.g. `parsing_time_ms`).
+
+An example when it is not necessary to add the unit to the name is when using `std::chrono` in C++
+as the typing (and API) explicitly handles the type.
+
 ## Code organization
 
 (declaration-order)=
