@@ -4,9 +4,9 @@ Follow the guidelines below when writing and updating any source files.
 
 ## Naming
 
-### Units
+### Measurement units
 
-When handling data with units the unit must always be explicitly stated.
+When handling data with measurement units, the unit must always be explicitly stated.
 If the unit is not statically available in the type information then it must be added to the name,
 preferably as a suffix.
 
