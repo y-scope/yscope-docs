@@ -1,0 +1,31 @@
+version: "3"
+
+tasks:
+  check-uv:
+    cmds:
+      - for: &uv-projects
+          - "{{.ROOT_DIR}}"
+        task: "uv-lock"
+        vars:
+          PROJECT_DIR: "{{.ITEM}}"
+          UV_LOCK_FLAGS: "--check"
+
+  update-uv:
+    cmds:
+      - for: *uv-projects
+        task: "uv-lock"
+        vars:
+          PROJECT_DIR: "{{.ITEM}}"
+          UV_LOCK_FLAGS: ""
+
+  # Runs `uv lock` in the UV project directory with the specified flags.
+  #
+  # @param {string} PROJECT_DIR
+  # @param {string} UV_LOCK_FLAGS The flags to pass to the `uv lock` command.
+  uv-lock:
+    internal: true
+    requires:
+      vars: ["PROJECT_DIR", "UV_LOCK_FLAGS"]
+    dir: "{{.PROJECT_DIR}}"
+    cmd: |-
+      uv lock {{.UV_LOCK_FLAGS}}
