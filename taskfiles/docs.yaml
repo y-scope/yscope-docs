@@ -37,11 +37,16 @@ tasks:
     cmd: "rm -rf '{{.G_PUBLISHABLE_OUTPUT_DIR}}'"
 
   download-projects:
+    env:
+      UV_PROJECT_ENVIRONMENT: "{{.G_VENV_DIR}}"
     deps: ["venv"]
     cmds:
-      - |-
-        . "{{.G_VENV_DIR}}/bin/activate"
-        python3 scripts/download-projects.py --build-dir "{{.G_PROJECTS_DOCS_DIR}}"
+      - >-
+        uv run
+        --directory "{{.ROOT_DIR}}"
+        --locked
+        scripts/download-projects.py
+        --build-dir "{{.G_PROJECTS_DOCS_DIR}}"
 
   release-tar:
     deps: ["build"]
@@ -60,6 +65,8 @@ tasks:
 
   build-dev-docs:
     internal: true
+    env:
+      UV_PROJECT_ENVIRONMENT: "{{.G_VENV_DIR}}"
     vars:
       CHECKSUM_FILE: "{{.G_BUILD_DIR}}/{{.TASK | replace \":\" \"#\"}}.md5"
       OUTPUT_DIR: "{{.G_DEV_DOCS_OUTPUT_DIR}}"
@@ -77,8 +84,10 @@ tasks:
           INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
       - "venv"
     cmds:
-      - |-
-        . "{{.G_VENV_DIR}}/bin/activate"
+      - >-
+        uv run
+        --directory "{{.ROOT_DIR}}"
+        --locked
         sphinx-build -a -E -c '{{.SOURCE_DIR}}' -b html '{{.SOURCE_DIR}}' "{{.OUTPUT_DIR}}"
 
       # This command must be last
@@ -191,12 +200,14 @@ tasks:
 
   venv:
     internal: true
+    env:
+      UV_PROJECT_ENVIRONMENT: "{{.OUTPUT_DIR}}"
     vars:
       CHECKSUM_FILE: "{{.G_VENV_CHECKSUM_FILE}}"
       OUTPUT_DIR: "{{.G_VENV_DIR}}"
-      REQUIREMENTS_FILE: "{{.ROOT_DIR}}/requirements.txt"
     sources:
-      - "{{.REQUIREMENTS_FILE}}"
+      - "{{.ROOT_DIR}}/pyproject.toml"
+      - "{{.ROOT_DIR}}/uv.lock"
       - "{{.TASKFILE}}"
     generates: ["{{.CHECKSUM_FILE}}"]
     run: "once"
@@ -207,11 +218,9 @@ tasks:
           CHECKSUM_FILE: "{{.CHECKSUM_FILE}}"
           INCLUDE_PATTERNS: ["{{.OUTPUT_DIR}}"]
     cmds:
-      - task: "utils:misc:create-venv"
-        vars:
-          LABEL: "docs"
-          OUTPUT_DIR: "{{.OUTPUT_DIR}}"
-          REQUIREMENTS_FILE: "{{.REQUIREMENTS_FILE}}"
+      - |-
+        rm -rf "{{.OUTPUT_DIR}}"
+        uv sync --locked
 
       # This command must be last
       - task: "utils:checksum:compute"

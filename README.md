@@ -9,9 +9,8 @@ Follow the steps below to build and view the site locally.
 ## Requirements
 
 * [Node.js] >= 16 to be able to [view the output](#viewing-the-output)
-* python3 >= 3.10
-* python3-venv
 * [Task]
+* [uv]
 
 ## Building
 
@@ -44,3 +43,4 @@ task docs:serve
 [docs.yscope.com]: https://docs.yscope.com
 [Node.js]: https://nodejs.org/en/download/current
 [Task]: https://taskfile.dev/
+[uv]: https://docs.astral.sh/uv/
