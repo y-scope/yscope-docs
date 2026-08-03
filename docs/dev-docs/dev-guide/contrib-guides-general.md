@@ -8,10 +8,10 @@ Follow the guidelines below when writing and updating any source files.
 
 When handling data with measurement units, always state the unit explicitly, either via:
 
-* the data's type information (e.g. `std::chrono::milliseconds` in C++), or
+* the data's static type information (e.g. `std::chrono::milliseconds` in C++), or
 * the data's name, preferably as a suffix (e.g. `encoded_size_kib`).
 
-When stating the unit in the name, use an abbreviation for the unit _only_ when it doesn't affect
+When stating the unit in the name, use an abbreviation for the unit *only* when it doesn't affect
 clarity. For example, when measuring milliseconds, the suffix `_ms` is ambiguous since it could
 imply the units "milli" or "mega"; instead, we should use the suffix `_millisecs` in this case (e.g.
 `parsing_time_millisecs`).
