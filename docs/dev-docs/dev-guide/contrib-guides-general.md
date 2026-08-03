@@ -6,19 +6,15 @@ Follow the guidelines below when writing and updating any source files.
 
 ### Measurement units
 
-When handling data with measurement units, the unit must always be explicitly stated.
-If the unit is not statically available in the type information, then it must be added to the name,
-preferably as a suffix.
+When handling data with measurement units, always state the unit explicitly, either via:
 
-For example, in C++ when storing a measure of kibibytes inside an integer type, name the variable
-with a `_kib` suffix (e.g. `encoded_size_kib`).
+* the data's type information (e.g. `std::chrono::milliseconds` in C++), or
+* the data's name, preferably as a suffix (e.g. `encoded_size_kib`).
 
-It is not a requirement to use abbreviations, as the goal is clarity. For example, when measuring
-milliseconds adding `_ms` is actually ambiguous as to whether it's milli or mega, so we use
-`_millisecs` (e.g. `parsing_time_millisecs`).
-
-Using `std::chrono` in C++ is an example of when the type (and API) explicitly handles the unit and
-it is unnecessary to add a suffix.
+When stating the unit in the name, use an abbreviation for the unit _only_ when it doesn't affect
+clarity. For example, when measuring milliseconds, the suffix `_ms` is ambiguous since it could
+imply the units "milli" or "mega"; instead, we should use the suffix `_millisecs` in this case (e.g.
+`parsing_time_millisecs`).
 
 ## Code organization
 
