@@ -159,9 +159,47 @@ that begin with a title comment, where the comment is simply the name of the sec
 Note, `<InheritedClass>` is a placeholder that should be replaced with the name of the class that
 first declares the virtual method.
 
+#### Grouping defaulting or deleting of constructors and operators
+
+To improve clarity, when defaulting/deleting *both* the copy/move constructor and assignment
+operator of a class they should be grouped together. These groups should come between the
+`Constructors` and `Operators` groups, with any other constructors or operators still in their
+normal groups.
+
+This commonly occur when adhering to ["the rule of 5"][cpp-core-guideline-rule-of-5], as once any
+constructor, operator, or destructor function is defined or deleted, they all must be defined or
+deleted.
+
+:::{note}
+Defaulting and deleting these constructors and operators should only be done when necessary and
+should be omitted when possible, following ["the rule of zero"][cpp-core-guideline-rule-of-0].
+
+Clang-tidy attempts to enforce both the rule of zero and 5.
+:::
+
+A common example where the destructor was defined causing the need of other definitions:
+
+```cpp
+// Constructors
+Foo() { ... };
+
+// Default copy constructor and assignment operator.
+Foo(const Foo&) = default;
+Foo& operator=(const Foo&) = default;
+
+// Default move constructor and assignment operator.
+Foo(Foo&&) = default;
+Foo& operator=(Foo&&) = default;
+
+// Destructor
+~Foo() { ... };
+```
+
 [adding-cpp-linting]: https://github.com/y-scope/yscope-dev-utils/blob/main/docs/lint-tools-cpp.md
 [clang-format-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-format
 [clang-tidy-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-tidy
+[cpp-core-guideline-rule-of-0]: https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#rc-zero
+[cpp-core-guideline-rule-of-5]: https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#rc-five
 [google-cpp-style]: https://google.github.io/styleguide/cppguide.html
 [google-cpp-style-classes]: https://google.github.io/styleguide/cppguide.html#Classes
 [google-cpp-style-declaration-order]: https://google.github.io/styleguide/cppguide.html#Declaration_Order
