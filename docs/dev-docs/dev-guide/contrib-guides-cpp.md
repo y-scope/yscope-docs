@@ -167,8 +167,7 @@ operator of a class they should be grouped together. These groups should come be
 normal groups.
 
 This commonly occurs when adhering to ["the rule of 5"][cpp-core-guideline-rule-of-5], as once any
-constructor, operator, or destructor function is defined or deleted, they all must be defined or
-deleted.
+copy, move, or destructor function is defined or deleted, they all must be defined or deleted.
 
 :::{note}
 Defaulting and deleting these constructors and operators should only be done when necessary and
