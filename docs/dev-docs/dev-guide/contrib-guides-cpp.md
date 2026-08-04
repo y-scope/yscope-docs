@@ -166,7 +166,7 @@ operator of a class they should be grouped together. These groups should come be
 `Constructors` and `Operators` groups, with any other constructors or operators still in their
 normal groups.
 
-This commonly occur when adhering to ["the rule of 5"][cpp-core-guideline-rule-of-5], as once any
+This commonly occurs when adhering to ["the rule of 5"][cpp-core-guideline-rule-of-5], as once any
 constructor, operator, or destructor function is defined or deleted, they all must be defined or
 deleted.
 
@@ -174,7 +174,9 @@ deleted.
 Defaulting and deleting these constructors and operators should only be done when necessary and
 should be omitted when possible, following ["the rule of zero"][cpp-core-guideline-rule-of-0].
 
-Clang-tidy attempts to enforce both the rule of zero and 5.
+[Clang-tidy's special-member-functions][clang-tidy-special-member-functions] check will enforce the
+rule of 5, so generally you can wait for it to tell you when to define/delete these functions if
+you're unsure.
 :::
 
 A common example where the destructor was defined causing the need of other definitions:
@@ -198,6 +200,7 @@ Foo& operator=(Foo&&) = default;
 [adding-cpp-linting]: https://github.com/y-scope/yscope-dev-utils/blob/main/docs/lint-tools-cpp.md
 [clang-format-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-format
 [clang-tidy-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-tidy
+[clang-tidy-special-member-functions]: https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines/special-member-functions.html
 [cpp-core-guideline-rule-of-0]: https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#rc-zero
 [cpp-core-guideline-rule-of-5]: https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#rc-five
 [google-cpp-style]: https://google.github.io/styleguide/cppguide.html
