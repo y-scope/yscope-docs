@@ -146,7 +146,11 @@ that begin with a title comment, where the comment is simply the name of the sec
 4. Static methods
 5. Static data members
 6. Constructors
+    * [Except](#defined-deleted-copy-move-constructors-and-assignment-operators) when
+      defaulting/deleting both a copy/move constructor *and* assignment operator.
 7. Operators
+    * [Except](#defined-deleted-copy-move-constructors-and-assignment-operators) when
+      defaulting/deleting both a copy/move constructor *and* assignment operator.
 8. Destructor
 9. Methods implementing `<InheritedClass>`
     * I.e., methods implementing abstract methods from the class `<InheritedClass>`.
