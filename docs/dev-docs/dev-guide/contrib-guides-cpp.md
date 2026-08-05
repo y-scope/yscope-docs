@@ -159,9 +159,9 @@ that begin with a title comment, where the comment is simply the name of the sec
 Note, `<InheritedClass>` is a placeholder that should be replaced with the name of the class that
 first declares the virtual method.
 
-#### Grouping defaulting or deleting of constructors and operators
+##### Defaulted/deleted copy/move constructors and assignment operators
 
-To improve clarity, when defaulting/deleting *both* the copy/move constructor and assignment
+To improve clarity, when defaulting/deleting both the copy/move constructor *and* assignment
 operator of a class they should be grouped together. These groups should come between the
 `Constructors` and `Operators` groups, with any other constructors or operators still in their
 normal groups.
@@ -173,12 +173,12 @@ copy, move, or destructor function is defined or deleted, they all must be defin
 Defaulting and deleting these constructors and operators should only be done when necessary and
 should be omitted when possible, following ["the rule of zero"][cpp-core-guideline-rule-of-0].
 
-[Clang-tidy's special-member-functions][clang-tidy-special-member-functions] check will enforce the
+[clang-tidy's special-member-functions][clang-tidy-special-member-functions] check will enforce the
 rule of 5, so generally you can wait for it to tell you when to define/delete these functions if
 you're unsure.
 :::
 
-A common example where the destructor was defined causing the need of other definitions:
+For example:
 
 ```cpp
 // Constructors
@@ -200,8 +200,8 @@ Foo& operator=(Foo&&) = default;
 [clang-format-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-format
 [clang-tidy-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-tidy
 [clang-tidy-special-member-functions]: https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines/special-member-functions.html
-[cpp-core-guideline-rule-of-0]: https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#rc-zero
-[cpp-core-guideline-rule-of-5]: https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#rc-five
+[cpp-core-guideline-rule-of-0]: https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#rc-zero
+[cpp-core-guideline-rule-of-5]: https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#rc-five
 [google-cpp-style]: https://google.github.io/styleguide/cppguide.html
 [google-cpp-style-classes]: https://google.github.io/styleguide/cppguide.html#Classes
 [google-cpp-style-declaration-order]: https://google.github.io/styleguide/cppguide.html#Declaration_Order
