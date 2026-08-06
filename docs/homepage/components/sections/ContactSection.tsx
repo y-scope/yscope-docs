@@ -61,7 +61,7 @@ const communityLinks = [
     },
     {
         name: "Slack",
-        url: "https://communityinviter.com/apps/yscopecommunity/yscope-community",
+        url: "https://inviter.co/clp-community",
         Icon: SlackIcon,
         color: "bg-[#4A154B] hover:bg-[#3a1039]",
     },
