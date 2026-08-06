@@ -146,7 +146,11 @@ that begin with a title comment, where the comment is simply the name of the sec
 4. Static methods
 5. Static data members
 6. Constructors
+    * [See the exception below](#defaulteddeleted-copymove-constructors-and-assignment-operators)
+      when defaulting/deleting both a copy/move constructor *and* assignment operator.
 7. Operators
+    * [See the exception below](#defaulteddeleted-copymove-constructors-and-assignment-operators)
+      when defaulting/deleting both a copy/move constructor *and* assignment operator.
 8. Destructor
 9. Methods implementing `<InheritedClass>`
     * I.e., methods implementing abstract methods from the class `<InheritedClass>`.
@@ -159,9 +163,49 @@ that begin with a title comment, where the comment is simply the name of the sec
 Note, `<InheritedClass>` is a placeholder that should be replaced with the name of the class that
 first declares the virtual method.
 
+##### Defaulted/deleted copy/move constructors and assignment operators
+
+To improve clarity, when defaulting/deleting both the copy/move constructor *and* assignment
+operator of a class they should be grouped together. These groups should come between the
+`Constructors` and `Operators` groups, with any other constructors or operators still in their
+normal groups.
+
+This commonly occurs when adhering to ["the rule of 5"][cpp-core-guideline-rule-of-5], as once any
+copy, move, or destructor function is defined or deleted, they all must be defined or deleted.
+
+:::{note}
+Defaulting and deleting these constructors and operators should only be done when necessary and
+should be omitted when possible, following ["the rule of zero"][cpp-core-guideline-rule-of-0].
+
+[clang-tidy's special-member-functions][clang-tidy-special-member-functions] check will enforce the
+rule of 5, so generally you can wait for it to tell you when to define/delete these functions if
+you're unsure.
+:::
+
+For example:
+
+```cpp
+// Constructors
+Foo() { ... };
+
+// Default copy constructor and assignment operator.
+Foo(const Foo&) = default;
+Foo& operator=(const Foo&) = default;
+
+// Default move constructor and assignment operator.
+Foo(Foo&&) = default;
+Foo& operator=(Foo&&) = default;
+
+// Destructor
+~Foo() { ... };
+```
+
 [adding-cpp-linting]: https://github.com/y-scope/yscope-dev-utils/blob/main/docs/lint-tools-cpp.md
 [clang-format-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-format
 [clang-tidy-config]: https://github.com/y-scope/yscope-dev-utils/blob/main/lint-configs/.clang-tidy
+[clang-tidy-special-member-functions]: https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines/special-member-functions.html
+[cpp-core-guideline-rule-of-0]: https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#rc-zero
+[cpp-core-guideline-rule-of-5]: https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#rc-five
 [google-cpp-style]: https://google.github.io/styleguide/cppguide.html
 [google-cpp-style-classes]: https://google.github.io/styleguide/cppguide.html#Classes
 [google-cpp-style-declaration-order]: https://google.github.io/styleguide/cppguide.html#Declaration_Order
