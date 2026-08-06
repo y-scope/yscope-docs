@@ -27,5 +27,4 @@ tasks:
     requires:
       vars: ["PROJECT_DIR", "UV_LOCK_FLAGS"]
     dir: "{{.PROJECT_DIR}}"
-    cmd: |-
-      uv lock {{.UV_LOCK_FLAGS}}
+    cmd: "uv lock {{.UV_LOCK_FLAGS}}"
