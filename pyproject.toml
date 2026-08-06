@@ -1,0 +1,17 @@
+[project]
+name = "yscope-docs"
+version = "0.1.0"
+description = "YScope documentation site"
+authors = [{ name = "YScope Inc.", email = "dev@yscope.com" }]
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "myst-parser>=2.0.0",
+    "pydata-sphinx-theme>=0.15.2",
+    "pydantic>=2.6.4",
+    "sphinx>=7.2.6",
+    "sphinx-design>=0.5.0",
+]
+
+[tool.uv]
+package = false
