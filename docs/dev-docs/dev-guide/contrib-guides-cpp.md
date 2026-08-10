@@ -163,6 +163,7 @@ that begin with a title comment, where the comment is simply the name of the sec
 Note, `<InheritedClass>` is a placeholder that should be replaced with the name of the class that
 first declares the virtual method.
 
+(defaulteddeleted-copymove-constructors-and-assignment-operators)=
 ##### Defaulted/deleted copy/move constructors and assignment operators
 
 To improve clarity, when defaulting/deleting both the copy/move constructor *and* assignment
@@ -188,11 +189,11 @@ For example:
 // Constructors
 Foo() { ... };
 
-// Default copy constructor and assignment operator.
+// Default copy constructor and assignment operator
 Foo(const Foo&) = default;
 Foo& operator=(const Foo&) = default;
 
-// Default move constructor and assignment operator.
+// Default move constructor and assignment operator
 Foo(Foo&&) = default;
 Foo& operator=(Foo&&) = default;
 
